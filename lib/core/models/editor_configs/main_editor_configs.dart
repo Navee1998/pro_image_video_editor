@@ -46,6 +46,8 @@ class MainEditorConfigs extends ZoomConfigs {
     this.icons = const MainEditorIcons(),
     this.widgets = const MainEditorWidgets(),
     this.safeArea = const EditorSafeArea(),
+    this.bottomBarIconSpacing = 0.0,
+    this.bottomBarIcon,
   });
 
   /// Determines whether the close button is displayed on the widget.
@@ -89,6 +91,12 @@ class MainEditorConfigs extends ZoomConfigs {
 
   /// Defines the safe area configuration for the editor.
   final EditorSafeArea safeArea;
+
+  /// A function that returns a custom widget for the bottom bar icons.
+  final Widget Function(String label, IconData icon)? bottomBarIcon;
+
+  /// The spacing between the bottom bar icons.
+  final double bottomBarIconSpacing;
 
   /// Defines which sub-editors are available in the bottom-bar of the editor.
   ///
@@ -138,6 +146,8 @@ class MainEditorConfigs extends ZoomConfigs {
     Curve? doubleTapZoomCurve,
     EditorSafeArea? safeArea,
     List<SubEditorMode>? tools,
+    Widget Function(String label, IconData icon)? bottomBarIcon,
+    double? bottomBarIconSpacing,
   }) {
     return MainEditorConfigs(
       enableCloseButton: enableCloseButton ?? this.enableCloseButton,
@@ -162,6 +172,8 @@ class MainEditorConfigs extends ZoomConfigs {
       boundaryMargin: boundaryMargin ?? this.boundaryMargin,
       safeArea: safeArea ?? this.safeArea,
       tools: tools ?? this.tools,
+      bottomBarIcon: bottomBarIcon ?? this.bottomBarIcon,
+      bottomBarIconSpacing: bottomBarIconSpacing ?? this.bottomBarIconSpacing,
     );
   }
 }

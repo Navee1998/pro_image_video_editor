@@ -123,6 +123,7 @@ class MainEditorBottombar extends StatelessWidget {
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 12.0),
                       child: Row(
+                        spacing: configs.mainEditor.bottomBarIconSpacing,
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         mainAxisSize: MainAxisSize.min,
                         children: _buildEditorButtons(),
@@ -227,6 +228,12 @@ class MainEditorBottombar extends StatelessWidget {
     required IconData icon,
     required VoidCallback onPressed,
   }) {
+    if (configs.mainEditor.bottomBarIcon != null){
+      return GestureDetector(
+        onTap: onPressed,
+        child: configs.mainEditor.bottomBarIcon!.call(label, icon),
+      );
+    }
     return FlatIconTextButton(
       key: key,
       label: Text(label, style: _bottomTextStyle),
