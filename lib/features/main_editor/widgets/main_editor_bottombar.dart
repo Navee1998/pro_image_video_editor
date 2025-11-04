@@ -124,7 +124,7 @@ class MainEditorBottombar extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(horizontal: 12.0),
                       child: Row(
                         spacing: configs.mainEditor.bottomBarIconSpacing,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         mainAxisSize: MainAxisSize.min,
                         children: _buildEditorButtons(),
                       ),
