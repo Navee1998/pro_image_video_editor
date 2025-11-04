@@ -34,6 +34,7 @@ class VideoEditorConfigs {
     this.trimBarMinScale = 1,
     this.trimBarMaxScale = 3,
     this.playTimeSmoothingDuration = Duration.zero,
+    this.showTrimBar = true,
   })  : assert(trimBarMinScale > 0, 'trimBarMinScale must be greater than 0'),
         assert(
           trimBarMaxScale > trimBarMinScale,
@@ -66,6 +67,9 @@ class VideoEditorConfigs {
   /// If `false` tapping on the video will toggle play/pause, and a round
   /// play button will be shown over the video.
   final bool enablePlayButton;
+
+  /// Whether to show the trim bar.
+  final bool showTrimBar;
 
   /// Displays an estimated file size based on the trim duration and bitrate.
   ///
@@ -126,6 +130,7 @@ class VideoEditorConfigs {
     Duration? animatedIndicatorDuration,
     Curve? animatedIndicatorSwitchInCurve,
     Curve? animatedIndicatorSwitchOutCurve,
+    bool? showTrimBar,
   }) {
     return VideoEditorConfigs(
       icons: icons ?? this.icons,
@@ -152,6 +157,7 @@ class VideoEditorConfigs {
           animatedIndicatorSwitchInCurve ?? this.animatedIndicatorSwitchInCurve,
       animatedIndicatorSwitchOutCurve: animatedIndicatorSwitchOutCurve ??
           this.animatedIndicatorSwitchOutCurve,
+      showTrimBar: showTrimBar ?? this.showTrimBar,
     );
   }
 

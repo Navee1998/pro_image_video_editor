@@ -24,6 +24,7 @@ class VideoEditorControlsWidget extends StatelessWidget {
     bool isAudioSupported = player.configs.isAudioSupported;
     bool alignTop =
         player.configs.controlsPosition == VideoEditorControlPosition.top;
+    bool showTrimBar = player.configs.showTrimBar;
     bool enablePlayButton = player.configs.enablePlayButton;
     final toolbarPadding = player.style.toolbarPadding;
 
@@ -35,6 +36,7 @@ class VideoEditorControlsWidget extends StatelessWidget {
               verticalDirection:
                   alignTop ? VerticalDirection.down : VerticalDirection.up,
               children: [
+                if (showTrimBar)
                 Padding(
                   padding: EdgeInsets.only(
                     top: toolbarPadding.top,
