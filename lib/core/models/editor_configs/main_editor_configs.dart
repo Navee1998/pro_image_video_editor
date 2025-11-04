@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 import '/features/crop_rotate_editor/models/transform_configs.dart';
@@ -48,6 +49,7 @@ class MainEditorConfigs extends ZoomConfigs {
     this.safeArea = const EditorSafeArea(),
     this.bottomBarIconSpacing = 0.0,
     this.bottomBarIcon,
+    this.bottomBarHeight,
   });
 
   /// Determines whether the close button is displayed on the widget.
@@ -97,6 +99,9 @@ class MainEditorConfigs extends ZoomConfigs {
 
   /// The spacing between the bottom bar icons.
   final double bottomBarIconSpacing;
+
+  /// The height of the bottom bar.
+  final double? bottomBarHeight;
 
   /// Defines which sub-editors are available in the bottom-bar of the editor.
   ///
@@ -148,6 +153,7 @@ class MainEditorConfigs extends ZoomConfigs {
     List<SubEditorMode>? tools,
     Widget Function(String label, IconData icon)? bottomBarIcon,
     double? bottomBarIconSpacing,
+    double? bottomBarIconSize,
   }) {
     return MainEditorConfigs(
       enableCloseButton: enableCloseButton ?? this.enableCloseButton,
@@ -174,6 +180,7 @@ class MainEditorConfigs extends ZoomConfigs {
       tools: tools ?? this.tools,
       bottomBarIcon: bottomBarIcon ?? this.bottomBarIcon,
       bottomBarIconSpacing: bottomBarIconSpacing ?? this.bottomBarIconSpacing,
+      bottomBarHeight: bottomBarHeight ?? this.bottomBarHeight,
     );
   }
 }

@@ -104,30 +104,20 @@ class MainEditorBottombar extends StatelessWidget {
           child: EditorScrollbar(
             controller: controllers.bottomBarScrollCtrl,
             child: BottomAppBar(
-              height: kBottomNavigationBarHeight,
+              height: configs.mainEditor.bottomBarHeight ?? kBottomNavigationBarHeight,
               color: configs.mainEditor.style.bottomBarBackground,
               padding: EdgeInsets.zero,
               child: Center(
                 child: SingleChildScrollView(
                   controller: controllers.bottomBarScrollCtrl,
                   scrollDirection: Axis.horizontal,
-                  child: ConstrainedBox(
-                    constraints: BoxConstraints(
-                      minWidth: min(
-                          sizesManager.lastScreenSize.width != 0
-                              ? sizesManager.lastScreenSize.width
-                              : constraints.maxWidth,
-                          600),
-                      maxWidth: 600,
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                      child: Row(
-                        spacing: configs.mainEditor.bottomBarIconSpacing,
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        mainAxisSize: MainAxisSize.min,
-                        children: _buildEditorButtons(),
-                      ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                    child: Row(
+                      spacing: configs.mainEditor.bottomBarIconSpacing,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      mainAxisSize: MainAxisSize.min,
+                      children: _buildEditorButtons(),
                     ),
                   ),
                 ),
