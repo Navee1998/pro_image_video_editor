@@ -18,6 +18,7 @@ class LayerInteractionConfigs {
     this.selectable = LayerInteractionSelectable.auto,
     this.initialSelected = false,
     this.hideToolbarOnInteraction = false,
+    this.hideBottomToolbar = false,
     this.hideVideoControlsOnInteraction = true,
     this.keepSelectionOnInteraction = true,
     this.enableKeyboardMultiSelection = true,
@@ -47,6 +48,9 @@ class LayerInteractionConfigs {
   /// Determines whether the toolbars should be hidden when the user interacts
   /// with the editor.
   final bool hideToolbarOnInteraction;
+
+  /// Determines whether the bottom toolbar should be hidden.
+  final bool hideBottomToolbar;
 
   /// Determines whether pinch-to-scale gestures are enabled for layers on
   /// mobile devices.
@@ -127,6 +131,7 @@ class LayerInteractionConfigs {
     LayerInteractionSelectable? selectable,
     bool? initialSelected,
     bool? hideToolbarOnInteraction,
+    bool? hideBottomToolbar,
     bool? enableMobilePinchScale,
     bool? enableMobilePinchRotate,
     bool? hideVideoControlsOnInteraction,
@@ -147,6 +152,7 @@ class LayerInteractionConfigs {
       initialSelected: initialSelected ?? this.initialSelected,
       hideToolbarOnInteraction:
           hideToolbarOnInteraction ?? this.hideToolbarOnInteraction,
+      hideBottomToolbar: hideBottomToolbar ?? this.hideBottomToolbar,
       enableMobilePinchScale:
           enableMobilePinchScale ?? this.enableMobilePinchScale,
       enableMobilePinchRotate:

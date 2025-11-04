@@ -2689,6 +2689,10 @@ class ProImageEditorState extends State<ProImageEditor>
   }
 
   Widget? _buildBottomNavBar() {
+    if (configs.layerInteraction.hideBottomToolbar){
+      return null;
+    }
+
     if (mainEditorConfigs.widgets.bottomBar != null) {
       return mainEditorConfigs.widgets.bottomBar!.call(
         this,
