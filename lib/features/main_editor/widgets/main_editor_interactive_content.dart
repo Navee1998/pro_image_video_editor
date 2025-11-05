@@ -124,93 +124,54 @@ class MainEditorInteractiveContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     bool hasSelectedLayers = layerInteractionManager.hasSelectedLayers;
-    final videoEditorConfig = configs.videoEditor;
-    final style = videoEditorConfig.style;
-
-    bool isAudioSupported = videoEditorConfig.isAudioSupported;
-    bool alignTop =
-        videoEditorConfig.controlsPosition == VideoEditorControlPosition.top;
-    bool showTrimBar = videoEditorConfig.showTrimBar;
-    final toolbarPadding = videoEditorConfig.style.toolbarPadding;
 
     return Center(
-      child: Column(
-        verticalDirection:
-            alignTop ? VerticalDirection.up : VerticalDirection.down,
-        mainAxisSize: MainAxisSize.max,
+      child: Stack(
         children: [
-          Expanded(
-            child: Container(
-              margin: configs.mainEditor.style.bodyPadding,
-              decoration: BoxDecoration(
-                color: configs.mainEditor.style.bodyBackground,
-                borderRadius: BorderRadius.circular(configs.mainEditor.style.bodyCornerRadius),
-                border: Border.all(
-                  color: configs.mainEditor.style.bodyBorderColor,
-                  width: configs.mainEditor.style.bodyBorderWidth,
-                )
-              ),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(configs.mainEditor.style.bodyCornerRadius),
-                child: Stack(
-                  children: [
-                    MainEditorFontPreloader(
-                        emojiEditorConfigs: configs.emojiEditor),
-                    Padding(
-                      padding: hasSelectedLayers &&
-                              configs.layerInteraction.hideToolbarOnInteraction
-                          ? EdgeInsets.only(
-                              top: sizesManager.appBarHeight,
-                              bottom: sizesManager.bottomBarHeight,
-                            )
-                          : EdgeInsets.zero,
-                      child: _buildInteractiveViewer(),
-                    ),
+          MainEditorFontPreloader(
+              emojiEditorConfigs: configs.emojiEditor),
+          Padding(
+            padding: hasSelectedLayers &&
+                    configs.layerInteraction.hideToolbarOnInteraction
+                ? EdgeInsets.only(
+                    top: sizesManager.appBarHeight,
+                    bottom: sizesManager.bottomBarHeight,
+                  )
+                : EdgeInsets.zero,
+            child: _buildInteractiveViewer(),
+          ),
 
-                    /// Build crop area overlay
-                    if (configs.imageGeneration.cropToImageBounds)
-                      _buildCropAreaOverlay(),
+          /// Build crop area overlay
+          if (configs.imageGeneration.cropToImageBounds)
+            _buildCropAreaOverlay(),
 
-                    /// Build video controls
-                    if (isVideoEditor)
-                      AnimatedOpacity(
-                        opacity: hasSelectedLayers ? 0 : 1,
-                        duration:
-                            configs.layerInteraction.videoControlsSwitchDuration,
-                        child: IgnorePointer(
-                          ignoring: hasSelectedLayers,
-                          child: VideoEditorConfigurable(
-                            controller: videoController!,
-                            child: const VideoEditorControlsWidget(),
-                          ),
-                        ),
-                      ),
-
-                    /// Build helper content
-                    if (!processFinalImage) ...[
-                      buildHelperLines(),
-                      buildRemoveArea(),
-                      _buildLayerSelector(),
-                    ],
-
-                    /// Build custom body items
-                    if (configs.mainEditor.widgets.bodyItems != null)
-                      ...configs.mainEditor.widgets.bodyItems!(
-                        state,
-                        rebuildController.stream,
-                      ),
-                  ],
+          /// Build video controls
+          if (isVideoEditor)
+            AnimatedOpacity(
+              opacity: hasSelectedLayers ? 0 : 1,
+              duration:
+                  configs.layerInteraction.videoControlsSwitchDuration,
+              child: IgnorePointer(
+                ignoring: hasSelectedLayers,
+                child: VideoEditorConfigurable(
+                  controller: videoController!,
+                  child: const VideoEditorControlsWidget(),
                 ),
               ),
             ),
-          ),
-          if (showTrimBar && isVideoEditor)
-            Padding(
-              padding: toolbarPadding,
-              child: VideoEditorConfigurable(
-                controller: videoController!,
-                child: const VideoEditorTrimBar(),
-              ),
+
+          /// Build helper content
+          if (!processFinalImage) ...[
+            buildHelperLines(),
+            buildRemoveArea(),
+            _buildLayerSelector(),
+          ],
+
+          /// Build custom body items
+          if (configs.mainEditor.widgets.bodyItems != null)
+            ...configs.mainEditor.widgets.bodyItems!(
+              state,
+              rebuildController.stream,
             ),
         ],
       ),
