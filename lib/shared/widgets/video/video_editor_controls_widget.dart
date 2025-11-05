@@ -36,16 +36,6 @@ class VideoEditorControlsWidget extends StatelessWidget {
               verticalDirection:
                   alignTop ? VerticalDirection.down : VerticalDirection.up,
               children: [
-                if (showTrimBar)
-                Padding(
-                  padding: EdgeInsets.only(
-                    top: toolbarPadding.top,
-                    left: toolbarPadding.left - style.trimBarHandlerButtonSize,
-                    right:
-                        toolbarPadding.right - style.trimBarHandlerButtonSize,
-                  ),
-                  child: const VideoEditorTrimBar(),
-                ),
                 Padding(
                   padding: toolbarPadding.copyWith(top: 0),
                   child: LayoutBuilder(builder: (_, constraints) {

@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
+import '../../../core/models/editor_configs/video_editor_configs.dart';
+import '../../../shared/widgets/video/trimmer/video_editor_trim_bar.dart';
 import '/core/models/editor_callbacks/pro_image_editor_callbacks.dart';
 import '/core/models/editor_configs/pro_image_editor_configs.dart';
 import '/features/crop_rotate_editor/widgets/crop_layer_painter.dart';
@@ -122,52 +124,79 @@ class MainEditorInteractiveContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     bool hasSelectedLayers = layerInteractionManager.hasSelectedLayers;
+    final videoEditorConfig = configs.videoEditor;
+    final style = videoEditorConfig.style;
+
+    bool isAudioSupported = videoEditorConfig.isAudioSupported;
+    bool alignTop =
+        videoEditorConfig.controlsPosition == VideoEditorControlPosition.top;
+    bool showTrimBar = videoEditorConfig.showTrimBar;
+    final toolbarPadding = videoEditorConfig.style.toolbarPadding;
 
     return Center(
-      child: Stack(
+      child: Column(
+        verticalDirection:
+            alignTop ? VerticalDirection.up : VerticalDirection.down,
+        mainAxisSize: MainAxisSize.max,
         children: [
-          MainEditorFontPreloader(emojiEditorConfigs: configs.emojiEditor),
-          Padding(
-            padding: hasSelectedLayers &&
-                    configs.layerInteraction.hideToolbarOnInteraction
-                ? EdgeInsets.only(
-                    top: sizesManager.appBarHeight,
-                    bottom: sizesManager.bottomBarHeight,
-                  )
-                : EdgeInsets.zero,
-            child: _buildInteractiveViewer(),
-          ),
-
-          /// Build crop area overlay
-          if (configs.imageGeneration.cropToImageBounds)
-            _buildCropAreaOverlay(),
-
-          /// Build video controls
-          if (isVideoEditor)
-            AnimatedOpacity(
-              opacity: hasSelectedLayers ? 0 : 1,
-              duration: configs.layerInteraction.videoControlsSwitchDuration,
-              child: IgnorePointer(
-                ignoring: hasSelectedLayers,
-                child: VideoEditorConfigurable(
-                  controller: videoController!,
-                  child: const VideoEditorControlsWidget(),
+          Expanded(
+            child: Stack(
+              children: [
+                MainEditorFontPreloader(
+                    emojiEditorConfigs: configs.emojiEditor),
+                Padding(
+                  padding: hasSelectedLayers &&
+                          configs.layerInteraction.hideToolbarOnInteraction
+                      ? EdgeInsets.only(
+                          top: sizesManager.appBarHeight,
+                          bottom: sizesManager.bottomBarHeight,
+                        )
+                      : EdgeInsets.zero,
+                  child: _buildInteractiveViewer(),
                 ),
-              ),
+
+                /// Build crop area overlay
+                if (configs.imageGeneration.cropToImageBounds)
+                  _buildCropAreaOverlay(),
+
+                /// Build video controls
+                if (isVideoEditor)
+                  AnimatedOpacity(
+                    opacity: hasSelectedLayers ? 0 : 1,
+                    duration:
+                        configs.layerInteraction.videoControlsSwitchDuration,
+                    child: IgnorePointer(
+                      ignoring: hasSelectedLayers,
+                      child: VideoEditorConfigurable(
+                        controller: videoController!,
+                        child: const VideoEditorControlsWidget(),
+                      ),
+                    ),
+                  ),
+
+                /// Build helper content
+                if (!processFinalImage) ...[
+                  buildHelperLines(),
+                  buildRemoveArea(),
+                  _buildLayerSelector(),
+                ],
+
+                /// Build custom body items
+                if (configs.mainEditor.widgets.bodyItems != null)
+                  ...configs.mainEditor.widgets.bodyItems!(
+                    state,
+                    rebuildController.stream,
+                  ),
+              ],
             ),
-
-          /// Build helper content
-          if (!processFinalImage) ...[
-            buildHelperLines(),
-            buildRemoveArea(),
-            _buildLayerSelector(),
-          ],
-
-          /// Build custom body items
-          if (configs.mainEditor.widgets.bodyItems != null)
-            ...configs.mainEditor.widgets.bodyItems!(
-              state,
-              rebuildController.stream,
+          ),
+          if (showTrimBar && isVideoEditor)
+            Padding(
+              padding: toolbarPadding,
+              child: VideoEditorConfigurable(
+                controller: videoController!,
+                child: const VideoEditorTrimBar(),
+              ),
             ),
         ],
       ),
