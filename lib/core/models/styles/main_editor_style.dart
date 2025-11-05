@@ -1,4 +1,5 @@
 // Flutter imports:
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '/core/constants/editor_style_constants.dart';
 
@@ -16,6 +17,11 @@ class MainEditorStyle {
     this.uiOverlayStyle = kImageEditorUiOverlayStyle,
     this.outsideCaptureAreaLayerOpacity = 0.5,
     this.subEditorPage = const SubEditorPageStyle(),
+    this.bodyPadding = const EdgeInsets.all(0),
+    this.bodyCornerRadius = 0,
+    this.bodyBackground = kImageEditorBackground,
+    this.bodyBorderWidth = 0,
+    this.bodyBorderColor = kImageEditorBackground,
   });
 
   /// Background color for the image editor in the overview.
@@ -39,6 +45,21 @@ class MainEditorStyle {
   /// The theme configuration for the sub-editor page.
   final SubEditorPageStyle subEditorPage;
 
+  /// The Padding around the body.
+  final EdgeInsets bodyPadding;
+
+  /// corners for media content
+  final double bodyCornerRadius;
+
+  /// background color for body
+  final Color bodyBackground;
+
+  /// border color for body
+  final Color bodyBorderColor;
+
+  /// background color for body
+  final double bodyBorderWidth;
+
   /// If this opacity is greater than 0, it will paint a transparent overlay
   /// over all layers that are drawn outside the background image area. The
   /// overlay will have the specified opacity level.
@@ -60,6 +81,11 @@ class MainEditorStyle {
     SystemUiOverlayStyle? uiOverlayStyle,
     double? outsideCaptureAreaLayerOpacity,
     SubEditorPageStyle? subEditorPage,
+    EdgeInsets? bodyPadding,
+    double? bodyCornerRadius,
+    Color? bodyBackground,
+    Color? bodyBorderColor,
+    double? bodyBorderWidth,
   }) {
     return MainEditorStyle(
         background: background ?? this.background,
