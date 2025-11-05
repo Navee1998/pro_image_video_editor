@@ -2540,6 +2540,7 @@ class ProImageEditorState extends State<ProImageEditor>
                       sizesManager.editorSize = constraints.biggest;
                       return Scaffold(
                         backgroundColor: mainEditorConfigs.style.background,
+                        extendBodyBehindAppBar: mainEditorConfigs.extendBodyBehindAppBar,
                         resizeToAvoidBottomInset: false,
                         appBar: _buildAppBar(),
                         body: _buildBody(),

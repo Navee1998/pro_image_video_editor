@@ -50,6 +50,8 @@ class MainEditorConfigs extends ZoomConfigs {
     this.bottomBarIconSpacing = 0.0,
     this.bottomBarIcon,
     this.bottomBarHeight,
+    this.showUndoRedoActions = true,
+    this.extendBodyBehindAppBar = false,
   });
 
   /// Determines whether the close button is displayed on the widget.
@@ -71,6 +73,11 @@ class MainEditorConfigs extends ZoomConfigs {
   /// This flag has no effect when the `onEscapeButton` callback is set.
   final bool enableEscapeButton;
 
+  /// to show updo redo
+  final bool showUndoRedoActions;
+
+  ///to show body behind appbar
+  final bool extendBodyBehindAppBar;
   /// Determines whether zooming is allowed when a layer is selected in the
   /// editor.
   ///
@@ -154,6 +161,8 @@ class MainEditorConfigs extends ZoomConfigs {
     Widget Function(String label, IconData icon)? bottomBarIcon,
     double? bottomBarIconSpacing,
     double? bottomBarIconSize,
+    bool? showUndoRedoActions,
+    bool? extendBodyBehindAppBar,
   }) {
     return MainEditorConfigs(
       enableCloseButton: enableCloseButton ?? this.enableCloseButton,
@@ -181,6 +190,8 @@ class MainEditorConfigs extends ZoomConfigs {
       bottomBarIcon: bottomBarIcon ?? this.bottomBarIcon,
       bottomBarIconSpacing: bottomBarIconSpacing ?? this.bottomBarIconSpacing,
       bottomBarHeight: bottomBarHeight ?? this.bottomBarHeight,
+      showUndoRedoActions: showUndoRedoActions ?? this.showUndoRedoActions,
+      extendBodyBehindAppBar: extendBodyBehindAppBar ?? this.extendBodyBehindAppBar,
     );
   }
 }

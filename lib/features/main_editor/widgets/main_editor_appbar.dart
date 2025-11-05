@@ -73,28 +73,30 @@ class MainEditorAppBar extends StatelessWidget implements PreferredSizeWidget {
             )
           : null,
       actions: [
-        IconButton(
-          key: const ValueKey('MainEditorUndoButton'),
-          tooltip: i18n.undo,
-          icon: Icon(
-            mainEditorConfigs.icons.undoAction,
-            color: stateManager.canUndo
-                ? foregroundColor
-                : foregroundColor.withAlpha(80),
+        if (configs.mainEditor.showUndoRedoActions) ...[
+          IconButton(
+            key: const ValueKey('MainEditorUndoButton'),
+            tooltip: i18n.undo,
+            icon: Icon(
+              mainEditorConfigs.icons.undoAction,
+              color: stateManager.canUndo
+                  ? foregroundColor
+                  : foregroundColor.withAlpha(80),
+            ),
+            onPressed: undoAction,
           ),
-          onPressed: undoAction,
-        ),
-        IconButton(
-          key: const ValueKey('MainEditorRedoButton'),
-          tooltip: i18n.redo,
-          icon: Icon(
-            mainEditorConfigs.icons.redoAction,
-            color: stateManager.canRedo
-                ? foregroundColor
-                : foregroundColor.withAlpha(80),
+          IconButton(
+            key: const ValueKey('MainEditorRedoButton'),
+            tooltip: i18n.redo,
+            icon: Icon(
+              mainEditorConfigs.icons.redoAction,
+              color: stateManager.canRedo
+                  ? foregroundColor
+                  : foregroundColor.withAlpha(80),
+            ),
+            onPressed: redoAction,
           ),
-          onPressed: redoAction,
-        ),
+        ],
         !isInitialized
             ? Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10.0),
