@@ -10,6 +10,7 @@ class VideoEditorStyle {
   /// trim bar, and banners.
   const VideoEditorStyle({
     this.toolbarPadding = const EdgeInsets.symmetric(horizontal: 16),
+    this.trimBarPadding = const EdgeInsets.symmetric(horizontal: 16),
     this.playIndicatorColor = const Color(0xFFFFFFFF),
     this.playIndicatorBackground = const Color.fromARGB(128, 0, 0, 0),
     this.muteButtonColor = const Color(0xFFFFFFFF),
@@ -50,6 +51,9 @@ class VideoEditorStyle {
 
   /// The Padding around the toolbar.
   final EdgeInsets toolbarPadding;
+
+  /// The Padding around the toolbar.
+  final EdgeInsets trimBarPadding;
 
   /// Color of the play indicator icon.
   final Color playIndicatorColor;
@@ -132,6 +136,7 @@ class VideoEditorStyle {
   /// Creates a copy of this instance with the given parameters overridden.
   VideoEditorStyle copyWith({
     EdgeInsets? toolbarPadding,
+    EdgeInsets? trimBarPadding,
     Color? playIndicatorColor,
     Color? playIndicatorBackground,
     Color? muteButtonColor,
@@ -159,6 +164,7 @@ class VideoEditorStyle {
   }) {
     return VideoEditorStyle(
       toolbarPadding: toolbarPadding ?? this.toolbarPadding,
+      trimBarPadding: trimBarPadding ?? this.trimBarPadding,
       playIndicatorColor: playIndicatorColor ?? this.playIndicatorColor,
       playIndicatorBackground:
           playIndicatorBackground ?? this.playIndicatorBackground,

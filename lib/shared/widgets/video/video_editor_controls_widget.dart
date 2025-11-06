@@ -19,12 +19,8 @@ class VideoEditorControlsWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final player = VideoEditorConfigurable.of(context);
-    final style = player.style;
 
     bool isAudioSupported = player.configs.isAudioSupported;
-    bool alignTop =
-        player.configs.controlsPosition == VideoEditorControlPosition.top;
-    bool showTrimBar = player.configs.showTrimBar;
     bool enablePlayButton = player.configs.enablePlayButton;
     final toolbarPadding = player.style.toolbarPadding;
 
@@ -33,11 +29,10 @@ class VideoEditorControlsWidget extends StatelessWidget {
         player.widgets.headerToolbar ??
             Column(
               spacing: 10,
-              verticalDirection:
-                  alignTop ? VerticalDirection.down : VerticalDirection.up,
+              verticalDirection: VerticalDirection.up,
               children: [
                 Padding(
-                  padding: toolbarPadding.copyWith(top: 0),
+                  padding: toolbarPadding.copyWith(),
                   child: LayoutBuilder(builder: (_, constraints) {
                     return Row(
                       spacing: constraints.maxWidth < 340 ? 6 : 12,

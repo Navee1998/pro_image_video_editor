@@ -2675,7 +2675,7 @@ class ProImageEditorState extends State<ProImageEditor>
     bool alignTop =
         videoEditorConfig.controlsPosition == VideoEditorControlPosition.top;
     bool showTrimBar = videoEditorConfig.showTrimBar;
-    final toolbarPadding = videoEditorConfig.style.toolbarPadding;
+    final toolbarPadding = videoEditorConfig.style.trimBarPadding;
     return Column(
       verticalDirection:
       alignTop ? VerticalDirection.up : VerticalDirection.down,
