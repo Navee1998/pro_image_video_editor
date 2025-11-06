@@ -2600,6 +2600,12 @@ class ProImageEditorState extends State<ProImageEditor>
                     isEnabled: stateManager.canRedo,
                   ),
                 ],
+                if (_isVideoEditor && configs.videoEditor.showTrimBar)
+                  _buildAppBarIcon(
+                    icon: configs.cropRotateEditor.icons.bottomNavBar,
+                    onTap: openCropRotateEditor,
+                    isEnabled: _isInitialized,
+                  ),
                 _buildAppBarIcon(
                   icon: mainEditorConfigs.icons.doneIcon,
                   onTap: doneEditing,
