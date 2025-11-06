@@ -621,12 +621,6 @@ class ProImageEditorState extends State<ProImageEditor>
     _rebuildController.close();
     _controllers.dispose();
     layerInteractionManager.scaleDebounce.dispose();
-    SystemChrome.setSystemUIOverlayStyle(
-      _theme.brightness == Brightness.dark
-          ? SystemUiOverlayStyle.light
-          : SystemUiOverlayStyle.dark,
-    );
-    SystemChrome.restoreSystemUIOverlays();
     ServicesBinding.instance.keyboard.removeHandler(_onKeyEvent);
     if (kIsWeb && _browserContextMenuBeforeEnabled) {
       BrowserContextMenu.enableContextMenu();
