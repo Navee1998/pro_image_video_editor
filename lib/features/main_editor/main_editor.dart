@@ -2698,6 +2698,7 @@ class ProImageEditorState extends State<ProImageEditor>
                   width: configs.mainEditor.style.bodyBorderWidth,
                 )
             ),
+            alignment: Alignment.center,
             child: AspectRatio(
               aspectRatio: 9 / 16,
               child: ClipRRect(
