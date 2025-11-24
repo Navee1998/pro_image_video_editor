@@ -28,6 +28,8 @@ class MainEditorAppBar extends StatelessWidget implements PreferredSizeWidget {
     required this.doneEditing,
     required this.isInitialized,
     required this.stateManager,
+    required this.cropAndRotate,
+    required this.showCropAndRotate,
   });
 
   /// Localization for tooltips and labels.
@@ -60,6 +62,13 @@ class MainEditorAppBar extends StatelessWidget implements PreferredSizeWidget {
   /// Callback for applying changes and completing editing.
   final Function() doneEditing;
 
+  /// Callback for crop and rotate.
+  final Function() cropAndRotate;
+
+  /// show crop and rotate option
+  final bool showCropAndRotate;
+
+
   @override
   Widget build(BuildContext context) {
     return AppBar(
@@ -73,6 +82,18 @@ class MainEditorAppBar extends StatelessWidget implements PreferredSizeWidget {
             )
           : null,
       actions: [
+        if (showCropAndRotate)
+          IconButton(
+            key: const ValueKey('CropAndRotateButton'),
+            tooltip: 'CropAndRotateButton',
+            icon: Icon(
+              configs.cropRotateEditor.icons.bottomNavBar,
+              color: isInitialized
+                  ? foregroundColor
+                  : foregroundColor.withAlpha(80),
+            ),
+            onPressed: (isInitialized) ? cropAndRotate : null,
+          ),
         if (configs.mainEditor.showUndoRedoActions) ...[
           IconButton(
             key: const ValueKey('MainEditorUndoButton'),
