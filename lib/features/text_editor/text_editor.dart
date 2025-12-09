@@ -354,6 +354,7 @@ class TextEditorState extends State<TextEditor>
               child: Scaffold(
                 backgroundColor: textEditorConfigs.style.background,
                 appBar: _buildAppBar(constraints),
+                resizeToAvoidBottomInset: false,
                 body: _buildBody(),
                 bottomNavigationBar: _buildBottomBar(),
               ),
