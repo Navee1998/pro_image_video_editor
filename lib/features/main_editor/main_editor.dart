@@ -2691,122 +2691,128 @@ class ProImageEditorState extends State<ProImageEditor>
       mainAxisSize: MainAxisSize.max,
       children: [
         Expanded(
-          child: Container(
-            margin: configs.mainEditor.style.bodyPadding,
-            decoration: BoxDecoration(
-                color: configs.mainEditor.style.bodyBackground,
-                borderRadius: BorderRadius.circular(configs.mainEditor.style.bodyCornerRadius),
-                border: Border.all(
-                  color: configs.mainEditor.style.bodyBorderColor,
-                  width: configs.mainEditor.style.bodyBorderWidth,
-                )
-            ),
+          child: Align(
             alignment: Alignment.center,
-            child: AspectRatio(
-              aspectRatio: 9 / 16,
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(configs.mainEditor.style.bodyCornerRadius),
-                child: Stack(
-                  children: [
-                    LayoutBuilder(builder: (context, constraints) {
-                      sizesManager.bodySize = constraints.biggest;
-                      return !_isVideoPlayerReady
-                          ? _buildSetupSpinner()
-                          : Listener(
-                              behavior: HitTestBehavior.translucent,
-                              onPointerDown: (details) {
-                                _lastDownEvent = details;
-                                _tapDownTimestamp = DateTime.now();
-                                _mouseService.onPointerDown(details);
-                                if (layerInteractionManager
-                                        .selectedLayerId.isNotEmpty ||
-                                    GestureManager.instance.isBlocked) {
-                                  return;
-                                }
-                                bool isDoubleTap = detectDoubleTap(details);
-                                if (!isDoubleTap) return;
-
-                                handleDoubleTap(
-                                    context, details, mainEditorConfigs);
-                                mainEditorCallbacks?.onDoubleTap?.call();
-                              },
-                              onPointerUp: (event) {
-                                _mouseService.onPointerUp(event);
-                                onPointerUp(event);
-
-                                WidgetsBinding.instance.addPostFrameCallback((_) {
-                                  final offsetDistance =
-                                      (event.position - _lastDownEvent!.position)
-                                          .distance;
-                                  final timeElapsed = DateTime.now()
-                                      .difference(_tapDownTimestamp)
-                                      .inMilliseconds;
-
-                                  // Ignore if pointer moved too much (exceeds tap slop)
-                                  if (offsetDistance >= tapSlop) return;
-
-                                  // Ignore if tap took too long (not a quick tap)
-                                  if (timeElapsed > tapTimeElapsed) return;
-
-                                  if (!configs.videoEditor.enablePlayButton) {
-                                    widget.videoController?.togglePlayState();
-                                  }
-                                  mainEditorCallbacks?.onTap?.call();
-                                });
-                              },
-                              onPointerSignal: isDesktop && hasSelectedLayers
-                                  ? (event) {
-                                      final hasMultiSelection =
-                                          selectedLayers.length > 1;
-
-                                      final zoomEnabled =
-                                          mainEditorConfigs.enableZoom;
-                                      final zoomGestureActive = interactiveViewer
-                                              .currentState
-                                              ?.isInteractionEnabled ==
-                                          true;
-
-                                      if ((hasMultiSelection && zoomEnabled) ||
-                                          (zoomEnabled && zoomGestureActive)) {
-                                        return;
-                                      }
-
-                                      /// Otherwise, handle scroll as a layer scaling
-                                      /// interaction.
-                                      _desktopInteractionManager.mouseScroll(
-                                          event,
-                                          selectedLayers: selectedLayers,
-                                          interactiveViewer:
-                                              interactiveViewer.currentState);
+            child: Padding(
+              padding: configs.mainEditor.style.bodyPadding,
+              child: AspectRatio(
+                aspectRatio: 9 / 16,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(configs.mainEditor.style.bodyCornerRadius),
+                  child: Container(
+                    // margin: configs.mainEditor.style.bodyPadding,
+                    decoration: BoxDecoration(
+                        color: configs.mainEditor.style.bodyBackground,
+                        // borderRadius: BorderRadius.circular(configs.mainEditor.style.bodyCornerRadius),
+                        // border: Border.all(
+                        //   color: configs.mainEditor.style.bodyBorderColor,
+                        //   width: configs.mainEditor.style.bodyBorderWidth,
+                        // )
+                    ),
+                    alignment: Alignment.center,
+                    child: Stack(
+                      children: [
+                        LayoutBuilder(builder: (context, constraints) {
+                          sizesManager.bodySize = constraints.biggest;
+                          return !_isVideoPlayerReady
+                              ? _buildSetupSpinner()
+                              : Listener(
+                                  behavior: HitTestBehavior.translucent,
+                                  onPointerDown: (details) {
+                                    _lastDownEvent = details;
+                                    _tapDownTimestamp = DateTime.now();
+                                    _mouseService.onPointerDown(details);
+                                    if (layerInteractionManager
+                                            .selectedLayerId.isNotEmpty ||
+                                        GestureManager.instance.isBlocked) {
+                                      return;
                                     }
-                                  : null,
-                              child: GestureDetector(
-                                behavior: HitTestBehavior.translucent,
-                                onTap: () {
-                                  /// That function is required so that multiselect works
-                                  /// correctly, even when it’s empty.
-                                },
-                                onLongPress: mainEditorCallbacks?.onLongPress,
-                                onScaleStart: _onScaleStart,
-                                onScaleUpdate: _onScaleUpdate,
-                                onScaleEnd: _onScaleEnd,
-                                child: mainEditorConfigs.widgets.wrapBody?.call(
-                                      this,
-                                      _rebuildController.stream,
-                                      _buildInteractiveContent(),
-                                    ) ??
-                                    _buildInteractiveContent(),
-                              ),
-                            );
-                    }),
-                    if (mainEditorConfigs.extendBodyBehindAppBar)
-                      Positioned(
-                        right: 0,
-                        top: 0,
-                        left: 0,
-                        child: _buildOnBodyAppBar() ?? Container(),
-                      )
-                  ],
+                                    bool isDoubleTap = detectDoubleTap(details);
+                                    if (!isDoubleTap) return;
+
+                                    handleDoubleTap(
+                                        context, details, mainEditorConfigs);
+                                    mainEditorCallbacks?.onDoubleTap?.call();
+                                  },
+                                  onPointerUp: (event) {
+                                    _mouseService.onPointerUp(event);
+                                    onPointerUp(event);
+
+                                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                                      final offsetDistance =
+                                          (event.position - _lastDownEvent!.position)
+                                              .distance;
+                                      final timeElapsed = DateTime.now()
+                                          .difference(_tapDownTimestamp)
+                                          .inMilliseconds;
+
+                                      // Ignore if pointer moved too much (exceeds tap slop)
+                                      if (offsetDistance >= tapSlop) return;
+
+                                      // Ignore if tap took too long (not a quick tap)
+                                      if (timeElapsed > tapTimeElapsed) return;
+
+                                      if (!configs.videoEditor.enablePlayButton) {
+                                        widget.videoController?.togglePlayState();
+                                      }
+                                      mainEditorCallbacks?.onTap?.call();
+                                    });
+                                  },
+                                  onPointerSignal: isDesktop && hasSelectedLayers
+                                      ? (event) {
+                                          final hasMultiSelection =
+                                              selectedLayers.length > 1;
+
+                                          final zoomEnabled =
+                                              mainEditorConfigs.enableZoom;
+                                          final zoomGestureActive = interactiveViewer
+                                                  .currentState
+                                                  ?.isInteractionEnabled ==
+                                              true;
+
+                                          if ((hasMultiSelection && zoomEnabled) ||
+                                              (zoomEnabled && zoomGestureActive)) {
+                                            return;
+                                          }
+
+                                          /// Otherwise, handle scroll as a layer scaling
+                                          /// interaction.
+                                          _desktopInteractionManager.mouseScroll(
+                                              event,
+                                              selectedLayers: selectedLayers,
+                                              interactiveViewer:
+                                                  interactiveViewer.currentState);
+                                        }
+                                      : null,
+                                  child: GestureDetector(
+                                    behavior: HitTestBehavior.translucent,
+                                    onTap: () {
+                                      /// That function is required so that multiselect works
+                                      /// correctly, even when it’s empty.
+                                    },
+                                    onLongPress: mainEditorCallbacks?.onLongPress,
+                                    onScaleStart: _onScaleStart,
+                                    onScaleUpdate: _onScaleUpdate,
+                                    onScaleEnd: _onScaleEnd,
+                                    child: mainEditorConfigs.widgets.wrapBody?.call(
+                                          this,
+                                          _rebuildController.stream,
+                                          _buildInteractiveContent(),
+                                        ) ??
+                                        _buildInteractiveContent(),
+                                  ),
+                                );
+                        }),
+                        if (mainEditorConfigs.extendBodyBehindAppBar)
+                          Positioned(
+                            right: 0,
+                            top: 0,
+                            left: 0,
+                            child: _buildOnBodyAppBar() ?? Container(),
+                          )
+                      ],
+                    ),
+                  ),
                 ),
               ),
             ),
