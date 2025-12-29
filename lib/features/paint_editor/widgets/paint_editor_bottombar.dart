@@ -75,7 +75,7 @@ class PaintEditorBottombar extends StatelessWidget {
       child: EditorScrollbar(
         controller: bottomBarScrollCtrl,
         child: BottomAppBar(
-          height: kToolbarHeight,
+          height: configs.style.bottomBarHeight,
           color: configs.style.bottomBarBackground,
           padding: EdgeInsets.zero,
           child: Center(
@@ -99,9 +99,16 @@ class PaintEditorBottombar extends StatelessWidget {
                       return FlatIconTextButton(
                         label: Text(
                           item.label,
-                          style: TextStyle(fontSize: 10.0, color: color),
+                          style: TextStyle(
+                            fontSize: configs.style.bottomBarTextSize,
+                            color: color,
+                          ),
                         ),
-                        icon: Icon(item.icon, color: color),
+                        icon: Icon(
+                          item.icon,
+                          color: color,
+                          size: configs.style.bottomBarIconSize,
+                        ),
                         onPressed: () {
                           setMode(item.mode);
                         },

@@ -1,4 +1,5 @@
 // Flutter imports:
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
@@ -24,6 +25,9 @@ class PaintEditorStyle {
     this.bottomBarBackground = kImageEditorBottomBarBackground,
     this.bottomBarActiveItemColor = kImageEditorPrimaryColor,
     this.bottomBarInactiveItemColor = const Color(0xFFEEEEEE),
+    this.bottomBarHeight = kToolbarHeight,
+    this.bottomBarIconSize = 24.0,
+    this.bottomBarTextSize = 12.0,
     this.initialStrokeWidth = 10.0,
     this.initialOpacity = 1.0,
     this.uiOverlayStyle = kImageEditorUiOverlayStyle,
@@ -54,6 +58,15 @@ class PaintEditorStyle {
 
   /// Color of inactive items in the bottom navigation bar.
   final Color bottomBarInactiveItemColor;
+
+  /// The height of the bottom bar.
+  final double bottomBarHeight;
+
+  /// The size of the icons in the bottom bar.
+  final double bottomBarIconSize;
+
+  /// The size of the text underneath the icons in the bottom bar.
+  final double bottomBarTextSize;
 
   /// Color of the bottom sheet used to select line width.
   final Color lineWidthBottomSheetBackground;
@@ -108,6 +121,9 @@ class PaintEditorStyle {
     Color? appBarBackground,
     Color? bottomBarActiveItemColor,
     Color? bottomBarInactiveItemColor,
+    double? bottomBarHeight,
+    double? bottomBarIconSize,
+    double? bottomBarTextSize,
     Color? lineWidthBottomSheetBackground,
     Color? opacityBottomSheetBackground,
     TextStyle? lineWidthBottomSheetTitle,
@@ -131,6 +147,9 @@ class PaintEditorStyle {
           bottomBarActiveItemColor ?? this.bottomBarActiveItemColor,
       bottomBarInactiveItemColor:
           bottomBarInactiveItemColor ?? this.bottomBarInactiveItemColor,
+      bottomBarHeight: bottomBarHeight ?? this.bottomBarHeight,
+      bottomBarIconSize: bottomBarIconSize ?? this.bottomBarIconSize,
+      bottomBarTextSize: bottomBarTextSize ?? this.bottomBarTextSize,
       lineWidthBottomSheetBackground:
           lineWidthBottomSheetBackground ?? this.lineWidthBottomSheetBackground,
       opacityBottomSheetBackground:
