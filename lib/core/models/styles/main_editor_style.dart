@@ -88,14 +88,15 @@ class MainEditorStyle {
     double? bodyBorderWidth,
   }) {
     return MainEditorStyle(
-        background: background ?? this.background,
-        bottomBarColor: bottomBarColor ?? this.bottomBarColor,
-        bottomBarBackground: bottomBarBackground ?? this.bottomBarBackground,
-        appBarColor: appBarColor ?? this.appBarColor,
-        appBarBackground: appBarBackground ?? this.appBarBackground,
-        uiOverlayStyle: uiOverlayStyle ?? this.uiOverlayStyle,
-        subEditorPage: subEditorPage ?? this.subEditorPage,
-        outsideCaptureAreaLayerOpacity: outsideCaptureAreaLayerOpacity ??
-            this.outsideCaptureAreaLayerOpacity);
+      background: background ?? this.background,
+      bottomBarColor: bottomBarColor ?? this.bottomBarColor,
+      bottomBarBackground: bottomBarBackground ?? this.bottomBarBackground,
+      appBarColor: appBarColor ?? this.appBarColor,
+      appBarBackground: appBarBackground ?? this.appBarBackground,
+      uiOverlayStyle: uiOverlayStyle ?? this.uiOverlayStyle,
+      subEditorPage: subEditorPage ?? this.subEditorPage,
+      outsideCaptureAreaLayerOpacity:
+          outsideCaptureAreaLayerOpacity ?? this.outsideCaptureAreaLayerOpacity,
+    );
   }
 }

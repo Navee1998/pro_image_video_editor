@@ -25,16 +25,14 @@ class DummyLayer extends Layer {
   Map<String, dynamic> toMap({
     int maxDecimalPlaces = kMaxSafeDecimalPlaces,
     bool enableMinify = false,
-  }) =>
-      {'id': id, 'scale': scale};
+  }) => {'id': id, 'scale': scale};
 
   @override
   Map<String, dynamic> toMapFromReference(
     Layer reference, {
     int maxDecimalPlaces = kMaxSafeDecimalPlaces,
     bool enableMinify = false,
-  }) =>
-      toMap();
+  }) => toMap();
 }
 
 void main() {

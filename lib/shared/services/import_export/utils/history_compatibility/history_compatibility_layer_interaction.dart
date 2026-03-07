@@ -23,15 +23,15 @@ void historyCompatibilityLayerInteraction({
   required EditorKeyMinifier minifier,
 }) {
   final importVersion = version.toVersionNumber();
-  final latestIncompatibleVersion =
-      ExportImportVersion.version_5_0_0.toVersionNumber();
+  final latestIncompatibleVersion = ExportImportVersion.version_5_0_0
+      .toVersionNumber();
 
   if (importVersion <= latestIncompatibleVersion) {
     var keyConverter = minifier.convertLayerKey;
     if (layerMap[keyConverter('enableInteraction')] != null) {
       var interactionMap = LayerInteraction.fromDefaultValue(
-              layerMap[keyConverter('enableInteraction')] == true)
-          .toMap();
+        layerMap[keyConverter('enableInteraction')] == true,
+      ).toMap();
       layerMap[keyConverter('interaction')] = interactionMap.map(
         (itemKey, itemValue) =>
             MapEntry(minifier.convertLayerInteractionKey(itemKey), itemValue),

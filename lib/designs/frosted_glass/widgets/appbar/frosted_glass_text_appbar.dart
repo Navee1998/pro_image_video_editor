@@ -65,19 +65,21 @@ class FrostedGlassTextAppbar extends StatelessWidget {
                       IconButton(
                         tooltip: textEditor.i18n.textEditor.textAlign,
                         onPressed: textEditor.toggleTextAlign,
-                        icon: Icon(textEditor.align == TextAlign.left
-                            ? textEditor.textEditorConfigs.icons.alignLeft
-                            : textEditor.align == TextAlign.right
-                                ? textEditor.textEditorConfigs.icons.alignRight
-                                : textEditor
-                                    .textEditorConfigs.icons.alignCenter),
+                        icon: Icon(
+                          textEditor.align == TextAlign.left
+                              ? textEditor.textEditorConfigs.icons.alignLeft
+                              : textEditor.align == TextAlign.right
+                              ? textEditor.textEditorConfigs.icons.alignRight
+                              : textEditor.textEditorConfigs.icons.alignCenter,
+                        ),
                       ),
                       const SizedBox(width: 3),
                       IconButton(
                         tooltip: textEditor.i18n.textEditor.backgroundMode,
                         onPressed: textEditor.toggleBackgroundMode,
                         icon: Icon(
-                            textEditor.textEditorConfigs.icons.backgroundMode),
+                          textEditor.textEditorConfigs.icons.backgroundMode,
+                        ),
                       ),
                     ],
                   ),

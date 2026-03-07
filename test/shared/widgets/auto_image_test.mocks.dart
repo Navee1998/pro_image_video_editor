@@ -35,57 +35,63 @@ import 'package:pro_image_editor/core/models/editor_image.dart' as _i2;
 class MockEditorImage extends _i1.Mock implements _i2.EditorImage {
   @override
   set byteArray(_i3.Uint8List? _byteArray) => super.noSuchMethod(
-        Invocation.setter(
-          #byteArray,
-          _byteArray,
-        ),
-        returnValueForMissingStub: null,
-      );
+    Invocation.setter(#byteArray, _byteArray),
+    returnValueForMissingStub: null,
+  );
 
   @override
-  bool get hasBytes => (super.noSuchMethod(
-        Invocation.getter(#hasBytes),
-        returnValue: false,
-        returnValueForMissingStub: false,
-      ) as bool);
+  bool get hasBytes =>
+      (super.noSuchMethod(
+            Invocation.getter(#hasBytes),
+            returnValue: false,
+            returnValueForMissingStub: false,
+          )
+          as bool);
 
   @override
-  bool get hasNetworkUrl => (super.noSuchMethod(
-        Invocation.getter(#hasNetworkUrl),
-        returnValue: false,
-        returnValueForMissingStub: false,
-      ) as bool);
+  bool get hasNetworkUrl =>
+      (super.noSuchMethod(
+            Invocation.getter(#hasNetworkUrl),
+            returnValue: false,
+            returnValueForMissingStub: false,
+          )
+          as bool);
 
   @override
-  bool get hasFile => (super.noSuchMethod(
-        Invocation.getter(#hasFile),
-        returnValue: false,
-        returnValueForMissingStub: false,
-      ) as bool);
+  bool get hasFile =>
+      (super.noSuchMethod(
+            Invocation.getter(#hasFile),
+            returnValue: false,
+            returnValueForMissingStub: false,
+          )
+          as bool);
 
   @override
-  bool get hasAssetPath => (super.noSuchMethod(
-        Invocation.getter(#hasAssetPath),
-        returnValue: false,
-        returnValueForMissingStub: false,
-      ) as bool);
+  bool get hasAssetPath =>
+      (super.noSuchMethod(
+            Invocation.getter(#hasAssetPath),
+            returnValue: false,
+            returnValueForMissingStub: false,
+          )
+          as bool);
 
   @override
-  _i2.EditorImageType get type => (super.noSuchMethod(
-        Invocation.getter(#type),
-        returnValue: _i2.EditorImageType.file,
-        returnValueForMissingStub: _i2.EditorImageType.file,
-      ) as _i2.EditorImageType);
+  _i2.EditorImageType get type =>
+      (super.noSuchMethod(
+            Invocation.getter(#type),
+            returnValue: _i2.EditorImageType.file,
+            returnValueForMissingStub: _i2.EditorImageType.file,
+          )
+          as _i2.EditorImageType);
 
   @override
   _i4.Future<_i3.Uint8List> safeByteArray([_i5.BuildContext? context]) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #safeByteArray,
-          [context],
-        ),
-        returnValue: _i4.Future<_i3.Uint8List>.value(_i3.Uint8List(0)),
-        returnValueForMissingStub:
-            _i4.Future<_i3.Uint8List>.value(_i3.Uint8List(0)),
-      ) as _i4.Future<_i3.Uint8List>);
+            Invocation.method(#safeByteArray, [context]),
+            returnValue: _i4.Future<_i3.Uint8List>.value(_i3.Uint8List(0)),
+            returnValueForMissingStub: _i4.Future<_i3.Uint8List>.value(
+              _i3.Uint8List(0),
+            ),
+          )
+          as _i4.Future<_i3.Uint8List>);
 }

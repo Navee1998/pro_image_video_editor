@@ -1,11 +1,7 @@
-// ignore_for_file: deprecated_member_use_from_same_package
-// TODO: Remove the deprecated values when releasing version 12.0.0.
-
-// Flutter imports:
 import 'package:flutter/material.dart';
 
 import '/core/models/editor_configs/pro_image_editor_configs.dart';
-import '../../../../shared/widgets/gesture/gesture_interceptor_widget.dart';
+import '/shared/widgets/gesture/gesture_interceptor_widget.dart';
 import '../../styles/whatsapp_appbar_button_style.dart';
 
 /// Represents the app bar for the WhatsApp theme.
@@ -62,13 +58,13 @@ class _WhatsAppAppBarState extends State<WhatsAppAppBar> {
       top: 10,
       left: 10,
       right: 10,
-      child: LayoutBuilder(builder: (context, constraints) {
-        return widget.openEditor
-            ? const SizedBox.shrink()
-            : Row(
-                children: _buildToolList(constraints.maxWidth),
-              );
-      }),
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          return widget.openEditor
+              ? const SizedBox.shrink()
+              : Row(children: _buildToolList(constraints.maxWidth));
+        },
+      ),
     );
   }
 
@@ -115,13 +111,15 @@ class _WhatsAppAppBarState extends State<WhatsAppAppBar> {
     for (final tool in tools) {
       switch (tool) {
         case SubEditorMode.cropRotate:
-          if (!widget.configs.cropRotateEditor.enabled) continue;
           items.addAll([
             gap,
             GestureInterceptor(
               child: IconButton(
                 tooltip: widget
-                    .configs.i18n.cropRotateEditor.bottomNavigationBarText,
+                    .configs
+                    .i18n
+                    .cropRotateEditor
+                    .bottomNavigationBarText,
                 onPressed: widget.onTapCropRotateEditor,
                 icon: Icon(widget.configs.cropRotateEditor.icons.bottomNavBar),
                 style: whatsAppButtonStyle,
@@ -131,10 +129,6 @@ class _WhatsAppAppBarState extends State<WhatsAppAppBar> {
           break;
 
         case SubEditorMode.emoji:
-          if (!(widget.configs.stickerEditor.enabled ||
-              widget.configs.emojiEditor.enabled)) {
-            continue;
-          }
           items.addAll([
             gap,
             GestureInterceptor(
@@ -151,7 +145,6 @@ class _WhatsAppAppBarState extends State<WhatsAppAppBar> {
           break;
 
         case SubEditorMode.text:
-          if (!widget.configs.textEditor.enabled) continue;
           items.addAll([
             gap,
             GestureInterceptor(
@@ -166,7 +159,6 @@ class _WhatsAppAppBarState extends State<WhatsAppAppBar> {
           break;
 
         case SubEditorMode.paint:
-          if (!widget.configs.paintEditor.enabled) continue;
           items.addAll([
             gap,
             GestureInterceptor(

@@ -60,8 +60,10 @@ void main() {
         align: TextAlign.right,
         fontScale: 2.0,
         customSecondaryColor: true,
-        textStyle:
-            const TextStyle(fontFamily: 'Roboto', fontWeight: FontWeight.bold),
+        textStyle: const TextStyle(
+          fontFamily: 'Roboto',
+          fontWeight: FontWeight.bold,
+        ),
       );
 
       final map = textLayer.toMap();

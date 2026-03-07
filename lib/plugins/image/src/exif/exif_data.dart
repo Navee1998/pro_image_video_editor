@@ -205,13 +205,13 @@ class ExifData extends IfdContainer {
       // be translated to the StripOffsets long type.
       final tagType =
           tag == stripOffsetTag && value.type == IfdValueType.undefined
-              ? IfdValueType.long
-              : value.type;
+          ? IfdValueType.long
+          : value.type;
 
       final tagLength =
           tag == stripOffsetTag && value.type == IfdValueType.undefined
-              ? 1
-              : value.length;
+          ? 1
+          : value.length;
 
       out
         ..writeUint16(tag)
@@ -281,7 +281,9 @@ class ExifData extends IfdContainer {
       final directory = IfdDirectory();
       final numEntries = block.readUint16();
       final dir = List<_ExifEntry>.generate(
-          numEntries, (i) => _readEntry(block, blockOffset));
+        numEntries,
+        (i) => _readEntry(block, blockOffset),
+      );
 
       for (final entry in dir) {
         if (entry.value != null) {
@@ -299,11 +301,7 @@ class ExifData extends IfdContainer {
       }
     }
 
-    const subTags = {
-      0x8769: 'exif',
-      0xA005: 'interop',
-      0x8825: 'gps',
-    };
+    const subTags = {0x8769: 'exif', 0xA005: 'interop', 0x8825: 'gps'};
 
     for (final d in directories.values) {
       for (final dt in subTags.keys) {
@@ -314,7 +312,9 @@ class ExifData extends IfdContainer {
           final directory = IfdDirectory();
           final numEntries = block.readUint16();
           final dir = List<_ExifEntry>.generate(
-              numEntries, (i) => _readEntry(block, blockOffset));
+            numEntries,
+            (i) => _readEntry(block, blockOffset),
+          );
 
           for (final entry in dir) {
             if (entry.value != null) {

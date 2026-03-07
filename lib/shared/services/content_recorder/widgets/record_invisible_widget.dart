@@ -28,22 +28,23 @@ class _RecordInvisibleWidgetState extends State<RecordInvisibleWidget> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<Widget?>(
-        stream: widget.controller.recorderStream.stream,
-        builder: (context, snapshot) {
-          if (!widget.controller.recordReadyHelper.isCompleted) {
-            widget.controller.recordReadyHelper.complete(true);
-          }
+      stream: widget.controller.recorderStream.stream,
+      builder: (context, snapshot) {
+        if (!widget.controller.recordReadyHelper.isCompleted) {
+          widget.controller.recordReadyHelper.complete(true);
+        }
 
-          return Stack(
-            children: [
-              if (snapshot.data != null)
-                ExtendedRepaintBoundary(
-                  key: widget.controller.recorderKey,
-                  child: snapshot.data,
-                ),
-              widget.child,
-            ],
-          );
-        });
+        return Stack(
+          children: [
+            if (snapshot.data != null)
+              ExtendedRepaintBoundary(
+                key: widget.controller.recorderKey,
+                child: snapshot.data,
+              ),
+            widget.child,
+          ],
+        );
+      },
+    );
   }
 }

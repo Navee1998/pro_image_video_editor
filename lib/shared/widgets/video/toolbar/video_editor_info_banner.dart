@@ -30,7 +30,7 @@ class VideoEditorInfoBanner extends StatelessWidget {
 
     return ValueListenableBuilder(
       valueListenable: controller.trimDurationSpanNotifier,
-      builder: (_, durationSpan, __) {
+      builder: (_, durationSpan, _) {
         // If a custom info banner widget is provided, use it
         if (player.configs.widgets.infoBanner != null) {
           return player.configs.widgets.infoBanner!(durationSpan);
@@ -45,16 +45,15 @@ class VideoEditorInfoBanner extends StatelessWidget {
             ),
             child: RichText(
               text: TextSpan(
-                style: player.style.infoBannerTextStyle ??
+                style:
+                    player.style.infoBannerTextStyle ??
                     TextStyle(
                       fontSize: 14,
                       height: 1.2,
                       color: player.style.infoBannerTextColor,
                     ),
                 children: [
-                  TextSpan(
-                    text: durationSpan.duration.toTimeString(),
-                  ),
+                  TextSpan(text: durationSpan.duration.toTimeString()),
                   if (player.configs.enableEstimatedFileSize &&
                       controller.bitrate != null) ...[
                     WidgetSpan(
@@ -70,8 +69,10 @@ class VideoEditorInfoBanner extends StatelessWidget {
                       ),
                     ),
                     TextSpan(
-                      text: _estimatedFileSize(controller, durationSpan)
-                          .toBytesString(1),
+                      text: _estimatedFileSize(
+                        controller,
+                        durationSpan,
+                      ).toBytesString(1),
                     ),
                   ],
                 ],

@@ -10,9 +10,7 @@ import 'package:flutter/services.dart';
 /// and mouse events on desktop platforms.
 class CropDesktopInteractionManager {
   /// Manages user interactions for the crop desktop interface.
-  CropDesktopInteractionManager({
-    required this.context,
-  });
+  CropDesktopInteractionManager({required this.context});
 
   /// Build context for the interaction manager.
   final BuildContext context;
@@ -77,7 +75,9 @@ class CropDesktopInteractionManager {
             _shiftDown = true;
             break;
           case 'Z':
-            if (_ctrlDown) onUndoRedo(!_shiftDown);
+            if (_ctrlDown && !HardwareKeyboard.instance.isAltPressed) {
+              onUndoRedo(!_shiftDown);
+            }
             break;
         }
       } else if (event is KeyUpEvent) {

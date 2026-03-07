@@ -86,12 +86,10 @@ class TextLayer extends Layer {
         if (decoration.contains('lineThrough')) {
           return TextDecoration.lineThrough;
         }
-
         /// Checks and returns overline decoration.
         else if (decoration.contains('overline')) {
           return TextDecoration.overline;
         }
-
         /// Checks and returns underline decoration.
         else if (decoration.contains('underline')) {
           return TextDecoration.underline;
@@ -112,6 +110,16 @@ class TextLayer extends Layer {
     String? fontStyle = map[keyConverter('fontStyle')] as String?;
     String? decoration = map[keyConverter('decoration')] as String?;
 
+    // Parse shadows
+    final shadows = List.from(map[keyConverter('shadows')] ?? []).map((raw) {
+      final c = safeParseInt(raw['color']);
+      final b = safeParseDouble(raw['blurRadius']);
+      final ox = safeParseDouble(raw['offsetX']);
+      final oy = safeParseDouble(raw['offsetY']);
+
+      return Shadow(color: Color(c), blurRadius: b, offset: Offset(ox, oy));
+    }).toList();
+
     /// Constructs and returns a TextLayer instance with properties derived
     /// from the map.
     return TextLayer(
@@ -128,13 +136,15 @@ class TextLayer extends Layer {
       text: map[keyConverter('text')] ?? '-',
       fontScale: fontScale,
       maxTextWidth: tryParseDouble(map[keyConverter('maxTextWidth')]),
-      textStyle: fontFamily != null ||
+      textStyle:
+          fontFamily != null ||
               wordSpacing != null ||
               height != null ||
               letterSpacing != null ||
               fontWeight != null ||
               fontStyle != null ||
-              decoration != null
+              decoration != null ||
+              shadows.isNotEmpty
           ? TextStyle(
               fontFamily: fontFamily,
               height: height,
@@ -142,21 +152,26 @@ class TextLayer extends Layer {
               letterSpacing: letterSpacing,
               decoration: decoration != null ? getDecoration(decoration) : null,
               fontStyle: fontStyle != null
-                  ? FontStyle.values
-                      .firstWhere((element) => element.name == fontStyle)
+                  ? FontStyle.values.firstWhere(
+                      (element) => element.name == fontStyle,
+                    )
                   : null,
               fontWeight: fontWeight != null
-                  ? FontWeight.values
-                      .firstWhere((element) => element.value == fontWeight)
+                  ? FontWeight.values.firstWhere(
+                      (element) => element.value == fontWeight,
+                    )
                   : null,
+              shadows: shadows.isNotEmpty ? shadows : null,
             )
           : null,
       colorMode: LayerBackgroundMode.values.firstWhere(
-          (element) => element.name == map[keyConverter!('colorMode')]),
+        (element) => element.name == map[keyConverter!('colorMode')],
+      ),
       color: Color(map[keyConverter('color')]),
       background: Color(map[keyConverter('background')]),
-      align: TextAlign.values
-          .firstWhere((element) => element.name == map[keyConverter!('align')]),
+      align: TextAlign.values.firstWhere(
+        (element) => element.name == map[keyConverter!('align')],
+      ),
       customSecondaryColor: map[keyConverter('customSecondaryColor')] ?? false,
     );
   }
@@ -203,7 +218,7 @@ class TextLayer extends Layer {
     int maxDecimalPlaces = kMaxSafeDecimalPlaces,
     bool enableMinify = false,
   }) {
-    return {
+    final result = {
       ...super.toMap(
         maxDecimalPlaces: maxDecimalPlaces,
         enableMinify: enableMinify,
@@ -230,7 +245,19 @@ class TextLayer extends Layer {
         'wordSpacing': textStyle?.wordSpacing?.roundSmart(maxDecimalPlaces),
       if (textStyle?.decoration != null)
         'decoration': textStyle?.decoration.toString(),
+      if (textStyle?.shadows != null && textStyle!.shadows!.isNotEmpty)
+        'shadows': textStyle!.shadows!
+            .map(
+              (s) => {
+                'color': s.color.toHex(),
+                'blurRadius': s.blurRadius,
+                'offsetX': s.offset.dx,
+                'offsetY': s.offset.dy,
+              },
+            )
+            .toList(),
     };
+    return result;
   }
 
   @override
@@ -271,6 +298,17 @@ class TextLayer extends Layer {
         'decoration': textStyle?.decoration.toString(),
       if (paintLayer.maxTextWidth != maxTextWidth)
         'maxTextWidth': maxTextWidth?.roundSmart(maxDecimalPlaces),
+      if (textStyle?.shadows != null && textStyle!.shadows!.isNotEmpty)
+        'shadows': textStyle!.shadows!
+            .map(
+              (s) => {
+                'color': s.color.toHex(),
+                'blurRadius': s.blurRadius,
+                'offsetX': s.offset.dx,
+                'offsetY': s.offset.dy,
+              },
+            )
+            .toList(),
     };
   }
 
@@ -331,8 +369,9 @@ class TextLayer extends Layer {
       ..add(EnumProperty<LayerBackgroundMode>('colorMode', colorMode))
       ..add(ColorProperty('color', color))
       ..add(ColorProperty('background', background))
-      ..add(DiagnosticsProperty<bool>(
-          'customSecondaryColor', customSecondaryColor))
+      ..add(
+        DiagnosticsProperty<bool>('customSecondaryColor', customSecondaryColor),
+      )
       ..add(EnumProperty<TextAlign>('align', align))
       ..add(DoubleProperty('fontScale', fontScale))
       ..add(DoubleProperty('maxTextWidth', maxTextWidth))

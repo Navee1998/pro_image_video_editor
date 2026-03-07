@@ -51,10 +51,8 @@ class PaintEditorWidgets
   ///   );
   /// },
   /// ```
-  final Widget Function(
-    PaintEditorState editorState,
-    Function() tap,
-  )? lineWidthCloseButton;
+  final Widget Function(PaintEditorState editorState, Function() tap)?
+  lineWidthCloseButton;
 
   /// Custom close button in the paint-editor to close the change-opacity
   /// bottom sheet.
@@ -68,10 +66,8 @@ class PaintEditorWidgets
   ///   );
   /// },
   /// ```
-  final Widget Function(
-    PaintEditorState editorState,
-    Function() tap,
-  )? changeOpacityCloseButton;
+  final Widget Function(PaintEditorState editorState, Function() tap)?
+  changeOpacityCloseButton;
 
   /// A custom slider widget for the line width in the paint editor.
   ///
@@ -94,22 +90,22 @@ class PaintEditorWidgets
   /// Builds a custom color slider widget for the [PaintLayer].
   /// The [setValue] callback should update the layer's color.
   final Widget Function(PaintLayer layer, Function(Color value) setValue)?
-      editColorSlider;
+  editColorSlider;
 
   /// Builds a custom opacity slider widget for the [PaintLayer].
   /// The [setValue] callback should update the layer's opacity.
   final Widget Function(PaintLayer layer, Function(double value) setValue)?
-      editOpacitySlider;
+  editOpacitySlider;
 
   /// Builds a custom stroke width slider widget for the [PaintLayer].
   /// The [setValue] callback should update the layer's stroke width.
   final Widget Function(PaintLayer layer, Function(double value) setValue)?
-      editStrokeWidthSlider;
+  editStrokeWidthSlider;
 
   /// Builds a custom switch widget to toggle the fill mode of the [PaintLayer].
   /// The [setValue] callback should update the fill state.
   final Widget Function(PaintLayer layer, Function(bool value) setValue)?
-      editFillSwitch;
+  editFillSwitch;
 
   /// Builds custom action buttons (e.g., apply/cancel) for editing the
   /// [PaintLayer].
@@ -121,29 +117,33 @@ class PaintEditorWidgets
   @override
   PaintEditorWidgets copyWith({
     ReactiveAppbar? Function(
-            PaintEditorState editorState, Stream<void> rebuildStream)?
-        appBar,
+      PaintEditorState editorState,
+      Stream<void> rebuildStream,
+    )?
+    appBar,
     ReactiveWidget? Function(
-            PaintEditorState editorState, Stream<void> rebuildStream)?
-        bottomBar,
+      PaintEditorState editorState,
+      Stream<void> rebuildStream,
+    )?
+    bottomBar,
     CustomBodyItems<PaintEditorState>? bodyItems,
     CustomBodyItems<PaintEditorState>? bodyItemsRecorded,
     Widget Function(PaintEditorState editorState, Function() tap)?
-        lineWidthCloseButton,
+    lineWidthCloseButton,
     Widget Function(PaintEditorState editorState, Function() tap)?
-        changeOpacityCloseButton,
+    changeOpacityCloseButton,
     CustomSlider<PaintEditorState>? sliderLineWidth,
     CustomSlider<PaintEditorState>? sliderChangeOpacity,
     CustomColorPicker<PaintEditorState>? colorPicker,
     Widget Function(PaintLayer layer)? editPreview,
     Widget Function(PaintLayer layer, Function(Color value) setValue)?
-        editColorSlider,
+    editColorSlider,
     Widget Function(PaintLayer layer, Function(double value) setValue)?
-        editOpacitySlider,
+    editOpacitySlider,
     Widget Function(PaintLayer layer, Function(double value) setValue)?
-        editStrokeWidthSlider,
+    editStrokeWidthSlider,
     Widget Function(PaintLayer layer, Function(bool value) setValue)?
-        editFillSwitch,
+    editFillSwitch,
     Widget Function(PaintLayer layer)? editActionButtons,
     Widget Function(PaintLayer layer)? editBottomSheet,
   }) {

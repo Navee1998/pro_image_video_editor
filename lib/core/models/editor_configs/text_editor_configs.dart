@@ -1,7 +1,3 @@
-// ignore_for_file: deprecated_member_use_from_same_package
-// TODO: Remove the deprecated values when releasing version 12.0.0.
-
-// Flutter imports:
 import 'package:flutter/widgets.dart';
 
 // Project imports:
@@ -38,46 +34,44 @@ class TextEditorConfigs
   ///
   /// By default, the text editor is enabled, and most text formatting options
   /// are enabled. The initial font size is set to 24.0.
-  const TextEditorConfigs(
-      {this.layerFractionalOffset = const Offset(-0.5, -0.5),
-      this.enableGesturePop = true,
-      this.enableSuggestions = true,
-      @Deprecated(
-        'Use tools inside MainEditorConfigs instead, e.g. tools: '
-        '[SubEditorMode.text]',
-      )
-      this.enabled = true,
-      this.enableEdit = true,
-      this.enableAutocorrect = true,
-      this.showSelectFontStyleBottomBar = false,
-      this.showTextAlignButton = true,
-      this.showFontScaleButton = true,
-      this.showBackgroundModeButton = true,
-      this.enableMainEditorZoomFactor = false,
-      this.enableTapOutsideToSave = true,
-      this.enableAutoOverflow = true,
-      this.enableAutoWrapOnLayer = true,
-      this.initFontSize = 24.0,
-      this.initialPrimaryColor = const Color(0xFF000000),
-      this.initialSecondaryColor,
-      this.initialTextAlign = TextAlign.center,
-      this.inputTextFieldAlign = Alignment.center,
-      this.initFontScale = 1.0,
-      this.maxFontScale = 3.0,
-      this.minFontScale = 0.3,
-      this.minScale = double.negativeInfinity,
-      this.maxScale = double.infinity,
-      this.customTextStyles,
-      this.defaultTextStyle = const TextStyle(),
-      this.initialBackgroundColorMode = LayerBackgroundMode.backgroundAndColor,
-      this.safeArea = const EditorSafeArea(),
-      this.style = const TextEditorStyle(),
-      this.icons = const TextEditorIcons(),
-      this.widgets = const TextEditorWidgets(),
-      this.enableImageBoundaryTextWrap = false})
-      : assert(initFontSize > 0, 'initFontSize must be positive'),
-        assert(maxScale >= minScale,
-            'maxScale must be greater than or equal to minScale');
+  const TextEditorConfigs({
+    this.layerFractionalOffset = const Offset(-0.5, -0.5),
+    this.enableGesturePop = true,
+    this.enableSuggestions = true,
+    this.enableEdit = true,
+    this.enableAutocorrect = true,
+    this.showSelectFontStyleBottomBar = false,
+    this.showTextAlignButton = true,
+    this.showFontScaleButton = true,
+    this.showBackgroundModeButton = true,
+    this.enableMainEditorZoomFactor = false,
+    this.enableTapOutsideToSave = true,
+    this.enableAutoOverflow = true,
+    this.enableAutoWrapOnLayer = true,
+    this.initFontSize = 24.0,
+    this.initialPrimaryColor = const Color(0xFF000000),
+    this.initialSecondaryColor,
+    this.initialTextAlign = TextAlign.center,
+    this.inputTextFieldAlign = Alignment.center,
+    this.initFontScale = 1.0,
+    this.maxFontScale = 3.0,
+    this.minFontScale = 0.3,
+    this.minScale = double.negativeInfinity,
+    this.maxScale = double.infinity,
+    this.customTextStyles,
+    this.defaultTextStyle = const TextStyle(),
+    this.initialBackgroundColorMode = LayerBackgroundMode.backgroundAndColor,
+    this.safeArea = const EditorSafeArea(),
+    this.style = const TextEditorStyle(),
+    this.icons = const TextEditorIcons(),
+    this.widgets = const TextEditorWidgets(),
+    this.enableImageBoundaryTextWrap = false,
+    this.resizeToAvoidBottomInset = true,
+  }) : assert(initFontSize > 0, 'initFontSize must be positive'),
+       assert(
+         maxScale >= minScale,
+         'maxScale must be greater than or equal to minScale',
+       );
 
   /// {@macro layerFractionalOffset}
   @override
@@ -86,13 +80,6 @@ class TextEditorConfigs
   /// {@macro enableGesturePop}
   @override
   final bool enableGesturePop;
-
-  /// Indicates whether the text editor is enabled.
-  @Deprecated(
-    'Use tools inside MainEditorConfigs instead, e.g. tools: '
-    '[SubEditorMode.text]',
-  )
-  final bool enabled;
 
   /// Indicating whether created layers can be edited.
   final bool enableEdit;
@@ -216,6 +203,13 @@ class TextEditorConfigs
   /// Enable automatic text wrapping when text reach the image boundaries
   final bool enableImageBoundaryTextWrap;
 
+  /// Whether the Scaffold should resize to avoid the bottom inset (keyboard).
+  ///
+  /// When `true` (default), the editor will resize when the keyboard appears.
+  /// When `false`, the editor will not resize and the keyboard may overlap
+  /// the content.
+  final bool resizeToAvoidBottomInset;
+
   /// Creates a copy of this `TextEditorConfigs` object with the given fields
   /// replaced with new values.
   ///
@@ -225,7 +219,6 @@ class TextEditorConfigs
   TextEditorConfigs copyWith({
     Offset? layerFractionalOffset,
     bool? enableGesturePop,
-    bool? enabled,
     bool? enableEdit,
     bool? showSelectFontStyleBottomBar,
     bool? enableMainEditorZoomFactor,
@@ -252,13 +245,16 @@ class TextEditorConfigs
     TextEditorIcons? icons,
     TextEditorWidgets? widgets,
     bool? enableImageBoundaryTextWrap,
+    bool? showBackgroundModeButton,
+    bool? showFontScaleButton,
+    bool? showTextAlignButton,
+    bool? resizeToAvoidBottomInset,
   }) {
     return TextEditorConfigs(
       layerFractionalOffset:
           layerFractionalOffset ?? this.layerFractionalOffset,
       enableGesturePop: enableGesturePop ?? this.enableGesturePop,
       safeArea: safeArea ?? this.safeArea,
-      enabled: enabled ?? this.enabled,
       enableEdit: enableEdit ?? this.enableEdit,
       showSelectFontStyleBottomBar:
           showSelectFontStyleBottomBar ?? this.showSelectFontStyleBottomBar,
@@ -291,6 +287,12 @@ class TextEditorConfigs
       widgets: widgets ?? this.widgets,
       enableImageBoundaryTextWrap:
           enableImageBoundaryTextWrap ?? this.enableImageBoundaryTextWrap,
+      showBackgroundModeButton:
+          showBackgroundModeButton ?? this.showBackgroundModeButton,
+      showFontScaleButton: showFontScaleButton ?? this.showFontScaleButton,
+      showTextAlignButton: showTextAlignButton ?? this.showTextAlignButton,
+      resizeToAvoidBottomInset:
+          resizeToAvoidBottomInset ?? this.resizeToAvoidBottomInset,
     );
   }
 }

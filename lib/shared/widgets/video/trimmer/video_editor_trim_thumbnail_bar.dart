@@ -23,26 +23,24 @@ class VideoEditorTrimThumbnailBar extends StatelessWidget {
         borderRadius: BorderRadius.circular(player.style.trimBarHandlerRadius),
       ),
       child: ValueListenableBuilder(
-          valueListenable: player.controller.thumbnailsNotifier,
-          builder: (_, thumbnails, __) {
-            return AnimatedSwitcher(
-              duration: const Duration(milliseconds: 200),
-              child: thumbnails == null
-                  ? player.widgets.trimBarSkeletonLoader ??
+        valueListenable: player.controller.thumbnailsNotifier,
+        builder: (_, thumbnails, _) {
+          return AnimatedSwitcher(
+            duration: const Duration(milliseconds: 200),
+            child: thumbnails == null
+                ? player.widgets.trimBarSkeletonLoader ??
                       const VideoEditorTrimSkeleton()
-                  : Row(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: thumbnails.map((item) {
-                        return Expanded(
-                          child: Image(
-                            image: item,
-                            fit: BoxFit.cover,
-                          ),
-                        );
-                      }).toList(),
-                    ),
-            );
-          }),
+                : Row(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: thumbnails.map((item) {
+                      return Expanded(
+                        child: Image(image: item, fit: BoxFit.cover),
+                      );
+                    }).toList(),
+                  ),
+          );
+        },
+      ),
     );
   }
 }

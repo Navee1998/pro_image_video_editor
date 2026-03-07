@@ -102,8 +102,10 @@ class ThreadWebRequest extends ThreadRequest {
 
     final jsId = jsGetProperty(jsObj, 'id');
     final jsMode = jsGetProperty(jsObj, 'mode');
-    final jsGenerateOnlyImageBounds =
-        jsGetProperty(jsObj, 'generateOnlyImageBounds');
+    final jsGenerateOnlyImageBounds = jsGetProperty(
+      jsObj,
+      'generateOnlyImageBounds',
+    );
     final jsJpegChroma = jsGetProperty(jsObj, 'jpegChroma');
     final jsJpegQuality = jsGetProperty(jsObj, 'jpegQuality');
     final jsJpegBackgroundColor = jsGetProperty(jsObj, 'jpegBackgroundColor');
@@ -119,8 +121,9 @@ class ThreadWebRequest extends ThreadRequest {
       generateOnlyImageBounds: convertBool(jsGenerateOnlyImageBounds),
       jpegChroma: getJpegChroma(convertString(jsJpegChroma)),
       jpegQuality: getJpgQuality(convertInteger(jsJpegQuality)),
-      jpegBackgroundColor:
-          getJpgBackgroundColor(convertInteger(jsJpegBackgroundColor)),
+      jpegBackgroundColor: getJpgBackgroundColor(
+        convertInteger(jsJpegBackgroundColor),
+      ),
       pngFilter: getPngFilter(convertString(jsPngFilter)),
       pngLevel: getPngLevel(convertInteger(jsPngLevel)),
       singleFrame: getSingleFrame(convertBool(jsSingleFrame)),

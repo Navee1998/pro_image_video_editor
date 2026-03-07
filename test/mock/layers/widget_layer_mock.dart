@@ -5,11 +5,7 @@ import 'package:pro_image_editor/core/models/layers/layer_interaction.dart';
 import 'package:pro_image_editor/core/models/layers/widget_layer.dart';
 
 WidgetLayer widgetLayerMock = WidgetLayer(
-  widget: Container(
-    width: 100,
-    height: 200,
-    color: Colors.red,
-  ),
+  widget: Container(width: 100, height: 200, color: Colors.red),
   exportConfigs: const WidgetLayerExportConfigs(id: 'widget-mock-container'),
   boxConstraints: const BoxConstraints(
     minWidth: 1,
@@ -27,9 +23,7 @@ WidgetLayer widgetLayerMock = WidgetLayer(
     enableScale: false,
     enableSelection: true,
   ),
-  meta: {
-    'widget-mock': 'meta',
-  },
+  meta: {'widget-mock': 'meta'},
   offset: const Offset(50, 30),
   rotation: pi,
   scale: 2.25,

@@ -19,12 +19,16 @@ class ZLibEncoder {
   /// Compress the given [bytes] with the ZLib format.
   /// [level] will set the compression level to use, between 0 and 9, 6 is the
   /// default.
-  Uint8List encodeBytes(List<int> bytes,
-          {int? level, int windowBits = maxWindowBits}) =>
-      platformZLibEncoder.encodeBytes(bytes, level: level);
+  Uint8List encodeBytes(
+    List<int> bytes, {
+    int? level,
+    int windowBits = maxWindowBits,
+  }) => platformZLibEncoder.encodeBytes(bytes, level: level);
 
   /// Alias for [encodeBytes], kept for backwards compatibility.
-  List<int> encode(List<int> bytes,
-          {int? level, int windowBits = maxWindowBits}) =>
-      encodeBytes(bytes, level: level, windowBits: windowBits);
+  List<int> encode(
+    List<int> bytes, {
+    int? level,
+    int windowBits = maxWindowBits,
+  }) => encodeBytes(bytes, level: level, windowBits: windowBits);
 }

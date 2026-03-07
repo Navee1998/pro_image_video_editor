@@ -66,16 +66,18 @@ class ImportStateHistory {
     final transformKey = minifier.convertHistoryKey('transform');
 
     /// Initialize default values
-    final version = map[minifier.convertMainKey('version')] as String? ??
+    final version =
+        map[minifier.convertMainKey('version')] as String? ??
         ExportImportVersion.version_1_0_0;
     final stateHistory = <EditorStateHistory>[];
     final widgetRecords = parseWidgetRecords(map, version, minifier);
-    final lastRenderedImgSize =
-        safeParseSize(map[minifier.convertMainKey('lastRenderedImgSize')]);
+    final lastRenderedImgSize = safeParseSize(
+      map[minifier.convertMainKey('lastRenderedImgSize')],
+    );
     final List<EditorImage> requirePrecacheList = [];
 
     Map<String, Map<String, dynamic>> lastLayerStateHelper = {
-      ...map[minifier.convertMainKey('references')] ?? {}
+      ...map[minifier.convertMainKey('references')] ?? {},
     };
 
     var historyList =
@@ -91,10 +93,14 @@ class ImportStateHistory {
         case ExportImportVersion.version_3_0_1:
         case ExportImportVersion.version_3_0_0:
         case ExportImportVersion.version_4_0_0:
-          layers =
-              (historyItem['layers'] as List<dynamic>? ?? []).map((rawLayer) {
+          layers = (historyItem['layers'] as List<dynamic>? ?? []).map((
+            rawLayer,
+          ) {
             historyCompatibilityLayerInteraction(
-                layerMap: rawLayer, minifier: minifier, version: version);
+              layerMap: rawLayer,
+              minifier: minifier,
+              version: version,
+            );
             return Layer.fromMap(
               rawLayer,
               widgetRecords: widgetRecords,
@@ -105,7 +111,8 @@ class ImportStateHistory {
           break;
         default:
           for (var rawLayer in List.from(
-              historyItem[minifier.convertHistoryKey('layers')] ?? [])) {
+            historyItem[minifier.convertHistoryKey('layers')] ?? [],
+          )) {
             String id = rawLayer['id'];
             Map<String, dynamic> convertedLayerMap = {
               ...lastLayerStateHelper[id] ?? {},
@@ -120,17 +127,20 @@ class ImportStateHistory {
               );
             }
 
-            layers.add(Layer.fromMap(
-              convertedLayerMap,
-              widgetRecords: widgetRecords,
-              widgetLoader: configs.widgetLoader,
-              requirePrecache: requirePrecacheList.add,
-              minifier: minifier,
-              id: id,
-            ));
+            layers.add(
+              Layer.fromMap(
+                convertedLayerMap,
+                widgetRecords: widgetRecords,
+                widgetLoader: configs.widgetLoader,
+                requirePrecache: requirePrecacheList.add,
+                minifier: minifier,
+                id: id,
+              ),
+            );
 
-            lastLayerStateHelper[id] =
-                Map<String, dynamic>.from(convertedLayerMap);
+            lastLayerStateHelper[id] = Map<String, dynamic>.from(
+              convertedLayerMap,
+            );
           }
       }
 
@@ -148,20 +158,23 @@ class ImportStateHistory {
           .toList();
 
       /// Transformations
-      final transformConfigs = historyItem[transformKey] != null &&
+      final transformConfigs =
+          historyItem[transformKey] != null &&
               Map.from(historyItem[transformKey]).isNotEmpty
           ? TransformConfigs.fromMap(historyItem[transformKey])
           : stateHistory.isNotEmpty
-              ? stateHistory.last.transformConfigs
-              : TransformConfigs.empty();
+          ? stateHistory.last.transformConfigs
+          : TransformConfigs.empty();
 
-      stateHistory.add(EditorStateHistory(
-        blur: blur,
-        layers: layers,
-        filters: filters,
-        tuneAdjustments: tuneAdjustments,
-        transformConfigs: transformConfigs,
-      ));
+      stateHistory.add(
+        EditorStateHistory(
+          blur: blur,
+          layers: layers,
+          filters: filters,
+          tuneAdjustments: tuneAdjustments,
+          transformConfigs: transformConfigs,
+        ),
+      );
     }
 
     return ImportStateHistory._(
@@ -193,9 +206,7 @@ class ImportStateHistory {
           if (opacity == 1.0) {
             filterMatrix.add(matrix);
           } else {
-            filterMatrix.add(
-              lerpColorMatrix(identityMatrix, matrix, opacity),
-            );
+            filterMatrix.add(lerpColorMatrix(identityMatrix, matrix, opacity));
           }
         }
 
@@ -210,8 +221,11 @@ class ImportStateHistory {
 
         final originalMatrix = List<double>.from(matrix.map(safeParseDouble));
         if (opacity != 1) {
-          var updatedMatrix =
-              lerpColorMatrix(identityMatrix, originalMatrix, opacity);
+          var updatedMatrix = lerpColorMatrix(
+            identityMatrix,
+            originalMatrix,
+            opacity,
+          );
 
           /// Set opacity to 1 as the other values are updated with lerp.
           updatedMatrix[18] = 1.0;
@@ -225,8 +239,10 @@ class ImportStateHistory {
       return result;
     } else {
       return (filtersData as List<dynamic>)
-          .map((el) =>
-              List<double>.from((el as List<dynamic>).map(safeParseDouble)))
+          .map(
+            (el) =>
+                List<double>.from((el as List<dynamic>).map(safeParseDouble)),
+          )
           .toList();
     }
   }
@@ -249,7 +265,7 @@ class ImportStateHistory {
       default:
         items =
             (map[minifier.convertMainKey('widgetRecords')] as List<dynamic>? ??
-                []);
+            []);
         break;
     }
 

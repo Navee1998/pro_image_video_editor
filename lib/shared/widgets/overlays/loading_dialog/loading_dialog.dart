@@ -76,7 +76,7 @@ class LoadingDialog extends ChangeNotifier {
                     context: context,
                     configs: configs,
                     message: message!,
-                  )
+                  ),
                 ],
               ),
       ),
@@ -84,11 +84,13 @@ class LoadingDialog extends ChangeNotifier {
 
     Overlay.of(context).insert(overlay);
 
-    _overlays.add(LoadingOverlayDetails(
-      entry: overlay,
-      isDismissible: isDismissible,
-      animationKey: animationKey,
-    ));
+    _overlays.add(
+      LoadingOverlayDetails(
+        entry: overlay,
+        isDismissible: isDismissible,
+        animationKey: animationKey,
+      ),
+    );
 
     notifyListeners();
   }
@@ -160,8 +162,10 @@ class LoadingDialog extends ChangeNotifier {
     return Theme(
       data: theme,
       child: AlertDialog(
-        contentPadding:
-            const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
+        contentPadding: const EdgeInsets.symmetric(
+          vertical: 16,
+          horizontal: 20,
+        ),
         content: content,
       ),
     );
@@ -183,22 +187,32 @@ class LoadingDialog extends ChangeNotifier {
         brightness: theme.brightness,
         primaryColor: theme.brightness == Brightness.dark
             ? configs
-                .dialogConfigs.style.loadingDialog.cupertinoPrimaryColorDark
+                  .dialogConfigs
+                  .style
+                  .loadingDialog
+                  .cupertinoPrimaryColorDark
             : configs
-                .dialogConfigs.style.loadingDialog.cupertinoPrimaryColorLight,
+                  .dialogConfigs
+                  .style
+                  .loadingDialog
+                  .cupertinoPrimaryColorLight,
         textTheme: CupertinoTextThemeData(
           textStyle: TextStyle(
             color: theme.brightness == Brightness.dark
                 ? configs
-                    .dialogConfigs.style.loadingDialog.cupertinoPrimaryColorDark
-                : configs.dialogConfigs.style.loadingDialog
-                    .cupertinoPrimaryColorLight,
+                      .dialogConfigs
+                      .style
+                      .loadingDialog
+                      .cupertinoPrimaryColorDark
+                : configs
+                      .dialogConfigs
+                      .style
+                      .loadingDialog
+                      .cupertinoPrimaryColorLight,
           ),
         ),
       ),
-      child: CupertinoAlertDialog(
-        content: content,
-      ),
+      child: CupertinoAlertDialog(content: content),
     );
   }
 
@@ -229,10 +243,7 @@ class LoadingDialog extends ChangeNotifier {
             Expanded(
               child: Text(
                 message,
-                style: platformTextStyle(
-                  context,
-                  configs.designMode,
-                ).copyWith(
+                style: platformTextStyle(context, configs.designMode).copyWith(
                   fontSize: 16,
                   color: configs.dialogConfigs.style.loadingDialog.textColor,
                 ),

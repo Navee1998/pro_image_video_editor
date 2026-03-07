@@ -59,5 +59,5 @@ class ShaderManager {
 /// Enum representing different shader modes.
 enum ShaderMode {
   /// Applies a pixelation effect to the image.
-  pixelate
+  pixelate,
 }

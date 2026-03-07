@@ -7,11 +7,11 @@ import 'palette.dart';
 
 class PaletteUint8 extends Palette {
   PaletteUint8(super.numColors, super.numChannels)
-      : data = Uint8List(numColors * numChannels);
+    : data = Uint8List(numColors * numChannels);
 
   PaletteUint8.from(PaletteUint8 other)
-      : data = Uint8List.fromList(other.data),
-        super(other.numColors, other.numChannels);
+    : data = Uint8List.fromList(other.data),
+      super(other.numColors, other.numChannels);
   final Uint8List data;
 
   @override

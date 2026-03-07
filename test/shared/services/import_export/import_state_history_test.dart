@@ -60,11 +60,9 @@ void main() {
     test('parse filters for version 1.0.0', () {
       final filtersData = [
         {
-          'filters': [
-            ColorFilterAddons.brightness(0.5),
-          ],
-          'opacity': 0.5
-        }
+          'filters': [ColorFilterAddons.brightness(0.5)],
+          'opacity': 0.5,
+        },
       ];
       final result = ImportStateHistory.parseFilters(filtersData, '1.0.0');
       expect(result.length, 1);
@@ -72,9 +70,7 @@ void main() {
     });
 
     test('parse filters for version 5.0.0', () {
-      final filtersData = [
-        ColorFilterAddons.brightness(0.5),
-      ];
+      final filtersData = [ColorFilterAddons.brightness(0.5)];
       final result = ImportStateHistory.parseFilters(filtersData, '5.0.0');
       expect(result, filtersData);
     });
@@ -82,8 +78,8 @@ void main() {
     test('parse widget records for version 1.0.0', () {
       final map = {
         'stickers': [
-          [1, 2, 3]
-        ]
+          [1, 2, 3],
+        ],
       };
       final result = ImportStateHistory.parseWidgetRecords(
         map,
@@ -91,15 +87,15 @@ void main() {
         EditorKeyMinifier(enableMinify: false),
       );
       expect(result, [
-        Uint8List.fromList([1, 2, 3])
+        Uint8List.fromList([1, 2, 3]),
       ]);
     });
 
     test('parse widget records for version 5.0.0', () {
       final map = {
         'widgetRecords': [
-          [4, 5, 6]
-        ]
+          [4, 5, 6],
+        ],
       };
       final result = ImportStateHistory.parseWidgetRecords(
         map,
@@ -107,7 +103,7 @@ void main() {
         EditorKeyMinifier(enableMinify: false),
       );
       expect(result, [
-        Uint8List.fromList([4, 5, 6])
+        Uint8List.fromList([4, 5, 6]),
       ]);
     });
   });

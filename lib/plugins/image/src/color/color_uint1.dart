@@ -11,26 +11,22 @@ import 'format.dart';
 class ColorUint1 extends Color {
   ColorUint1(this.length) : data = 0;
 
-  ColorUint1.from(ColorUint1 other)
-      : length = other.length,
-        data = other.data;
+  ColorUint1.from(ColorUint1 other) : length = other.length, data = other.data;
 
-  ColorUint1.fromList(List<int> color)
-      : length = color.length,
-        data = 0 {
-    setRgba(length > 0 ? color[0] : 0, length > 1 ? color[1] : 0,
-        length > 2 ? color[2] : 0, length > 3 ? color[3] : 0);
+  ColorUint1.fromList(List<int> color) : length = color.length, data = 0 {
+    setRgba(
+      length > 0 ? color[0] : 0,
+      length > 1 ? color[1] : 0,
+      length > 2 ? color[2] : 0,
+      length > 3 ? color[3] : 0,
+    );
   }
 
-  ColorUint1.rgb(int r, int g, int b)
-      : length = 3,
-        data = 0 {
+  ColorUint1.rgb(int r, int g, int b) : length = 3, data = 0 {
     setRgb(r, g, b);
   }
 
-  ColorUint1.rgba(int r, int g, int b, int a)
-      : length = 4,
-        data = 0 {
+  ColorUint1.rgba(int r, int g, int b, int a) : length = 4, data = 0 {
     setRgba(r, g, b, a);
   }
   @override
@@ -182,7 +178,10 @@ class ColorUint1 extends Color {
   int get hashCode => Object.hashAll(toList());
 
   @override
-  Color convert({Format? format, int? numChannels, num? alpha}) =>
-      convertColor(this,
-          format: format, numChannels: numChannels, alpha: alpha);
+  Color convert({Format? format, int? numChannels, num? alpha}) => convertColor(
+    this,
+    format: format,
+    numChannels: numChannels,
+    alpha: alpha,
+  );
 }

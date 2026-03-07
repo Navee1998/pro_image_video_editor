@@ -10,9 +10,7 @@ import 'package:pro_image_editor/pro_image_editor.dart';
 import '../mock/mock_image.dart';
 
 void main() {
-  final initConfigs = BlurEditorInitConfigs(
-    theme: ThemeData(),
-  );
+  final initConfigs = BlurEditorInitConfigs(theme: ThemeData());
   var key = GlobalKey<BlurEditorState>();
   Future<void> pumpBlurEditor(WidgetTester tester) async {
     await tester.pumpWidget(
@@ -30,72 +28,89 @@ void main() {
 
   group('BlurEditor Initialization', () {
     testWidgets('creates BlurEditor using memory image', (tester) async {
-      await tester.pumpWidget(MaterialApp(
-        home: BlurEditor.memory(mockMemoryImage, initConfigs: initConfigs),
-      ));
+      await tester.pumpWidget(
+        MaterialApp(
+          home: BlurEditor.memory(mockMemoryImage, initConfigs: initConfigs),
+        ),
+      );
 
       expect(find.byType(BlurEditor), findsOneWidget);
     });
     testWidgets('creates BlurEditor using network image', (tester) async {
       await mockNetworkImagesFor(() async {
-        await tester.pumpWidget(MaterialApp(
-          home: BlurEditor.network(mockNetworkImage, initConfigs: initConfigs),
-        ));
+        await tester.pumpWidget(
+          MaterialApp(
+            home: BlurEditor.network(
+              mockNetworkImage,
+              initConfigs: initConfigs,
+            ),
+          ),
+        );
       });
 
       expect(find.byType(BlurEditor), findsOneWidget);
     });
     testWidgets('creates BlurEditor using file image', (tester) async {
-      await tester.pumpWidget(MaterialApp(
-        home: BlurEditor.file(mockFileImage, initConfigs: initConfigs),
-      ));
+      await tester.pumpWidget(
+        MaterialApp(
+          home: BlurEditor.file(mockFileImage, initConfigs: initConfigs),
+        ),
+      );
 
       expect(find.byType(BlurEditor), findsOneWidget);
     });
     testWidgets('creates BlurEditor using file path', (tester) async {
-      await tester.pumpWidget(MaterialApp(
-        home: BlurEditor.file('', initConfigs: initConfigs),
-      ));
+      await tester.pumpWidget(
+        MaterialApp(home: BlurEditor.file('', initConfigs: initConfigs)),
+      );
 
       expect(find.byType(BlurEditor), findsOneWidget);
     });
     group('creates BlurEditor using autoSource constructor', () {
       testWidgets('Auto-detects from memory image', (tester) async {
-        await tester.pumpWidget(MaterialApp(
-          home: BlurEditor.autoSource(
-            byteArray: mockMemoryImage,
-            initConfigs: initConfigs,
+        await tester.pumpWidget(
+          MaterialApp(
+            home: BlurEditor.autoSource(
+              byteArray: mockMemoryImage,
+              initConfigs: initConfigs,
+            ),
           ),
-        ));
+        );
 
         expect(find.byType(BlurEditor), findsOneWidget);
       });
       testWidgets('Auto-detects from network image', (tester) async {
         await mockNetworkImagesFor(() async {
-          await tester.pumpWidget(MaterialApp(
-            home: BlurEditor.autoSource(
-              networkUrl: mockNetworkImage,
-              initConfigs: initConfigs,
+          await tester.pumpWidget(
+            MaterialApp(
+              home: BlurEditor.autoSource(
+                networkUrl: mockNetworkImage,
+                initConfigs: initConfigs,
+              ),
             ),
-          ));
+          );
         });
 
         expect(find.byType(BlurEditor), findsOneWidget);
       });
       testWidgets('Auto-detects from file image', (tester) async {
-        await tester.pumpWidget(MaterialApp(
-          home: BlurEditor.autoSource(
-            file: mockFileImage,
-            initConfigs: initConfigs,
+        await tester.pumpWidget(
+          MaterialApp(
+            home: BlurEditor.autoSource(
+              file: mockFileImage,
+              initConfigs: initConfigs,
+            ),
           ),
-        ));
+        );
 
         expect(find.byType(BlurEditor), findsOneWidget);
       });
       testWidgets('Auto-detects from file path', (tester) async {
-        await tester.pumpWidget(MaterialApp(
-          home: BlurEditor.autoSource(file: '', initConfigs: initConfigs),
-        ));
+        await tester.pumpWidget(
+          MaterialApp(
+            home: BlurEditor.autoSource(file: '', initConfigs: initConfigs),
+          ),
+        );
 
         expect(find.byType(BlurEditor), findsOneWidget);
       });

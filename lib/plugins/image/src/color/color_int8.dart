@@ -126,8 +126,8 @@ class ColorInt8 extends Color {
   num getChannel(Channel channel) => channel == Channel.luminance
       ? luminance
       : channel.index < data.length
-          ? data[channel.index]
-          : 0;
+      ? data[channel.index]
+      : 0;
 
   @override
   num getChannelNormalized(Channel channel) =>
@@ -179,7 +179,10 @@ class ColorInt8 extends Color {
   int get hashCode => Object.hashAll(toList());
 
   @override
-  Color convert({Format? format, int? numChannels, num? alpha}) =>
-      convertColor(this,
-          format: format, numChannels: numChannels, alpha: alpha);
+  Color convert({Format? format, int? numChannels, num? alpha}) => convertColor(
+    this,
+    format: format,
+    numChannels: numChannels,
+    alpha: alpha,
+  );
 }

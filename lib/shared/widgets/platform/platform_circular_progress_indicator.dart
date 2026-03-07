@@ -9,10 +9,7 @@ import '/core/models/editor_configs/pro_image_editor_configs.dart';
 /// On iOS and macOS, it displays a [CupertinoActivityIndicator].
 class PlatformCircularProgressIndicator extends StatefulWidget {
   /// Creates a platform-aware circular progress indicator.
-  const PlatformCircularProgressIndicator({
-    super.key,
-    required this.configs,
-  });
+  const PlatformCircularProgressIndicator({super.key, required this.configs});
 
   /// A class representing configuration options for the Image Editor.
   final ProImageEditorConfigs configs;
@@ -27,7 +24,10 @@ class _PlatformCircularProgressIndicatorState
   @override
   Widget build(BuildContext context) {
     // Conditionally choose the progress indicator based on the platform.
-    return widget.configs.progressIndicatorConfigs.widgets
+    return widget
+            .configs
+            .progressIndicatorConfigs
+            .widgets
             .circularProgressIndicator ??
         (widget.configs.designMode == ImageEditorDesignMode.material
             ? const CircularProgressIndicator()

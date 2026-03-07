@@ -62,10 +62,9 @@ class PathBuilderDashDotLine extends PathBuilderBase {
         if (dotCenter < metric.length) {
           final tangent = metric.getTangentForOffset(dotCenter);
           if (tangent != null) {
-            dotPath.addOval(Rect.fromCircle(
-              center: tangent.position,
-              radius: dotRadius,
-            ));
+            dotPath.addOval(
+              Rect.fromCircle(center: tangent.position, radius: dotRadius),
+            );
           }
         }
 

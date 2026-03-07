@@ -26,14 +26,12 @@ String? lookupMimeType(String path, {List<int>? headerBytes}) =>
 /// MIME-type resolver class, used to customize the lookup of mime-types.
 class MimeTypeResolver {
   /// Create a new empty [MimeTypeResolver].
-  MimeTypeResolver.empty()
-      : _useDefault = false,
-        _magicNumbersMaxLength = 0;
+  MimeTypeResolver.empty() : _useDefault = false, _magicNumbersMaxLength = 0;
 
   /// Create a new [MimeTypeResolver] containing the default scope.
   MimeTypeResolver()
-      : _useDefault = true,
-        _magicNumbersMaxLength = initialMagicNumbersMaxLength;
+    : _useDefault = true,
+      _magicNumbersMaxLength = initialMagicNumbersMaxLength;
   final Map<String, String> _extensionMap = {};
   final List<MagicNumber> _magicNumbers = [];
   final bool _useDefault;
@@ -73,7 +71,9 @@ class MimeTypeResolver {
   }
 
   static String? _matchMagic(
-      List<int> headerBytes, List<MagicNumber> magicNumbers) {
+    List<int> headerBytes,
+    List<MagicNumber> magicNumbers,
+  ) {
     for (var mn in magicNumbers) {
       if (mn.matches(headerBytes)) return mn.mimeType;
     }
@@ -121,33 +121,24 @@ const List<MagicNumber> initialMagicNumbers = [
   /// -> 4 bytes indicating the size of the file
   /// -> 4 bytes have the ASCII characters 'W' 'E' 'B' 'P'.
   /// https://developers.google.com/speed/webp/docs/riff_container
-  MagicNumber('image/webp', [
-    0x52,
-    0x49,
-    0x46,
-    0x46,
-    0x00,
-    0x00,
-    0x00,
-    0x00,
-    0x57,
-    0x45,
-    0x42,
-    0x50
-  ], mask: [
-    0xFF,
-    0xFF,
-    0xFF,
-    0xFF,
-    0x00,
-    0x00,
-    0x00,
-    0x00,
-    0xFF,
-    0xFF,
-    0xFF,
-    0xFF
-  ]),
+  MagicNumber(
+    'image/webp',
+    [0x52, 0x49, 0x46, 0x46, 0x00, 0x00, 0x00, 0x00, 0x57, 0x45, 0x42, 0x50],
+    mask: [
+      0xFF,
+      0xFF,
+      0xFF,
+      0xFF,
+      0x00,
+      0x00,
+      0x00,
+      0x00,
+      0xFF,
+      0xFF,
+      0xFF,
+      0xFF,
+    ],
+  ),
 ];
 const Map<String, String> defaultExtensionMap = <String, String>{
   'jpg': 'image/jpeg',

@@ -6,15 +6,18 @@ import 'package:pro_image_editor/shared/styles/platform_text_styles.dart';
 
 void main() {
   group('platformTextStyle', () {
-    testWidgets('returns Cupertino text style for cupertino mode',
-        (tester) async {
+    testWidgets('returns Cupertino text style for cupertino mode', (
+      tester,
+    ) async {
       late TextStyle result;
       await tester.pumpWidget(
         CupertinoApp(
           home: Builder(
             builder: (context) {
-              result =
-                  platformTextStyle(context, ImageEditorDesignMode.cupertino);
+              result = platformTextStyle(
+                context,
+                ImageEditorDesignMode.cupertino,
+              );
               return Container();
             },
           ),
@@ -25,8 +28,9 @@ void main() {
       expect(result.fontFamily, cupertinoStyle.fontFamily);
     });
 
-    testWidgets('returns Material text style for material mode',
-        (tester) async {
+    testWidgets('returns Material text style for material mode', (
+      tester,
+    ) async {
       late TextStyle result;
       const initialStyle = TextStyle(fontSize: 30, fontFamily: 'Roboto');
       final theme = ThemeData(
@@ -38,8 +42,10 @@ void main() {
           theme: theme,
           home: Builder(
             builder: (context) {
-              result =
-                  platformTextStyle(context, ImageEditorDesignMode.material);
+              result = platformTextStyle(
+                context,
+                ImageEditorDesignMode.material,
+              );
               return Container();
             },
           ),

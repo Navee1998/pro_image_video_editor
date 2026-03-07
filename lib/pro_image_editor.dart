@@ -11,14 +11,16 @@ export 'core/models/editor_callbacks/pro_image_editor_callbacks.dart';
 /// Configs and Callbacks
 export 'core/enums/editor_mode.dart';
 export 'core/models/editor_configs/pro_image_editor_configs.dart';
+export 'core/models/editor_audio.dart';
 export 'core/models/editor_image.dart';
+export 'core/models/editor_video_clip.dart';
 export 'core/models/history/state_history.dart';
 
 /// Video editing
 export '/shared/controllers/video_controller.dart';
 export '/shared/widgets/video/export_prebuild/video_editor_prebuild_widgets.dart';
 export '/core/models/editor_callbacks/video_editor_callbacks.dart';
-export '/core/models/editor_configs/video_editor_configs.dart';
+export 'core/models/editor_configs/video/video_editor_configs.dart';
 export '/core/models/video/trim_duration_span_model.dart';
 
 /// Import/Export state history
@@ -46,6 +48,7 @@ export 'features/tune_editor/tune_editor.dart';
 export '/shared/utils/debounce.dart';
 export '/features/main_editor/services/state_manager.dart';
 export '/features/tune_editor/models/tune_adjustment_matrix.dart';
+export '/features/clips_editor/models/video_clip.dart';
 
 /// Editors
 export 'features/main_editor/main_editor.dart';
@@ -66,6 +69,7 @@ export 'core/utils/image_converter.dart';
 export '/shared/utils/parser/int_parser.dart';
 export '/shared/utils/parser/double_parser.dart';
 export '/shared/utils/parser/size_parser.dart';
+export '/core/models/editor_configs/utils/editor_safe_area.dart';
 
 /// Widgets
 export 'shared/widgets/animated/fade_in_up.dart';

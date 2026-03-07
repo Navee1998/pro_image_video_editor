@@ -77,7 +77,7 @@ enum ButtonMode {
   MATERIAL,
 
   /// iOS button style - gives the button a fade out effect when pressed
-  CUPERTINO
+  CUPERTINO,
 }
 
 /// Callback function for when emoji is selected
@@ -88,8 +88,13 @@ enum ButtonMode {
 typedef OnEmojiSelected = void Function(Category? category, Emoji emoji);
 
 /// Callback from emoji cell to show a skin tone selection overlay
-typedef OnSkinToneDialogRequested = void Function(Offset emojiBoxPosition,
-    Emoji emoji, double emojiSize, CategoryEmoji? categoryEmoji);
+typedef OnSkinToneDialogRequested =
+    void Function(
+      Offset emojiBoxPosition,
+      Emoji emoji,
+      double emojiSize,
+      CategoryEmoji? categoryEmoji,
+    );
 
 /// Callback function for backspace button
 typedef OnBackspacePressed = void Function();
@@ -157,14 +162,18 @@ class EmojiPickerState extends State<EmojiPicker> {
   final _emojiPickerInternalUtils = EmojiPickerInternalUtils();
 
   /// Update recentEmoji list from outside using EmojiPickerUtils
-  void updateRecentEmoji(List<RecentEmoji> recentEmoji,
-      {bool refresh = false}) {
+  void updateRecentEmoji(
+    List<RecentEmoji> recentEmoji, {
+    bool refresh = false,
+  }) {
     _recentEmoji = recentEmoji;
-    final recentTabIndex = _categoryEmoji
-        .indexWhere((element) => element.category == Category.RECENT);
+    final recentTabIndex = _categoryEmoji.indexWhere(
+      (element) => element.category == Category.RECENT,
+    );
     if (recentTabIndex != -1) {
-      _categoryEmoji[recentTabIndex] = _categoryEmoji[recentTabIndex]
-          .copyWith(emoji: _recentEmoji.map((e) => e.emoji).toList());
+      _categoryEmoji[recentTabIndex] = _categoryEmoji[recentTabIndex].copyWith(
+        emoji: _recentEmoji.map((e) => e.emoji).toList(),
+      );
       if (mounted && refresh) {
         setState(() {});
       }
@@ -229,8 +238,11 @@ class EmojiPickerState extends State<EmojiPicker> {
 
       if (cursorPosition >= 0) {
         final selection = controller.value.selection;
-        final newTextBeforeCursor =
-            selection.textBefore(text).characters.skipLast(1).toString();
+        final newTextBeforeCursor = selection
+            .textBefore(text)
+            .characters
+            .skipLast(1)
+            .toString();
 
         controller.value = controller.value.copyWith(
           text: newTextBeforeCursor + selection.textAfter(text),
@@ -303,24 +315,32 @@ class EmojiPickerState extends State<EmojiPicker> {
         RecentTabBehavior.POPULAR) {
       _emojiPickerInternalUtils
           .addEmojiToPopularUsed(emoji: emoji, config: widget.config)
-          .then((newRecentEmoji) => {
-                // we don't want to rebuild the widget if user is currently on
-                // the RECENT tab, it will make emojis jump since sorting
-                // is based on the use frequency
-                updateRecentEmoji(newRecentEmoji,
-                    refresh: category != Category.RECENT),
-              });
+          .then(
+            (newRecentEmoji) => {
+              // we don't want to rebuild the widget if user is currently on
+              // the RECENT tab, it will make emojis jump since sorting
+              // is based on the use frequency
+              updateRecentEmoji(
+                newRecentEmoji,
+                refresh: category != Category.RECENT,
+              ),
+            },
+          );
     } else if (widget.config.categoryViewConfig.recentTabBehavior ==
         RecentTabBehavior.RECENT) {
       _emojiPickerInternalUtils
           .addEmojiToRecentlyUsed(emoji: emoji, config: widget.config)
-          .then((newRecentEmoji) => {
-                // we don't want to rebuild the widget if user is currently on
-                // the RECENT tab, it will make emojis jump since sorting
-                // is based on the use frequency
-                updateRecentEmoji(newRecentEmoji,
-                    refresh: category != Category.RECENT),
-              });
+          .then(
+            (newRecentEmoji) => {
+              // we don't want to rebuild the widget if user is currently on
+              // the RECENT tab, it will make emojis jump since sorting
+              // is based on the use frequency
+              updateRecentEmoji(
+                newRecentEmoji,
+                refresh: category != Category.RECENT,
+              ),
+            },
+          );
     }
 
     if (widget.textEditingController != null) {
@@ -362,17 +382,22 @@ class EmojiPickerState extends State<EmojiPicker> {
   // Initialize emoji data
   Future<void> _updateEmojis() async {
     _categoryEmoji.clear();
-    if ([RecentTabBehavior.RECENT, RecentTabBehavior.POPULAR]
-        .contains(widget.config.categoryViewConfig.recentTabBehavior)) {
+    if ([
+      RecentTabBehavior.RECENT,
+      RecentTabBehavior.POPULAR,
+    ].contains(widget.config.categoryViewConfig.recentTabBehavior)) {
       _recentEmoji = await _emojiPickerInternalUtils.getRecentEmojis();
       final recentEmojiMap = _recentEmoji.map((e) => e.emoji).toList();
       _categoryEmoji.add(CategoryEmoji(Category.RECENT, recentEmojiMap));
     }
-    final data = widget.config.emojiSet?.call(widget.config.locale) ??
+    final data =
+        widget.config.emojiSet?.call(widget.config.locale) ??
         getDefaultEmojiLocale(widget.config.locale);
-    _categoryEmoji.addAll(widget.config.checkPlatformCompatibility
-        ? await _emojiPickerInternalUtils.filterUnsupported(data)
-        : data);
+    _categoryEmoji.addAll(
+      widget.config.checkPlatformCompatibility
+          ? await _emojiPickerInternalUtils.filterUnsupported(data)
+          : data,
+    );
     _state = EmojiViewState(
       _categoryEmoji,
       _onEmojiSelected,
@@ -389,11 +414,7 @@ class EmojiPickerState extends State<EmojiPicker> {
 
   Widget _buildSearchBar() {
     return widget.config.searchViewConfig.customSearchView == null
-        ? DefaultSearchView(
-            widget.config,
-            _state,
-            _hideSearchView,
-          )
+        ? DefaultSearchView(widget.config, _state, _hideSearchView)
         : widget.config.searchViewConfig.customSearchView!(
             widget.config,
             _state,
@@ -404,9 +425,9 @@ class EmojiPickerState extends State<EmojiPicker> {
   Widget _wrapScrollBehaviorForPlatforms(Widget child) {
     return !kIsWeb && Platform.isLinux
         ? ScrollConfiguration(
-            behavior: ScrollConfiguration.of(context).copyWith(
-              scrollbars: false,
-            ),
+            behavior: ScrollConfiguration.of(
+              context,
+            ).copyWith(scrollbars: false),
             child: child,
           )
         : child;
@@ -417,16 +438,8 @@ class EmojiPickerState extends State<EmojiPicker> {
       SizedBox(
         height: widget.config.height,
         child: widget.customWidget == null
-            ? DefaultEmojiPickerView(
-                widget.config,
-                _state,
-                _showSearchView,
-              )
-            : widget.customWidget!(
-                widget.config,
-                _state,
-                _showSearchView,
-              ),
+            ? DefaultEmojiPickerView(widget.config, _state, _showSearchView)
+            : widget.customWidget!(widget.config, _state, _showSearchView),
       ),
     );
   }

@@ -35,13 +35,13 @@ class ExportStateHistory {
     required ContentRecorderController contentRecorderCtrl,
     required BuildContext context,
     ExportEditorConfigs configs = const ExportEditorConfigs(),
-  })  : _configs = configs,
-        _editorConfigs = editorConfigs,
-        _stateHistory = stateHistory,
-        _imageInfos = imageInfos,
-        _contentRecorderCtrl = contentRecorderCtrl,
-        _context = context,
-        _editorPosition = editorPosition;
+  }) : _configs = configs,
+       _editorConfigs = editorConfigs,
+       _stateHistory = stateHistory,
+       _imageInfos = imageInfos,
+       _contentRecorderCtrl = contentRecorderCtrl,
+       _context = context,
+       _editorPosition = editorPosition;
 
   /// The current position of the editor in the state history.
   ///
@@ -204,10 +204,10 @@ class ExportStateHistory {
 
       Map<String, dynamic> transformConfigsMap =
           element.transformConfigs?.toMap(
-                maxDecimalPlaces: maxDecimalPlaces,
-                enableMinify: enableMinify,
-              ) ??
-              {};
+            maxDecimalPlaces: maxDecimalPlaces,
+            enableMinify: enableMinify,
+          ) ??
+          {};
 
       bool enableTuneExport =
           _configs.exportTuneAdjustments && element.tuneAdjustments.isNotEmpty;
@@ -221,9 +221,11 @@ class ExportStateHistory {
         if (layers.isNotEmpty) 'layers'.toHistoryKey(minifier): layers,
         if (enableFilterExport)
           'filters'.toHistoryKey(minifier): element.filters
-              .map((item) => item
-                  .map((value) => value.roundSmart(maxDecimalPlaces))
-                  .toList())
+              .map(
+                (item) => item
+                    .map((value) => value.roundSmart(maxDecimalPlaces))
+                    .toList(),
+              )
               .toList(),
         if (enableTuneExport)
           'tune'.toHistoryKey(minifier): element.tuneAdjustments
@@ -246,22 +248,24 @@ class ExportStateHistory {
       if (_configs.enableMinify) 'minify'.toMainKey(minifier): true,
       'position'.toMainKey(minifier):
           _configs.historySpan == ExportHistorySpan.current ||
-                  _configs.historySpan == ExportHistorySpan.currentAndForward
-              ? 0
-              : _editorPosition - 1,
+              _configs.historySpan == ExportHistorySpan.currentAndForward
+          ? 0
+          : _editorPosition - 1,
       if (history.isNotEmpty) 'history'.toMainKey(minifier): history,
       if (widgetRecords.isNotEmpty)
         'widgetRecords'.toMainKey(minifier): widgetRecords,
       if (references.isNotEmpty) 'references'.toMainKey(minifier): references,
       'imgSize'.toMainKey(minifier): {
-        'width'.toSizeKey(minifier):
-            _imageInfos.rawSize.width.roundSmart(maxDecimalPlaces),
-        'height'.toSizeKey(minifier):
-            _imageInfos.rawSize.height.roundSmart(maxDecimalPlaces),
+        'width'.toSizeKey(minifier): _imageInfos.rawSize.width.roundSmart(
+          maxDecimalPlaces,
+        ),
+        'height'.toSizeKey(minifier): _imageInfos.rawSize.height.roundSmart(
+          maxDecimalPlaces,
+        ),
       },
       'lastRenderedImgSize'.toMainKey(minifier): {
-        'width'.toSizeKey(minifier):
-            _imageInfos.originalRenderedSize.width.roundSmart(maxDecimalPlaces),
+        'width'.toSizeKey(minifier): _imageInfos.originalRenderedSize.width
+            .roundSmart(maxDecimalPlaces),
         'height'.toSizeKey(minifier): _imageInfos.originalRenderedSize.height
             .roundSmart(maxDecimalPlaces),
       },
@@ -310,13 +314,15 @@ class ExportStateHistory {
           updateReference(widgetLayer, recordPosition: widgetRecords.length);
 
           double imageWidth =
-              _editorConfigs.stickerEditor.initWidth * layer.scale;
+              (layer.width ?? _editorConfigs.stickerEditor.initWidth) *
+              layer.scale;
 
           Size targetSize = Size(
-              imageWidth,
-              MediaQuery.sizeOf(_context).height /
-                  MediaQuery.sizeOf(_context).width *
-                  imageWidth);
+            imageWidth,
+            MediaQuery.sizeOf(_context).height /
+                MediaQuery.sizeOf(_context).width *
+                imageWidth,
+          );
 
           Uint8List? result = await _contentRecorderCtrl.capture(
             widget: layer.widget,

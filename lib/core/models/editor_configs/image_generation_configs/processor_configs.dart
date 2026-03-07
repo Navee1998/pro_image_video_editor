@@ -11,9 +11,11 @@ class ProcessorConfigs {
     this.numberOfBackgroundProcessors = 2,
     this.maxConcurrency = 1,
     this.processorMode = ProcessorMode.auto,
-  })  : assert(numberOfBackgroundProcessors > 0,
-            'minBackgroundProcessors must be positive'),
-        assert(maxConcurrency > 0, 'maxConcurrency must be positive');
+  }) : assert(
+         numberOfBackgroundProcessors > 0,
+         'minBackgroundProcessors must be positive',
+       ),
+       assert(maxConcurrency > 0, 'maxConcurrency must be positive');
 
   /// The number of background processors to use.
   ///

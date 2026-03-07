@@ -2,14 +2,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
-/// A stateless widget that represents a customizable button for interacting
+/// A stateful widget that represents a customizable button for interacting
 /// with layers.
 ///
 /// The button provides multiple functionalities, including detecting scale and
 /// rotate gestures, handling taps, and displaying tooltips. It is designed for
 /// use in scenarios such as image editing applications where user interactions
 /// with layers are required.
-class LayerInteractionButton extends StatelessWidget {
+class LayerInteractionButton extends StatefulWidget {
   /// Creates a [LayerInteractionButton].
   ///
   /// This button can be customized with an icon, rotation, tooltip, and various
@@ -54,6 +54,9 @@ class LayerInteractionButton extends StatelessWidget {
     required this.color,
     required this.background,
   });
+
+  @override
+  State<LayerInteractionButton> createState() => _LayerInteractionButtonState();
 
   /// Callback for handling pointer down events associated with scale and
   /// rotate gestures.
@@ -113,34 +116,48 @@ class LayerInteractionButton extends StatelessWidget {
   /// This color affects the icon's appearance, allowing for customization
   /// based on design requirements.
   final Color color;
+}
+
+class _LayerInteractionButtonState extends State<LayerInteractionButton> {
+  final _tooltipKey = GlobalKey<TooltipState>();
+
+  void _showTooltip() => _tooltipKey.currentState?.ensureTooltipVisible();
+
+  void _hideTooltip() => Tooltip.dismissAllToolTips();
 
   @override
   Widget build(BuildContext context) {
     return Transform.rotate(
-      angle: rotation,
+      angle: widget.rotation,
       child: MouseRegion(
-        cursor: cursor,
+        cursor: widget.cursor,
         hitTestBehavior: HitTestBehavior.translucent,
-        child: Tooltip(
-          message: tooltip,
-          child: Listener(
+        onEnter: (_) => _showTooltip(),
+        onExit: (_) => _hideTooltip(),
+        child: Listener(
+          behavior: HitTestBehavior.translucent,
+          onPointerDown: widget.onScaleRotateDown,
+          onPointerUp: widget.onScaleRotateUp,
+          child: GestureDetector(
             behavior: HitTestBehavior.translucent,
-            onPointerDown: onScaleRotateDown,
-            onPointerUp: onScaleRotateUp,
-            child: GestureDetector(
-              behavior: HitTestBehavior.translucent,
-              onTap: onTap,
-              child: _HitTestTransparent(
+            onTap: widget.onTap,
+            child: _HitTestTransparent(
+              child: Tooltip(
+                key: _tooltipKey,
+                message: widget.tooltip,
+                triggerMode: TooltipTriggerMode.manual,
                 child: Container(
                   padding: const EdgeInsets.all(3),
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(buttonRadius * 2),
-                    color: background,
+                    borderRadius: BorderRadius.circular(
+                      widget.buttonRadius * 2,
+                    ),
+                    color: widget.background,
                   ),
                   child: Icon(
-                    icon,
-                    color: color,
-                    size: buttonRadius * 2,
+                    widget.icon,
+                    color: widget.color,
+                    size: widget.buttonRadius * 2,
                   ),
                 ),
               ),

@@ -77,8 +77,9 @@ void main() {
   }
 
   group('ProImageEditor import/export', () {
-    testWidgets('restores all layers correctly after export/import',
-        (WidgetTester tester) async {
+    testWidgets('restores all layers correctly after export/import', (
+      WidgetTester tester,
+    ) async {
       await tester.runAsync(() async {
         final editor = await pumpTestEditor(tester);
 
@@ -92,18 +93,22 @@ void main() {
         expect(editor.activeLayers.length, 4);
         expect(editor.stateManager.historyPointer, 4);
 
-        await runExportImport(editor, onAfterImport: () {
-          editor.removeAllLayers();
-          expect(editor.activeLayers.length, 0);
-        });
+        await runExportImport(
+          editor,
+          onAfterImport: () {
+            editor.removeAllLayers();
+            expect(editor.activeLayers.length, 0);
+          },
+        );
 
         expect(editor.activeLayers.length, 4);
         expect(editor.stateManager.historyPointer, 1);
       });
     });
 
-    testWidgets('restores blur correctly after export/import',
-        (WidgetTester tester) async {
+    testWidgets('restores blur correctly after export/import', (
+      WidgetTester tester,
+    ) async {
       await tester.runAsync(() async {
         final editor = await pumpTestEditor(tester);
 
@@ -113,18 +118,22 @@ void main() {
         expect(editor.stateManager.activeBlur, blurFactor);
         expect(editor.stateManager.historyPointer, 1);
 
-        await runExportImport(editor, onAfterImport: () {
-          editor.addHistory(blur: 1);
-          expect(editor.stateManager.activeBlur, 1);
-        });
+        await runExportImport(
+          editor,
+          onAfterImport: () {
+            editor.addHistory(blur: 1);
+            expect(editor.stateManager.activeBlur, 1);
+          },
+        );
 
         expect(editor.stateManager.activeBlur, blurFactor);
         expect(editor.stateManager.historyPointer, 1);
       });
     });
 
-    testWidgets('restores filters correctly after export/import',
-        (WidgetTester tester) async {
+    testWidgets('restores filters correctly after export/import', (
+      WidgetTester tester,
+    ) async {
       await tester.runAsync(() async {
         final editor = await pumpTestEditor(tester);
 
@@ -134,18 +143,22 @@ void main() {
         expect(editor.stateManager.activeFilters, testFilters);
         expect(editor.stateManager.historyPointer, 1);
 
-        await runExportImport(editor, onAfterImport: () {
-          editor.addHistory(filters: []);
-          expect(editor.stateManager.activeFilters.length, 1);
-        });
+        await runExportImport(
+          editor,
+          onAfterImport: () {
+            editor.addHistory(filters: []);
+            expect(editor.stateManager.activeFilters.length, 1);
+          },
+        );
 
         expect(editor.stateManager.activeFilters, testFilters);
         expect(editor.stateManager.historyPointer, 1);
       });
     });
 
-    testWidgets('restores tune-adjustments correctly after export/import',
-        (WidgetTester tester) async {
+    testWidgets('restores tune-adjustments correctly after export/import', (
+      WidgetTester tester,
+    ) async {
       await tester.runAsync(() async {
         final editor = await pumpTestEditor(tester);
 
@@ -160,18 +173,22 @@ void main() {
         expect(editor.stateManager.activeTuneAdjustments, [tuneMatrix.copy()]);
         expect(editor.stateManager.historyPointer, 1);
 
-        await runExportImport(editor, onAfterImport: () {
-          editor.addHistory(tuneAdjustments: []);
-          expect(editor.stateManager.activeTuneAdjustments.length, 1);
-        });
+        await runExportImport(
+          editor,
+          onAfterImport: () {
+            editor.addHistory(tuneAdjustments: []);
+            expect(editor.stateManager.activeTuneAdjustments.length, 1);
+          },
+        );
 
         expect(editor.stateManager.activeTuneAdjustments, [tuneMatrix.copy()]);
         expect(editor.stateManager.historyPointer, 1);
       });
     });
 
-    testWidgets('restores transformations correctly after export/import',
-        (WidgetTester tester) async {
+    testWidgets('restores transformations correctly after export/import', (
+      WidgetTester tester,
+    ) async {
       await tester.runAsync(() async {
         final editor = await pumpTestEditor(tester);
 
@@ -193,10 +210,13 @@ void main() {
         expect(editor.stateManager.transformConfigs, transformConfigs);
         expect(editor.stateManager.historyPointer, 1);
 
-        await runExportImport(editor, onAfterImport: () {
-          editor.addHistory(transformConfigs: TransformConfigs.empty());
-          expect(editor.stateManager.transformConfigs.isEmpty, isTrue);
-        });
+        await runExportImport(
+          editor,
+          onAfterImport: () {
+            editor.addHistory(transformConfigs: TransformConfigs.empty());
+            expect(editor.stateManager.transformConfigs.isEmpty, isTrue);
+          },
+        );
 
         expect(editor.stateManager.transformConfigs, transformConfigs);
         expect(editor.stateManager.historyPointer, 1);

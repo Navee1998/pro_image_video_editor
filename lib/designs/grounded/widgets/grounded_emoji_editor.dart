@@ -79,8 +79,10 @@ class _GroundedEmojiEditorState extends State<GroundedEmojiEditor> {
                 ),
               ),
               Container(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 3, horizontal: 12),
+                padding: const EdgeInsets.symmetric(
+                  vertical: 3,
+                  horizontal: 12,
+                ),
                 color: const Color(0xFF222222),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -124,7 +126,7 @@ class _GroundedEmojiEditorState extends State<GroundedEmojiEditor> {
                     ),
                   ],
                 ),
-              )
+              ),
             ],
           ),
         ),
@@ -157,9 +159,7 @@ class _GroundedEmojiEditorState extends State<GroundedEmojiEditor> {
                     });
                   },
                   itemColor: const Color.fromARGB(255, 243, 243, 243),
-                  style: const TextStyle(
-                    color: Colors.white,
-                  ),
+                  style: const TextStyle(color: Colors.white),
                 ),
               ),
               CupertinoButton(

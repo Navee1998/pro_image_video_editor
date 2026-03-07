@@ -77,14 +77,16 @@ class BmpEncoder extends Encoder {
       bpp = 16;
     }
 
-    final compression =
-        bpp > 8 ? BmpCompression.bitfields : BmpCompression.none;
+    final compression = bpp > 8
+        ? BmpCompression.bitfields
+        : BmpCompression.none;
 
     final imageStride = image.rowStride;
     final fileStride = ((image.width * bpp + 31) ~/ 32) * 4;
     final rowPaddingSize = fileStride - imageStride;
-    final rowPadding =
-        rowPaddingSize > 0 ? List<int>.filled(rowPaddingSize, 0xff) : null;
+    final rowPadding = rowPaddingSize > 0
+        ? List<int>.filled(rowPaddingSize, 0xff)
+        : null;
 
     final implicitPaletteSize = bpp >= 1 && bpp <= 8 ? 1 << bpp : 0;
 

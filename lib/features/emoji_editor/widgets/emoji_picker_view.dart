@@ -88,8 +88,10 @@ class _DefaultEmojiPickerViewState extends State<ProEmojiPickerView>
   void initState() {
     super.initState();
     _scrollController = widget.scrollController ?? ScrollController();
-    var initCategory = _categories.indexWhere((element) =>
-        element.category == widget.config.categoryViewConfig.initCategory);
+    var initCategory = _categories.indexWhere(
+      (element) =>
+          element.category == widget.config.categoryViewConfig.initCategory,
+    );
     if (initCategory == -1) {
       initCategory = 0;
     }
@@ -157,12 +159,16 @@ class _DefaultEmojiPickerViewState extends State<ProEmojiPickerView>
     }
 
     Future.delayed(
-        Duration(
-          milliseconds:
-              max(widget.emojiEditorStyle.scrollToDuration.inMilliseconds, 200),
-        ), () {
-      _activeTabChange = false;
-    });
+      Duration(
+        milliseconds: max(
+          widget.emojiEditorStyle.scrollToDuration.inMilliseconds,
+          200,
+        ),
+      ),
+      () {
+        _activeTabChange = false;
+      },
+    );
   }
 
   void _onScroll() {
@@ -276,33 +282,33 @@ class _DefaultEmojiPickerViewState extends State<ProEmojiPickerView>
         builder: (context, constraints) {
           _emojiSize = _viewConfigs.getEmojiSize(constraints.maxWidth);
 
-          _emojiBoxSize = widget.config.emojiViewConfig
-              .getEmojiBoxSize(constraints.maxWidth);
+          _emojiBoxSize = widget.config.emojiViewConfig.getEmojiBoxSize(
+            constraints.maxWidth,
+          );
           _setEmojiTextStyle();
 
           return EmojiContainer(
             color: widget.emojiEditorStyle.backgroundColor,
             buttonMode: _viewConfigs.buttonMode,
             child: Column(
-              children: [
-                widget.config.viewOrderConfig.top,
-                widget.config.viewOrderConfig.middle,
-                widget.config.viewOrderConfig.bottom,
-              ].map(
-                (item) {
-                  switch (item) {
-                    case EmojiPickerItem.categoryBar:
-                      // Category view
-                      return _buildCategoryView();
-                    case EmojiPickerItem.emojiView:
-                      // Emoji view
-                      return _buildEmojiView();
-                    case EmojiPickerItem.searchBar:
-                      // Search Bar
-                      return _buildSearchBar();
-                  }
-                },
-              ).toList(),
+              children:
+                  [
+                    widget.config.viewOrderConfig.top,
+                    widget.config.viewOrderConfig.middle,
+                    widget.config.viewOrderConfig.bottom,
+                  ].map((item) {
+                    switch (item) {
+                      case EmojiPickerItem.categoryBar:
+                        // Category view
+                        return _buildCategoryView();
+                      case EmojiPickerItem.emojiView:
+                        // Emoji view
+                        return _buildEmojiView();
+                      case EmojiPickerItem.searchBar:
+                        // Search Bar
+                        return _buildSearchBar();
+                    }
+                  }).toList(),
             ),
           );
         },
@@ -343,10 +349,7 @@ class _DefaultEmojiPickerViewState extends State<ProEmojiPickerView>
           }
           return true;
         },
-        child: CustomScrollView(
-          controller: _scrollController,
-          slivers: pages,
-        ),
+        child: CustomScrollView(controller: _scrollController, slivers: pages),
       ),
     );
   }

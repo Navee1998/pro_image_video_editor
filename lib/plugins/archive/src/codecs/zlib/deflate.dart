@@ -31,12 +31,13 @@ class Deflate {
   /// If [output] is provided, the compressed data will be written to that
   /// [OutputStream], otherwise the compressed data will be accessed from
   /// the [getBytes] method.
-  Deflate(List<int> bytes,
-      {int level = DeflateLevel.defaultCompression,
-      int windowBits = maxWindowBits,
-      OutputStream? output})
-      : _input = InputMemoryStream(bytes),
-        _output = output ?? OutputMemoryStream() {
+  Deflate(
+    List<int> bytes, {
+    int level = DeflateLevel.defaultCompression,
+    int windowBits = maxWindowBits,
+    OutputStream? output,
+  }) : _input = InputMemoryStream(bytes),
+       _output = output ?? OutputMemoryStream() {
     if (_init(level, windowBits: windowBits)) {
       _deflate(_DeflateFlushMode.finish);
     }
@@ -51,11 +52,12 @@ class Deflate {
   /// If [output] is provided, the compressed data will be written to that
   /// [OutputStream], otherwise the compressed data will be accessed from
   /// the [getBytes] method.
-  Deflate.stream(this._input,
-      {int level = DeflateLevel.defaultCompression,
-      int windowBits = maxWindowBits,
-      OutputStream? output})
-      : _output = output ?? OutputMemoryStream() {
+  Deflate.stream(
+    this._input, {
+    int level = DeflateLevel.defaultCompression,
+    int windowBits = maxWindowBits,
+    OutputStream? output,
+  }) : _output = output ?? OutputMemoryStream() {
     _init(level, windowBits: windowBits);
     _deflate(_DeflateFlushMode.finish);
   }
@@ -67,11 +69,13 @@ class Deflate {
   int crc32 = 0;
 
   /// Initialize the deflate structures for the given parameters.
-  bool _init(int level,
-      {int method = zDeflated,
-      int windowBits = maxWindowBits,
-      int memLevel = defMemLevel,
-      int strategy = zDefaultStrategy}) {
+  bool _init(
+    int level, {
+    int method = zDeflated,
+    int windowBits = maxWindowBits,
+    int memLevel = defMemLevel,
+    int strategy = zDefaultStrategy,
+  }) {
     if (memLevel < 1 ||
         memLevel > maxMemLevel ||
         method != zDeflated ||
@@ -530,7 +534,8 @@ class Deflate {
       final inLength = _strStart - _blockStart;
       int dcode;
       for (dcode = 0; dcode < dCodes; dcode++) {
-        outLength = outLength +
+        outLength =
+            outLength +
             _dynamicDistTree[dcode * 2] * (5 + _HuffmanTree.extraDBits[dcode]);
       }
       outLength = _rshift(outLength, 3);
@@ -555,7 +560,8 @@ class Deflate {
 
     if (_lastLit != 0) {
       do {
-        dist = ((_pendingBuffer[_dbuf + lx * 2] << 8) & 0xff00) |
+        dist =
+            ((_pendingBuffer[_dbuf + lx * 2] << 8) & 0xff00) |
             (_pendingBuffer[_dbuf + lx * 2 + 1] & 0xff);
         lc = (_pendingBuffer[_lbuf + lx]) & 0xff;
         lx++;
@@ -654,7 +660,10 @@ class Deflate {
 
   void _flushBlockOnly(bool eof) {
     _trFlushBlock(
-        _blockStart >= 0 ? _blockStart : -1, _strStart - _blockStart, eof);
+      _blockStart >= 0 ? _blockStart : -1,
+      _strStart - _blockStart,
+      eof,
+    );
     _blockStart = _strStart;
     _flushPending();
   }
@@ -857,7 +866,7 @@ class Deflate {
         _insertHash = _window[_strStart] & 0xff;
         _insertHash =
             ((_insertHash << _hashShift) ^ (_window[_strStart + 1] & 0xff)) &
-                _hashMask;
+            _hashMask;
       }
 
       // If the whole input has less than MIN_MATCH bytes, ins_h is garbage,
@@ -892,7 +901,8 @@ class Deflate {
       // Insert the string window[strstart .. strstart+2] in the
       // dictionary, and set hash_head to the head of the hash chain:
       if (_lookAhead >= minMatch) {
-        _insertHash = ((_insertHash << _hashShift) ^
+        _insertHash =
+            ((_insertHash << _hashShift) ^
                 (_window[_strStart + (minMatch - 1)] & 0xff)) &
             _hashMask;
 
@@ -928,7 +938,8 @@ class Deflate {
           do {
             _strStart++;
 
-            _insertHash = ((_insertHash << _hashShift) ^
+            _insertHash =
+                ((_insertHash << _hashShift) ^
                     (_window[_strStart + (minMatch - 1)] & 0xff)) &
                 _hashMask;
 
@@ -947,7 +958,7 @@ class Deflate {
 
           _insertHash =
               ((_insertHash << _hashShift) ^ (_window[_strStart + 1] & 0xff)) &
-                  _hashMask;
+              _hashMask;
           // If lookahead < MIN_MATCH, ins_h is garbage, but it does not
           // matter since it will be recomputed at next deflate call.
         }
@@ -998,7 +1009,8 @@ class Deflate {
       // dictionary, and set hash_head to the head of the hash chain:
 
       if (_lookAhead >= minMatch) {
-        _insertHash = ((_insertHash << _hashShift) ^
+        _insertHash =
+            ((_insertHash << _hashShift) ^
                 (_window[_strStart + (minMatch - 1)] & 0xff)) &
             _hashMask;
         hashHead = _head[_insertHash] & 0xffff;
@@ -1049,7 +1061,8 @@ class Deflate {
 
         do {
           if (++_strStart <= maxInsert) {
-            _insertHash = ((_insertHash << _hashShift) ^
+            _insertHash =
+                ((_insertHash << _hashShift) ^
                     (_window[_strStart + (minMatch - 1)] & 0xff)) &
                 _hashMask;
             hashHead = _head[_insertHash] & 0xffff;
@@ -1522,8 +1535,13 @@ class Deflate {
 }
 
 class _DeflaterConfig {
-  _DeflaterConfig(this.goodLength, this.maxLazy, this.niceLength, this.maxChain,
-      this.function);
+  _DeflaterConfig(
+    this.goodLength,
+    this.maxLazy,
+    this.niceLength,
+    this.maxChain,
+    this.function,
+  );
 
   /// Use a faster search when the previous match is longer than this
   int goodLength;
@@ -1598,7 +1616,7 @@ class _HuffmanTree {
     5,
     5,
     5,
-    0
+    0,
   ];
 
   /// extra bits for each distance code
@@ -1632,7 +1650,7 @@ class _HuffmanTree {
     12,
     12,
     13,
-    13
+    13,
   ];
 
   /// extra bits for each bit length code
@@ -1655,7 +1673,7 @@ class _HuffmanTree {
     0,
     2,
     3,
-    7
+    7,
   ];
 
   static const List<int> blOrder = [
@@ -1677,7 +1695,7 @@ class _HuffmanTree {
     2,
     14,
     1,
-    15
+    15,
   ];
 
   /// The lengths of the bit length codes are sent in order of decreasing
@@ -2200,7 +2218,7 @@ class _HuffmanTree {
     29,
     29,
     29,
-    29
+    29,
   ];
 
   static const List<int> lengthCode = [
@@ -2459,7 +2477,7 @@ class _HuffmanTree {
     27,
     27,
     27,
-    28
+    28,
   ];
 
   static const List<int> baseLength = [
@@ -2491,7 +2509,7 @@ class _HuffmanTree {
     160,
     192,
     224,
-    0
+    0,
   ];
 
   static const List<int> baseDist = [
@@ -2524,7 +2542,7 @@ class _HuffmanTree {
     8192,
     12288,
     16384,
-    24576
+    24576,
   ];
 
   /// the dynamic tree
@@ -2769,8 +2787,13 @@ class _HuffmanTree {
 class _StaticTree {
   // max bit length for the codes
 
-  _StaticTree(this.staticTree, this.extraBits, this.extraBase, this.numElements,
-      this.maxLength);
+  _StaticTree(
+    this.staticTree,
+    this.extraBits,
+    this.extraBase,
+    this.numElements,
+    this.maxLength,
+  );
   static const maxBits = 15;
 
   static const blCodes = 19;
@@ -3358,7 +3381,7 @@ class _StaticTree {
     99,
     8,
     227,
-    8
+    8,
   ];
 
   static const List<int> staticDTree = [
@@ -3421,17 +3444,32 @@ class _StaticTree {
     7,
     5,
     23,
-    5
+    5,
   ];
 
   static final staticLDesc = _StaticTree(
-      staticLTree, _HuffmanTree.extraLBits, literals + 1, lCodes, maxBits);
+    staticLTree,
+    _HuffmanTree.extraLBits,
+    literals + 1,
+    lCodes,
+    maxBits,
+  );
 
-  static final staticDDesc =
-      _StaticTree(staticDTree, _HuffmanTree.extraDBits, 0, dCodes, maxBits);
+  static final staticDDesc = _StaticTree(
+    staticDTree,
+    _HuffmanTree.extraDBits,
+    0,
+    dCodes,
+    maxBits,
+  );
 
-  static final staticBlDesc =
-      _StaticTree(null, _HuffmanTree.extraBLBits, 0, blCodes, maxBLBits);
+  static final staticBlDesc = _StaticTree(
+    null,
+    _HuffmanTree.extraBLBits,
+    0,
+    blCodes,
+    maxBLBits,
+  );
 
   List<int>? staticTree; // static tree or null
   List<int> extraBits; // extra bits for each code or null

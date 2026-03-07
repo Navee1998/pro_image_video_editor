@@ -120,14 +120,20 @@ class PvrPacket {
       final r = colorA >> 9;
       final g = colorA >> 4 & 0x1f;
       final b = colorA & 0xf;
-      return PvrColorRgb(PvrBitUtility.bitScale5To8[r],
-          PvrBitUtility.bitScale5To8[g], PvrBitUtility.bitScale4To8[b]);
+      return PvrColorRgb(
+        PvrBitUtility.bitScale5To8[r],
+        PvrBitUtility.bitScale5To8[g],
+        PvrBitUtility.bitScale4To8[b],
+      );
     } else {
       final r = (colorA >> 7) & 0xf;
       final g = (colorA >> 3) & 0xf;
       final b = colorA & 7;
-      return PvrColorRgb(PvrBitUtility.bitScale4To8[r],
-          PvrBitUtility.bitScale4To8[g], PvrBitUtility.bitScale3To8[b]);
+      return PvrColorRgb(
+        PvrBitUtility.bitScale4To8[r],
+        PvrBitUtility.bitScale4To8[g],
+        PvrBitUtility.bitScale3To8[b],
+      );
     }
   }
 
@@ -136,18 +142,23 @@ class PvrPacket {
       final r = colorA >> 9;
       final g = colorA >> 4 & 0x1f;
       final b = colorA & 0xf;
-      return PvrColorRgba(PvrBitUtility.bitScale5To8[r],
-          PvrBitUtility.bitScale5To8[g], PvrBitUtility.bitScale4To8[b], 255);
+      return PvrColorRgba(
+        PvrBitUtility.bitScale5To8[r],
+        PvrBitUtility.bitScale5To8[g],
+        PvrBitUtility.bitScale4To8[b],
+        255,
+      );
     } else {
       final a = colorA >> 11 & 7;
       final r = (colorA >> 7) & 0xf;
       final g = (colorA >> 3) & 0xf;
       final b = colorA & 7;
       return PvrColorRgba(
-          PvrBitUtility.bitScale4To8[r],
-          PvrBitUtility.bitScale4To8[g],
-          PvrBitUtility.bitScale3To8[b],
-          PvrBitUtility.bitScale3To8[a]);
+        PvrBitUtility.bitScale4To8[r],
+        PvrBitUtility.bitScale4To8[g],
+        PvrBitUtility.bitScale3To8[b],
+        PvrBitUtility.bitScale3To8[a],
+      );
     }
   }
 
@@ -156,14 +167,20 @@ class PvrPacket {
       final r = colorB >> 10;
       final g = colorB >> 5 & 0x1f;
       final b = colorB & 0x1f;
-      return PvrColorRgb(PvrBitUtility.bitScale5To8[r],
-          PvrBitUtility.bitScale5To8[g], PvrBitUtility.bitScale5To8[b]);
+      return PvrColorRgb(
+        PvrBitUtility.bitScale5To8[r],
+        PvrBitUtility.bitScale5To8[g],
+        PvrBitUtility.bitScale5To8[b],
+      );
     } else {
       final r = colorB >> 8 & 0xf;
       final g = colorB >> 4 & 0xf;
       final b = colorB & 0xf;
-      return PvrColorRgb(PvrBitUtility.bitScale4To8[r],
-          PvrBitUtility.bitScale4To8[g], PvrBitUtility.bitScale4To8[b]);
+      return PvrColorRgb(
+        PvrBitUtility.bitScale4To8[r],
+        PvrBitUtility.bitScale4To8[g],
+        PvrBitUtility.bitScale4To8[b],
+      );
     }
   }
 
@@ -172,18 +189,23 @@ class PvrPacket {
       final r = colorB >> 10;
       final g = colorB >> 5 & 0x1f;
       final b = colorB & 0x1f;
-      return PvrColorRgba(PvrBitUtility.bitScale5To8[r],
-          PvrBitUtility.bitScale5To8[g], PvrBitUtility.bitScale5To8[b], 255);
+      return PvrColorRgba(
+        PvrBitUtility.bitScale5To8[r],
+        PvrBitUtility.bitScale5To8[g],
+        PvrBitUtility.bitScale5To8[b],
+        255,
+      );
     } else {
       final a = colorB >> 12 & 7;
       final r = colorB >> 8 & 0xf;
       final g = colorB >> 4 & 0xf;
       final b = colorB & 0xf;
       return PvrColorRgba(
-          PvrBitUtility.bitScale4To8[r],
-          PvrBitUtility.bitScale4To8[g],
-          PvrBitUtility.bitScale4To8[b],
-          PvrBitUtility.bitScale3To8[a]);
+        PvrBitUtility.bitScale4To8[r],
+        PvrBitUtility.bitScale4To8[g],
+        PvrBitUtility.bitScale4To8[b],
+        PvrBitUtility.bitScale3To8[a],
+      );
     }
   }
 
@@ -508,6 +530,6 @@ class PvrPacket {
     0x5550,
     0x5551,
     0x5554,
-    0x5555
+    0x5555,
   ];
 }

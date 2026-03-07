@@ -49,10 +49,7 @@ class StickerEditorState extends State<StickerEditor>
 
   @override
   Widget build(BuildContext context) {
-    assert(
-      stickerEditorConfigs.builder != null,
-      '`builder` is required',
-    );
+    assert(stickerEditorConfigs.builder != null, '`builder` is required');
 
     return ExtendedPopScope(
       canPop: stickerEditorConfigs.enableGesturePop,

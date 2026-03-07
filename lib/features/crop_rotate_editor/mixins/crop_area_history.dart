@@ -309,8 +309,9 @@ mixin CropAreaHistory
     final callback = cropRotateEditorCallbacks?.onTransformUpdateEnd;
     if (callback == null) return;
 
-    final completeParams =
-        await getCompleteParameters(imageBytes: Uint8List(0));
+    final completeParams = await getCompleteParameters(
+      imageBytes: Uint8List(0),
+    );
 
     callback(completeParams);
   }
@@ -367,13 +368,15 @@ mixin CropAreaHistory
     setCropMode(activeHistory.cropMode, updateHistory: false);
     rotationCount = (activeHistory.angle * 2 / pi).abs().toInt();
     rotateAnimation =
-        Tween<double>(begin: rotateAnimation.value, end: activeHistory.angle)
-            .animate(
-      CurvedAnimation(
-        parent: rotateCtrl,
-        curve: cropRotateEditorConfigs.rotateAnimationCurve,
-      ),
-    );
+        Tween<double>(
+          begin: rotateAnimation.value,
+          end: activeHistory.angle,
+        ).animate(
+          CurvedAnimation(
+            parent: rotateCtrl,
+            curve: cropRotateEditorConfigs.rotateAnimationCurve,
+          ),
+        );
     rotateCtrl
       ..reset()
       ..forward();
@@ -402,29 +405,26 @@ mixin CropAreaHistory
   /// ```
   /// reset(skipAddHistory: true);
   /// ```
-  void reset({
-    bool skipAddHistory = false,
-  }) {
+  void reset({bool skipAddHistory = false}) {
     initialized = false;
     flipX = false;
     flipY = false;
     translate = Offset.zero;
-    setCropMode(
-      cropRotateEditorConfigs.initialCropMode,
-      updateHistory: false,
-    );
+    setCropMode(cropRotateEditorConfigs.initialCropMode, updateHistory: false);
     int rCount = rotationCount % 4;
-    rotateAnimation =
-        Tween<double>(begin: rCount == 3 ? pi / 2 : -rCount * pi / 2, end: 0)
-            .animate(rotateCtrl);
+    rotateAnimation = Tween<double>(
+      begin: rCount == 3 ? pi / 2 : -rCount * pi / 2,
+      end: 0,
+    ).animate(rotateCtrl);
     rotateCtrl
       ..reset()
       ..forward();
     rotationCount = 0;
 
-    scaleAnimation =
-        Tween<double>(begin: oldScaleFactor * userScaleFactor, end: 1)
-            .animate(scaleCtrl);
+    scaleAnimation = Tween<double>(
+      begin: oldScaleFactor * userScaleFactor,
+      end: 1,
+    ).animate(scaleCtrl);
     scaleCtrl
       ..reset()
       ..forward();
@@ -494,8 +494,8 @@ mixin CropAreaHistory
   }) async {
     TransformConfigs transformC =
         !canRedo && !canUndo && initialTransformConfigs != null
-            ? initialTransformConfigs!
-            : activeHistory;
+        ? initialTransformConfigs!
+        : activeHistory;
 
     final isTransformed = transformC.isNotEmpty;
 
@@ -518,8 +518,9 @@ mixin CropAreaHistory
     return CompleteParameters(
       blur: appliedBlurFactor,
       matrixFilterList: appliedFilters,
-      matrixTuneAdjustmentsList:
-          appliedTuneAdjustments.map((item) => item.matrix).toList(),
+      matrixTuneAdjustmentsList: appliedTuneAdjustments
+          .map((item) => item.matrix)
+          .toList(),
       cropWidth: isTransformed ? outputSize.width.round() : null,
       cropHeight: isTransformed ? outputSize.height.round() : null,
       cropX: isTransformed ? outputOffset.dx.round() : null,

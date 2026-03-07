@@ -11,10 +11,7 @@ const Map<String, String> kMinifiedMainKeys = {
 };
 
 /// A constant map containing minified size keys for import/export services.
-const Map<String, String> kMinifiedSizeKeys = {
-  'width': 'w',
-  'height': 'h',
-};
+const Map<String, String> kMinifiedSizeKeys = {'width': 'w', 'height': 'h'};
 
 /// A constant map containing minified history keys for import/export services.
 const Map<String, String> kMinifiedHistoryKeys = {
@@ -30,6 +27,7 @@ const Map<String, String> kMinifiedLayerKeys = {
   'x': 'x',
   'y': 'y',
   'rotation': 'r',
+  'width': 'w',
   'scale': 's',
   'flipX': 'fx',
   'flipY': 'fy',
@@ -59,6 +57,7 @@ const Map<String, String> kMinifiedLayerKeys = {
   'meta': 'm',
   'boxConstraints': 'bx',
   'maxTextWidth': 'mt',
+  'shadows': 'sh',
 
   /// Only in version < 8.0.0
   'enableInteraction': 'ei',

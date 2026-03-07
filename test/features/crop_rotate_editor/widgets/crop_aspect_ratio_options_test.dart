@@ -11,8 +11,9 @@ class MockProImageEditorConfigs extends Mock implements ProImageEditorConfigs {}
 
 void main() {
   group('CropAspectRatioOptions Tests', () {
-    testWidgets('Initializes with correct aspect ratio',
-        (WidgetTester tester) async {
+    testWidgets('Initializes with correct aspect ratio', (
+      WidgetTester tester,
+    ) async {
       const String ratioText = 'Ratio-Text';
       await tester.pumpWidget(
         const MaterialApp(
@@ -21,9 +22,10 @@ void main() {
               aspectRatio: 1.0,
               originalAspectRatio: 1.0,
               configs: ProImageEditorConfigs(
-                  cropRotateEditor: CropRotateEditorConfigs(aspectRatios: [
-                AspectRatioItem(text: ratioText, value: 1),
-              ])),
+                cropRotateEditor: CropRotateEditorConfigs(
+                  aspectRatios: [AspectRatioItem(text: ratioText, value: 1)],
+                ),
+              ),
             ),
           ),
         ),

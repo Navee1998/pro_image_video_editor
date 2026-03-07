@@ -5,8 +5,12 @@ import '/plugins/emoji_picker_flutter/emoji_picker_flutter.dart';
 /// Search Button Widget
 class SearchButton extends StatelessWidget {
   /// Constructor
-  const SearchButton(this.config, this.showSearchView, this.buttonIconColor,
-      {super.key});
+  const SearchButton(
+    this.config,
+    this.showSearchView,
+    this.buttonIconColor, {
+    super.key,
+  });
 
   /// Config
   final Config config;
@@ -21,11 +25,8 @@ class SearchButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return IconButton(
       onPressed: showSearchView,
-      icon: config.customSearchIcon ??
-          Icon(
-            Icons.search,
-            color: buttonIconColor,
-          ),
+      icon:
+          config.customSearchIcon ?? Icon(Icons.search, color: buttonIconColor),
     );
   }
 }

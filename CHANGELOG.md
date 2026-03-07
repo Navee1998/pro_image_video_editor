@@ -1,5 +1,101 @@
 # Changelog
 
+## 12.0.5
+- **FEAT**(editor-audio): Add `safeFilePath` method to `EditorAudio` that returns a file path for the audio source. For file sources, it returns the path directly. For memory, asset, and network sources, it writes the data to a temporary file. File extension is automatically extracted from asset paths and network URLs.
+
+## 12.0.4
+- **FIX**(wasm): Resolve WASM incompatibility caused by unconditional `dart:isolate` import. The `IsolateManager` is now loaded via a conditional import, so web/WASM builds use a stub that falls back to single-threaded processing.
+
+## 12.0.3
+- **FEAT**(crop-rotate-editor): Add `exportOvalMask` to `CropRotateEditorConfigs` (default `true`). When set to `false`, the exported image uses a plain rectangular crop even if `CropMode.oval` is active, while the oval UI remains visible inside the crop editor.
+- **FEAT**(crop-rotate-editor): Add `helperLineWidth` to `CropRotateEditorStyle`, allowing the grid line thickness to be customized or hidden entirely by setting it to `0`.
+
+## 12.0.2
+- **FIX**(main-editor): Resolve crash when `setState` is called after widget disposal, preventing "Cannot add new events after calling close" error.
+
+## 12.0.1
+- **FIX**(layers): Resolve issue where layer interaction button tooltips would absorb pointer events in Flutter 3.41+, preventing scale and rotate gestures from working.
+- **CHORE**: Update minimum Flutter version to 3.41.0 and Dart SDK to 3.11.0.
+
+## 12.0.0
+- **FEAT**(audio-editor): Added a new Audio Editor to the Video Editor, allowing users to add background music. Users can set the audio start time and adjust the balance between the original and overlay tracks.
+- **FEAT**(clips-editor): Introduced a new Clips Editor that lets users combine multiple video clips into a single merged video.
+
+## 11.23.0
+- **FEAT**(paint-editor): Add `customPathBuilders` to `PaintEditorConfigs`, allowing users to register custom `PathBuilderBase` implementations for any paint mode.
+- **FEAT**(paint-editor): Add `custom1`, `custom2`, `custom3` paint modes that require custom path builders to be registered. These can be fully customized with custom icons and i18n labels.
+- **FIX**(paint-editor): Arrow head size now scales proportionally with stroke width for consistent appearance.
+
+## 11.22.2
+- **FEAT**(helper-lines): Helper line stroke width is now configurable via the configs.
+- **FIX**(paint-editor): Fix drawing latency with the Apple Pencil.
+
+## 11.22.1
+- **FIX**(layers): Resolve issue of layers always being clipped and unable to extend beyond the image editor.
+
+## 11.22.0
+- **FEAT**(image-generation): Add `captureImageByteFormat` config to `ImageGenerationConfigs` to control the byte format used when capturing images. Defaults to `ImageByteFormat.rawStraightRgba` which prevents black border artifacts around transparent edges when exporting to PNG.
+- **FEAT**(main-editor): Add `enableKeyboardShortcuts` config to `MainEditorConfigs` to optionally disable library-side keyboard shortcuts, allowing apps to implement their own key bindings without conflicts.
+
+## 11.21.3
+- **FEAT**(video-editor): Add `videoSetupLoadingIndicator` widget to `VideoEditorWidgets` to allow customizing the loading indicator shown while the video player is initializing.
+
+## 11.21.2
+- **FEAT**(video-editor): Add `showControls` config to `VideoEditorConfigs` to allow hiding the video editor controls UI.
+
+## 11.21.1
+- **FEAT**(text-editor): Add `resizeToAvoidBottomInset` config to control whether the editor resizes when the keyboard appears.
+- **FIX**(paint-editor): Resolve issue where erasing would randomly remove other layers.
+
+## 11.21.0
+- **FIX**(keyboard-shortcuts): Block Ctrl-based shortcuts when Alt is pressed to prevent conflicts with keyboard layouts (e.g., Polish) where Ctrl+Alt+Z is used for typing characters. More details in PR [#757](https://github.com/hm21/pro_image_editor/pull/757).
+
+## 11.20.1
+- **FIX**: Resolve issue where DeferPointer shows an error when the hero animations is running for the text layers from the custom screens.
+
+## 11.20.0
+- **FEAT**(main-editor): Add the flag `enableSubEditorPage` which allows sub-editors to be opened with the same constraints as the editor itself. More details in PR [#752](https://github.com/hm21/pro_image_editor/pull/752).
+
+## 11.19.1
+- **FEAT**(main-editor): Add `onEditTextLayer` callback to `MainEditorCallbacks`, allowing users to open a custom text editor when a text layer is tapped.
+- **FEAT**(main-editor): Add `onCreateTextLayer` callback to `MainEditorCallbacks`, allowing users to open a custom text editor when creating a new text layer.
+- **FEAT**(text-editor): Add `bodyItemsOverlay` to `TextEditorWidgets` for placing custom widgets above all other content in the text editor body.
+- **FEAT**(text-editor): Add `textFieldPadding` to `TextEditorStyle` for applying padding outside the scroll area of the text field.
+
+## 11.19.0
+- **FEAT**(CompleteParameters): Add serialization methods (`toMap`, `fromMap`, `toJson`, `fromJson`).
+
+## 11.18.3
+- **FEAT**(paint-editor): Add freestyle arrow modes (`freeStyleArrowStart`, `freeStyleArrowEnd`, `freeStyleArrowStartEnd`) to draw freehand paths with arrowheads at the start, end, or both ends.
+
+## 11.18.2
+- **FEAT**(EditorSafeArea): Add convenience constructors `none`, `symmetric`, and `fromLTRB` for easier safe area configuration.
+- **FIX**(HelperLines): Resolves the issue of horizontal lines not showing up when the editor overflows the screen.
+
+## 11.18.1
+- **FIX**(filter-editor): Ensure that the applied filters can also be removed.
+
+## 11.18.0
+- **FEAT**(filter-editor): Restore previously applied filter when `enableMultiSelection` is disabled, allowing users to toggle between filters instant of stacking filters.
+
+## 11.17.0
+- **FEAT**(paint-editor): Add hexagon shape tool. More details in PR [#738](https://github.com/hm21/pro_image_editor/pull/738).
+
+## 11.16.0
+- **FIX**(text-editor): Persist text shadow properties when exporting and importing state history. More details in PR [#733](https://github.com/hm21/pro_image_editor/pull/733).
+
+## 11.15.6
+- **FEAT**(text-editor): Add an optional background and borders to the text editor input field. More details in PR [#735](https://github.com/hm21/pro_image_editor/pull/735).
+
+## 11.15.5
+- **FEAT**(network-image): Added optional `networkHeaders` to the `EditorImage`. More details in PR [#729](https://github.com/hm21/pro_image_editor/pull/729).
+
+## 11.15.4
+- **FIX**(widget-layer): Resolve the issue of the optional `width` being applied incorrectly.
+
+## 11.15.3
+- **FEAT**(widget-layer): Add optional `width` property.
+
 ## 11.15.2
 - **FEAT**(crop-rotate-editor): Add new callback `onTransformUpdateEnd` that returns all transformation changes whenever a value in the crop-rotate editor is modified.
 

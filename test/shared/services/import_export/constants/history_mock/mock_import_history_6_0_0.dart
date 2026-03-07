@@ -5,9 +5,9 @@ Map<String, dynamic> kMockHistory_6_0_0 = {
   'history': [
     {
       'layers': [
-        {'id': 'A'}
+        {'id': 'A'},
       ],
-      'blur': 2.0
+      'blur': 2.0,
     },
     {
       'layers': [
@@ -16,34 +16,34 @@ Map<String, dynamic> kMockHistory_6_0_0 = {
           'x': -71.60000000000002,
           'y': -90.39999999999998,
           'rotation': -0.523596,
-          'scale': 2.5582142857142856
-        }
-      ]
-    },
-    {
-      'layers': [
-        {'id': 'A'},
-        {'id': 'B'}
-      ]
-    },
-    {
-      'layers': [
-        {'id': 'A'},
-        {'id': 'B', 'x': 58.0, 'y': -173.2, 'rotation': 0.43633, 'scale': 0.85}
-      ]
+          'scale': 2.5582142857142856,
+        },
+      ],
     },
     {
       'layers': [
         {'id': 'A'},
         {'id': 'B'},
-        {'id': 'C'}
-      ]
+      ],
+    },
+    {
+      'layers': [
+        {'id': 'A'},
+        {'id': 'B', 'x': 58.0, 'y': -173.2, 'rotation': 0.43633, 'scale': 0.85},
+      ],
     },
     {
       'layers': [
         {'id': 'A'},
         {'id': 'B'},
-        {'id': 'C'}
+        {'id': 'C'},
+      ],
+    },
+    {
+      'layers': [
+        {'id': 'A'},
+        {'id': 'B'},
+        {'id': 'C'},
       ],
       'filters': [
         [
@@ -66,7 +66,7 @@ Map<String, dynamic> kMockHistory_6_0_0 = {
           0.0,
           0.0,
           1.0,
-          0.0
+          0.0,
         ],
         [
           1.0,
@@ -88,15 +88,15 @@ Map<String, dynamic> kMockHistory_6_0_0 = {
           0.0,
           0.0,
           0.29,
-          0.0
-        ]
-      ]
+          0.0,
+        ],
+      ],
     },
     {
       'layers': [
         {'id': 'A'},
         {'id': 'B'},
-        {'id': 'C'}
+        {'id': 'C'},
       ],
       'tune': [
         {
@@ -122,8 +122,8 @@ Map<String, dynamic> kMockHistory_6_0_0 = {
             0.0,
             0.0,
             1.0,
-            0.0
-          ]
+            0.0,
+          ],
         },
         {
           'id': 'contrast',
@@ -148,8 +148,8 @@ Map<String, dynamic> kMockHistory_6_0_0 = {
             0.0,
             0.0,
             1.0,
-            0.0
-          ]
+            0.0,
+          ],
         },
         {
           'id': 'saturation',
@@ -174,8 +174,8 @@ Map<String, dynamic> kMockHistory_6_0_0 = {
             0.0,
             0.0,
             1.0,
-            0.0
-          ]
+            0.0,
+          ],
         },
         {
           'id': 'exposure',
@@ -200,8 +200,8 @@ Map<String, dynamic> kMockHistory_6_0_0 = {
             0.0,
             0.0,
             1.0,
-            0.0
-          ]
+            0.0,
+          ],
         },
         {
           'id': 'hue',
@@ -226,8 +226,8 @@ Map<String, dynamic> kMockHistory_6_0_0 = {
             0.0,
             0.0,
             1.0,
-            0.0
-          ]
+            0.0,
+          ],
         },
         {
           'id': 'temperature',
@@ -252,8 +252,8 @@ Map<String, dynamic> kMockHistory_6_0_0 = {
             0.0,
             0.0,
             1.0,
-            0.0
-          ]
+            0.0,
+          ],
         },
         {
           'id': 'sharpness',
@@ -278,8 +278,8 @@ Map<String, dynamic> kMockHistory_6_0_0 = {
             0.0,
             0.0,
             1.0,
-            0.0
-          ]
+            0.0,
+          ],
         },
         {
           'id': 'luminance',
@@ -304,8 +304,8 @@ Map<String, dynamic> kMockHistory_6_0_0 = {
             0.0,
             0.0,
             1.0,
-            0.0
-          ]
+            0.0,
+          ],
         },
         {
           'id': 'fade',
@@ -330,10 +330,10 @@ Map<String, dynamic> kMockHistory_6_0_0 = {
             0.0,
             0.0,
             1.0,
-            0.0
-          ]
-        }
-      ]
+            0.0,
+          ],
+        },
+      ],
     },
     {
       'layers': [
@@ -341,9 +341,9 @@ Map<String, dynamic> kMockHistory_6_0_0 = {
         {'id': 'B'},
         {'id': 'C'},
         {'id': 'D'},
-        {'id': 'E'}
-      ]
-    }
+        {'id': 'E'},
+      ],
+    },
   ],
   'references': {
     'A': {
@@ -357,10 +357,10 @@ Map<String, dynamic> kMockHistory_6_0_0 = {
         'enableMove': true,
         'enableScale': true,
         'enableRotate': true,
-        'enableSelection': true
+        'enableSelection': true,
       },
       'type': 'emoji',
-      'emoji': '😛'
+      'emoji': '😛',
     },
     'B': {
       'x': 0.0,
@@ -373,7 +373,7 @@ Map<String, dynamic> kMockHistory_6_0_0 = {
         'enableMove': true,
         'enableScale': true,
         'enableRotate': true,
-        'enableSelection': true
+        'enableSelection': true,
       },
       'type': 'text',
       'text': 'Hello World',
@@ -381,7 +381,7 @@ Map<String, dynamic> kMockHistory_6_0_0 = {
       'color': 4281073408,
       'background': 4278190080,
       'align': 'center',
-      'fontScale': 1.0
+      'fontScale': 1.0,
     },
     'C': {
       'x': 9.100000000000023,
@@ -394,22 +394,22 @@ Map<String, dynamic> kMockHistory_6_0_0 = {
         'enableMove': true,
         'enableScale': true,
         'enableRotate': true,
-        'enableSelection': true
+        'enableSelection': true,
       },
       'type': 'paint',
       'item': {
         'mode': 'arrow',
         'offsets': [
           {'x': 5.0, 'y': 68.59999999999997},
-          {'x': 70.60000000000002, 'y': 5.0}
+          {'x': 70.60000000000002, 'y': 5.0},
         ],
         'color': 4294901760,
         'strokeWidth': 10.0,
         'opacity': 1.0,
-        'fill': false
+        'fill': false,
       },
       'rawSize': {'w': 75.60000000000002, 'h': 73.59999999999997},
-      'opacity': 1.0
+      'opacity': 1.0,
     },
     'D': {
       'x': -101.19999999999993,
@@ -422,10 +422,10 @@ Map<String, dynamic> kMockHistory_6_0_0 = {
         'enableMove': true,
         'enableScale': true,
         'enableRotate': true,
-        'enableSelection': true
+        'enableSelection': true,
       },
       'type': 'widget',
-      'exportConfigs': {'networkUrl': 'https://picsum.photos/id/17/400'}
+      'exportConfigs': {'networkUrl': 'https://picsum.photos/id/17/400'},
     },
     'E': {
       'x': 101.19999999999993,
@@ -438,12 +438,12 @@ Map<String, dynamic> kMockHistory_6_0_0 = {
         'enableMove': true,
         'enableScale': true,
         'enableRotate': true,
-        'enableSelection': true
+        'enableSelection': true,
       },
       'type': 'widget',
-      'exportConfigs': {'networkUrl': 'https://picsum.photos/id/17/400'}
-    }
+      'exportConfigs': {'networkUrl': 'https://picsum.photos/id/17/400'},
+    },
   },
   'imgSize': {'width': 1024.0, 'height': 1792.0},
-  'lastRenderedImgSize': {'width': 327.0, 'height': 572.0}
+  'lastRenderedImgSize': {'width': 327.0, 'height': 572.0},
 };

@@ -14,11 +14,7 @@ import 'constants/censor_backdrop_key.dart';
 class BlurAreaItem extends CensorAreaItem {
   /// Creates a [BlurAreaItem] with the specified [censorConfigs] and
   /// optional [size].
-  const BlurAreaItem({
-    super.key,
-    required super.censorConfigs,
-    super.size,
-  });
+  const BlurAreaItem({super.key, required super.censorConfigs, super.size});
 
   /// Builds a [BackdropFilter] that applies a blur effect based on the provided
   /// [censorConfigs].

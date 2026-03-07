@@ -51,10 +51,7 @@ class _WhatsAppDoneBtnState extends State<WhatsAppDoneBtn> {
         padding: const EdgeInsets.symmetric(horizontal: 20),
         side: isMaterial
             ? const BorderSide(width: 0, color: Colors.transparent)
-            : BorderSide(
-                width: 1,
-                color: widget.foregroundColor,
-              ),
+            : BorderSide(width: 1, color: widget.foregroundColor),
         backgroundColor: isMaterial ? Colors.black38 : null,
       ),
       child: Text(widget.configs.i18n.done),

@@ -64,18 +64,22 @@ void main() {
       expect(find.text(testConfigs.i18n.paintEditor.color), findsOneWidget);
       expect(find.text(testConfigs.i18n.paintEditor.opacity), findsOneWidget);
       expect(
-          find.text(testConfigs.i18n.paintEditor.strokeWidth), findsOneWidget);
+        find.text(testConfigs.i18n.paintEditor.strokeWidth),
+        findsOneWidget,
+      );
     });
 
     testWidgets('changes opacity on slider interaction', (tester) async {
-      await tester.pumpWidget(MaterialApp(
-        home: Scaffold(
-          body: PaintEditorLayerEditor(
-            layer: testLayer,
-            configs: testConfigs,
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: PaintEditorLayerEditor(
+              layer: testLayer,
+              configs: testConfigs,
+            ),
           ),
         ),
-      ));
+      );
 
       final opacitySlider = find.byType(Slider).at(0);
       await tester.drag(opacitySlider, const Offset(100, 0));
@@ -83,18 +87,22 @@ void main() {
 
       // Basic validation
       expect(
-          testLayer.opacity, greaterThan(testConfigs.paintEditor.minOpacity));
+        testLayer.opacity,
+        greaterThan(testConfigs.paintEditor.minOpacity),
+      );
     });
 
     testWidgets('toggles fill mode', (tester) async {
-      await tester.pumpWidget(MaterialApp(
-        home: Scaffold(
-          body: PaintEditorLayerEditor(
-            layer: testLayer,
-            configs: testConfigs,
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: PaintEditorLayerEditor(
+              layer: testLayer,
+              configs: testConfigs,
+            ),
           ),
         ),
-      ));
+      );
 
       final switchTile = find.byType(SwitchListTile);
       expect(switchTile, findsOneWidget);
@@ -105,8 +113,9 @@ void main() {
       expect(testLayer.item.fill, isTrue);
     });
 
-    testWidgets('returns layer on done button via bottom sheet',
-        (tester) async {
+    testWidgets('returns layer on done button via bottom sheet', (
+      tester,
+    ) async {
       PaintLayer? resultLayer;
 
       await tester.pumpWidget(

@@ -107,10 +107,7 @@ class _WhatsAppColorPickerState extends State<WhatsAppColorPicker> {
               decoration: BoxDecoration(
                 color: color,
                 borderRadius: BorderRadius.circular(100),
-                border: Border.all(
-                  color: Colors.white,
-                  width: borderWidth,
-                ),
+                border: Border.all(color: Colors.white, width: borderWidth),
               ),
             ),
           ),

@@ -499,10 +499,7 @@ class LayerInteractionManager {
     /// Calculates the scale factor based on the movement of a button.
     /// [oldPosition] is the initial button position,
     /// [newPosition] is the final button position.
-    double calculateScale(
-      Offset oldPosition,
-      Offset newPosition,
-    ) {
+    double calculateScale(Offset oldPosition, Offset newPosition) {
       // Calculate distances from the origin to the old and new positions
       double oldDistance = (oldPosition).distance;
       double newDistance = (newPosition).distance;
@@ -544,7 +541,8 @@ class LayerInteractionManager {
       _rotateScaleButtonStartPosition ??= touchPositionFromLayerCenter;
 
       if (layer.interaction.enableScale) {
-        layer.scale = _getLayerBaseScale(layer.id) *
+        layer.scale =
+            _getLayerBaseScale(layer.id) *
             calculateScale(
               _rotateScaleButtonStartPosition!,
               touchPositionFromLayerCenter,
@@ -553,7 +551,8 @@ class LayerInteractionManager {
       }
 
       if (layer.interaction.enableRotate) {
-        layer.rotation = _getLayerBaseAngle(layer.id) +
+        layer.rotation =
+            _getLayerBaseAngle(layer.id) +
             calculateRotation(
               _rotateScaleButtonStartPosition!,
               touchPositionFromLayerCenter,
@@ -607,10 +606,12 @@ class LayerInteractionManager {
         continue;
       }
 
-      final Offset localPointFromCenter =
-          layer.computeLocalCenterOffset(fractionalOffset);
-      final Offset layerCenterOffset =
-          layer.computeOffsetFromCenterFraction(fractionalOffset);
+      final Offset localPointFromCenter = layer.computeLocalCenterOffset(
+        fractionalOffset,
+      );
+      final Offset layerCenterOffset = layer.computeOffsetFromCenterFraction(
+        fractionalOffset,
+      );
 
       final releaseThreshold = helperLineConfigs.releaseThreshold;
       bool hasLineHit = false;
@@ -619,10 +620,10 @@ class LayerInteractionManager {
 
       bool hitAreaX =
           detail.focalPoint.dx >= snapStartPosX - releaseThreshold &&
-              detail.focalPoint.dx <= snapStartPosX + releaseThreshold;
+          detail.focalPoint.dx <= snapStartPosX + releaseThreshold;
       bool hitAreaY =
           detail.focalPoint.dy >= snapStartPosY - releaseThreshold &&
-              detail.focalPoint.dy <= snapStartPosY + releaseThreshold;
+          detail.focalPoint.dy <= snapStartPosY + releaseThreshold;
 
       bool helperGoNearLineLeft =
           posX >= 0 && lastPositionX == LayerLastPosition.left;
@@ -643,15 +644,13 @@ class LayerInteractionManager {
             snapStartPosX = detail.focalPoint.dx;
           }
           showVerticalHelperLine = true;
-          layer.offset = Offset(
-            -localPointFromCenter.dx,
-            layer.offset.dy,
-          );
+          layer.offset = Offset(-localPointFromCenter.dx, layer.offset.dy);
           lastPositionX = LayerLastPosition.center;
         } else {
           showVerticalHelperLine = false;
-          lastPositionX =
-              posX <= 0 ? LayerLastPosition.left : LayerLastPosition.right;
+          lastPositionX = posX <= 0
+              ? LayerLastPosition.left
+              : LayerLastPosition.right;
         }
       }
 
@@ -665,15 +664,13 @@ class LayerInteractionManager {
             snapStartPosY = detail.focalPoint.dy;
           }
           showHorizontalHelperLine = true;
-          layer.offset = Offset(
-            layer.offset.dx,
-            -localPointFromCenter.dy,
-          );
+          layer.offset = Offset(layer.offset.dx, -localPointFromCenter.dy);
           lastPositionY = LayerLastPosition.center;
         } else {
           showHorizontalHelperLine = false;
-          lastPositionY =
-              posY <= 0 ? LayerLastPosition.top : LayerLastPosition.bottom;
+          lastPositionY = posY <= 0
+              ? LayerLastPosition.top
+              : LayerLastPosition.bottom;
         }
       }
 
@@ -797,8 +794,9 @@ class LayerInteractionManager {
 
         final Offset fractionalOffset = _getFractionalLayerOffset(layer);
         layer.computeLocalCenterOffset(fractionalOffset);
-        final Offset layerCenterOffset =
-            layer.computeOffsetFromCenterFraction(fractionalOffset);
+        final Offset layerCenterOffset = layer.computeOffsetFromCenterFraction(
+          fractionalOffset,
+        );
 
         double posY = layerCenterOffset.dy;
         double posX = layerCenterOffset.dx;
@@ -834,8 +832,9 @@ class LayerInteractionManager {
       reset();
 
       final fractionOffset = _getFractionalLayerOffset(layer);
-      final centerOffset =
-          layer.computeOffsetFromCenterFraction(fractionOffset);
+      final centerOffset = layer.computeOffsetFromCenterFraction(
+        fractionOffset,
+      );
       double posX = centerOffset.dx;
       double posY = centerOffset.dy;
 
@@ -844,13 +843,13 @@ class LayerInteractionManager {
       lastPositionY = posY <= -releaseThreshold
           ? LayerLastPosition.top
           : posY >= releaseThreshold
-              ? LayerLastPosition.bottom
-              : LayerLastPosition.center;
+          ? LayerLastPosition.bottom
+          : LayerLastPosition.center;
       lastPositionX = posX <= -releaseThreshold
           ? LayerLastPosition.left
           : posX >= releaseThreshold
-              ? LayerLastPosition.right
-              : LayerLastPosition.center;
+          ? LayerLastPosition.right
+          : LayerLastPosition.center;
     }
   }
 
@@ -950,10 +949,7 @@ class LayerInteractionManager {
       var initialIconX = (layer.offset.dx - paddingLeft) * scaleX;
       var initialIconY = (layer.offset.dy - paddingTop) * scaleX;
       layer
-        ..offset = Offset(
-          initialIconX,
-          initialIconY,
-        )
+        ..offset = Offset(initialIconX, initialIconY)
         ..scale *= scale;
       return true;
     }
@@ -978,18 +974,12 @@ class LayerInteractionManager {
       } else {
         layer.flipX = !layer.flipX;
       }
-      layer.offset = Offset(
-        imageWidth - layer.offset.dx,
-        layer.offset.dy,
-      );
+      layer.offset = Offset(imageWidth - layer.offset.dx, layer.offset.dy);
     }
     if (flipX) {
       layer
         ..flipX = !layer.flipX
-        ..offset = Offset(
-          layer.offset.dx,
-          imageHeight - layer.offset.dy,
-        );
+        ..offset = Offset(layer.offset.dx, imageHeight - layer.offset.dy);
     }
   }
 
@@ -1040,10 +1030,11 @@ class LayerInteractionManager {
     Offset? horizontalOffset;
     Offset? verticalOffset;
 
-    final Offset localPointFromCenter =
-        activeLayer.computeLocalCenterOffset(fractionalOffset);
-    final Offset layerCenterOffset =
-        activeLayer.computeOffsetFromCenterFraction(fractionalOffset);
+    final Offset localPointFromCenter = activeLayer.computeLocalCenterOffset(
+      fractionalOffset,
+    );
+    final Offset layerCenterOffset = activeLayer
+        .computeOffsetFromCenterFraction(fractionalOffset);
 
     List<Offset> uniqueDxOffsets = [];
     List<Offset> uniqueDyOffsets = [];
@@ -1120,7 +1111,9 @@ class LayerInteractionManager {
       isVerticalGuideVisible = true;
 
       activeLayer.offset = Offset(
-          verticalOffset.dx - localPointFromCenter.dx, activeLayer.offset.dy);
+        verticalOffset.dx - localPointFromCenter.dx,
+        activeLayer.offset.dy,
+      );
     }
 
     // Handle horizontal snapping
@@ -1129,11 +1122,14 @@ class LayerInteractionManager {
       isHorizontalGuideVisible = true;
 
       activeLayer.offset = Offset(
-          activeLayer.offset.dx, horizontalOffset.dy - localPointFromCenter.dy);
+        activeLayer.offset.dx,
+        horizontalOffset.dy - localPointFromCenter.dy,
+      );
     }
 
     // Notify UI only if something changed
-    final hasChanged = isHorizontalGuideVisible != wasHorizontalGuideVisible ||
+    final hasChanged =
+        isHorizontalGuideVisible != wasHorizontalGuideVisible ||
         isVerticalGuideVisible != wasVerticalGuideVisible;
 
     if (hasChanged) {
@@ -1165,8 +1161,9 @@ class _LayerAlignGuideHelper {
     final diff = (_lastSnapFocal ?? focal) - focal;
 
     if (_lastSnapFocal == null || diff.abs() < releaseThreshold) {
-      final newPosition =
-          focalDelta > 0 ? positiveDirection : negativeDirection;
+      final newPosition = focalDelta > 0
+          ? positiveDirection
+          : negativeDirection;
 
       if (newPosition != _lastSnapPosition || _lastSnapOffset != offset) {
         _lastSnapFocal ??= focal;
@@ -1175,8 +1172,9 @@ class _LayerAlignGuideHelper {
         return true;
       }
     } else if (diff.abs() > releaseThreshold) {
-      _lastSnapPosition =
-          focal > _lastSnapFocal! ? positiveDirection : negativeDirection;
+      _lastSnapPosition = focal > _lastSnapFocal!
+          ? positiveDirection
+          : negativeDirection;
       _lastSnapFocal = null;
     }
 

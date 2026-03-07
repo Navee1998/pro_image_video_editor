@@ -66,7 +66,8 @@ class SliderBottomSheet<T> extends StatefulWidget {
     double,
     dynamic Function(double),
     dynamic Function(double),
-  )? customSlider;
+  )?
+  customSlider;
 
   /// Whether to show the factor value in the title.
   final bool showFactorInTitle;
@@ -125,10 +126,7 @@ class _SliderBottomSheetState<T> extends State<SliderBottomSheet<T>> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                _buildHeader(),
-                _buildBody(),
-              ],
+              children: [_buildHeader(), _buildBody()],
             ),
           ),
         ),
@@ -137,8 +135,9 @@ class _SliderBottomSheetState<T> extends State<SliderBottomSheet<T>> {
   }
 
   Widget _buildHeader() {
-    String factorText =
-        widget.showFactorInTitle ? ' ${_value.toStringAsFixed(1)}x' : '';
+    String factorText = widget.showFactorInTitle
+        ? ' ${_value.toStringAsFixed(1)}x'
+        : '';
 
     return BottomSheetHeaderRow(
       title: '${widget.title}$factorText',

@@ -20,21 +20,23 @@ Future<Uint8List> encodeJpg(
   required int backgroundColor,
   JpegChroma chroma = JpegChroma.yuv444,
   Completer<void>? destroy$,
-}) =>
-    JpegHealthyEncoder(quality: quality).encode(
-      image,
-      chroma: chroma,
-      destroy$: destroy$,
-      backgroundColor: backgroundColor,
-    );
+}) => JpegHealthyEncoder(quality: quality).encode(
+  image,
+  chroma: chroma,
+  destroy$: destroy$,
+  backgroundColor: backgroundColor,
+);
 
 /// Encode an image to the PNG format.
-Uint8List encodePng(Image image,
-        {bool singleFrame = false,
-        int level = 6,
-        PngFilter filter = PngFilter.paeth}) =>
-    PngEncoder(filter: filter, level: level)
-        .encode(image, singleFrame: singleFrame);
+Uint8List encodePng(
+  Image image, {
+  bool singleFrame = false,
+  int level = 6,
+  PngFilter filter = PngFilter.paeth,
+}) => PngEncoder(
+  filter: filter,
+  level: level,
+).encode(image, singleFrame: singleFrame);
 
 /// Encode an image to the TGA format.
 Uint8List encodeTga(Image image) => TgaEncoder().encode(image);

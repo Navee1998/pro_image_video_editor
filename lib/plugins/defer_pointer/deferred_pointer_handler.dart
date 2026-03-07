@@ -22,13 +22,22 @@ class DeferredPointerHandler extends StatefulWidget {
   DeferredPointerHandlerState createState() => DeferredPointerHandlerState();
 
   /// The state from the closest instance of this class that encloses the given
-  /// context.
-  static DeferredPointerHandlerState of(BuildContext context) {
+  /// context, or null if there is no instance in the tree.
+  static DeferredPointerHandlerState? maybeOf(BuildContext context) {
     final inherited = context
         .dependOnInheritedWidgetOfExactType<_InheritedDeferredPaintSurface>();
-    assert(inherited != null,
-        'DeferredPaintSurface was not found on this context.');
-    return inherited!.state;
+    return inherited?.state;
+  }
+
+  /// The state from the closest instance of this class that encloses the given
+  /// context.
+  static DeferredPointerHandlerState of(BuildContext context) {
+    final DeferredPointerHandlerState? result = maybeOf(context);
+    assert(
+      result != null,
+      'DeferredPaintSurface was not found on this context.',
+    );
+    return result!;
   }
 }
 
@@ -81,10 +90,7 @@ class DeferredPointerHandlerState extends State<DeferredPointerHandler> {
 // RENDER OBJECT WIDGET
 class _DeferredHitTargetRenderObjectWidget
     extends SingleChildRenderObjectWidget {
-  const _DeferredHitTargetRenderObjectWidget({
-    required this.link,
-    super.child,
-  });
+  const _DeferredHitTargetRenderObjectWidget({required this.link, super.child});
 
   final DeferredPointerHandlerLink link;
 
@@ -94,16 +100,18 @@ class _DeferredHitTargetRenderObjectWidget
 
   @override
   void updateRenderObject(
-          BuildContext context, _DeferredHitTargetRenderObject renderObject) =>
-      renderObject.link = link;
+    BuildContext context,
+    _DeferredHitTargetRenderObject renderObject,
+  ) => renderObject.link = link;
 }
 
 ////////////////////////////////
 // RENDER OBJECT PAINTER
 class _DeferredHitTargetRenderObject extends RenderProxyBox {
-  _DeferredHitTargetRenderObject(DeferredPointerHandlerLink link,
-      [RenderBox? child])
-      : super(child) {
+  _DeferredHitTargetRenderObject(
+    DeferredPointerHandlerLink link, [
+    RenderBox? child,
+  ]) : super(child) {
     this.link = link;
   }
 
@@ -152,8 +160,10 @@ class _DeferredHitTargetRenderObject extends RenderProxyBox {
 ////////////////////////////////
 // INHERITED WIDGET
 class _InheritedDeferredPaintSurface extends InheritedWidget {
-  const _InheritedDeferredPaintSurface(
-      {required super.child, required this.state});
+  const _InheritedDeferredPaintSurface({
+    required super.child,
+    required this.state,
+  });
 
   final DeferredPointerHandlerState state;
   @override

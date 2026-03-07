@@ -39,10 +39,10 @@ class Layer {
     this.meta,
     this.boxConstraints,
     this.groupId,
-  })  : key = key ??= GlobalKey(),
-        keyInternalSize = GlobalKey(),
-        id = id ?? generateUniqueId(),
-        interaction = interaction ?? LayerInteraction();
+  }) : key = key ??= GlobalKey(),
+       keyInternalSize = GlobalKey(),
+       id = id ?? generateUniqueId(),
+       interaction = interaction ?? LayerInteraction();
 
   /// Factory constructor for creating a Layer instance from a map and a list
   /// of stickers.
@@ -65,10 +65,14 @@ class Layer {
       boxConstraints = BoxConstraints(
         minWidth: safeParseDouble(constrainedMap['minWidth']),
         minHeight: safeParseDouble(constrainedMap['minHeight']),
-        maxWidth: safeParseDouble(constrainedMap['maxWidth'],
-            fallback: double.infinity),
-        maxHeight: safeParseDouble(constrainedMap['maxHeight'],
-            fallback: double.infinity),
+        maxWidth: safeParseDouble(
+          constrainedMap['maxWidth'],
+          fallback: double.infinity,
+        ),
+        maxHeight: safeParseDouble(
+          constrainedMap['maxHeight'],
+          fallback: double.infinity,
+        ),
       );
     }
 
@@ -200,8 +204,9 @@ class Layer {
       if (meta != null) 'meta': meta,
       'type': 'default',
       if (boxConstraints != null)
-        'boxConstraints':
-            boxConstraints!.toMap(maxDecimalPlaces: maxDecimalPlaces),
+        'boxConstraints': boxConstraints!.toMap(
+          maxDecimalPlaces: maxDecimalPlaces,
+        ),
       if (groupId != null) 'groupId': groupId,
     };
   }
@@ -229,11 +234,14 @@ class Layer {
       if (layer.flipY != flipY) 'flipY': flipY.minify(enableMinify),
       if (!mapIsEqual(layer.meta, meta)) 'meta': meta,
       if (layer.interaction != interaction)
-        'interaction': interaction.toMapFromReference(layer.interaction,
-            enableMinify: enableMinify),
+        'interaction': interaction.toMapFromReference(
+          layer.interaction,
+          enableMinify: enableMinify,
+        ),
       if (layer.boxConstraints != boxConstraints)
-        'boxConstraints':
-            boxConstraints!.toMap(maxDecimalPlaces: maxDecimalPlaces),
+        'boxConstraints': boxConstraints!.toMap(
+          maxDecimalPlaces: maxDecimalPlaces,
+        ),
       if (layer.groupId != groupId) 'groupId': groupId,
     };
   }
@@ -365,7 +373,8 @@ class Layer {
       ..add(DiagnosticsProperty<Offset>('offset', offset))
       ..add(DiagnosticsProperty<Map<String, dynamic>>('meta', meta))
       ..add(
-          DiagnosticsProperty<BoxConstraints>('boxConstraints', boxConstraints))
+        DiagnosticsProperty<BoxConstraints>('boxConstraints', boxConstraints),
+      )
       ..add(DiagnosticsProperty<LayerInteraction>('interaction', interaction))
       ..add(FlagProperty('isEmojiLayer', value: isEmojiLayer, ifTrue: 'true'))
       ..add(FlagProperty('isPaintLayer', value: isPaintLayer, ifTrue: 'true'))

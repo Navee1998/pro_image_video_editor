@@ -14,10 +14,11 @@ class OutputMemoryStream extends OutputStream {
   Uint8List _buffer;
 
   /// Create a byte buffer for writing.
-  OutputMemoryStream(
-      {int? size = defaultBufferSize, super.byteOrder = ByteOrder.littleEndian})
-      : _buffer = Uint8List(size ?? defaultBufferSize),
-        length = 0;
+  OutputMemoryStream({
+    int? size = defaultBufferSize,
+    super.byteOrder = ByteOrder.littleEndian,
+  }) : _buffer = Uint8List(size ?? defaultBufferSize),
+       length = 0;
 
   @override
   void flush() {}
@@ -69,7 +70,11 @@ class OutputMemoryStream extends OutputStream {
     if (stream is InputMemoryStream) {
       if (stream.buffer != null) {
         _buffer.setRange(
-            length, length + stream.length, stream.buffer!, stream.position);
+          length,
+          length + stream.length,
+          stream.buffer!,
+          stream.position,
+        );
       }
     } else {
       final bytes = stream.toUint8List();
@@ -96,7 +101,10 @@ class OutputMemoryStream extends OutputStream {
     }
 
     return Uint8List.view(
-        _buffer.buffer, _buffer.offsetInBytes + start, end - start);
+      _buffer.buffer,
+      _buffer.offsetInBytes + start,
+      end - start,
+    );
   }
 
   /// Grow the buffer to accommodate additional data.

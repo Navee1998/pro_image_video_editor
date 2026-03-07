@@ -17,15 +17,16 @@ class MockBuildContext extends Mock implements BuildContext {
 
 Future<ui.Image> createTestUiImage() async {
   final recorder = ui.PictureRecorder();
-  Canvas(recorder).drawRect(const Rect.fromLTWH(0, 0, 1, 1),
-      Paint()..color = const Color(0xFFFFFFFF));
+  Canvas(recorder).drawRect(
+    const Rect.fromLTWH(0, 0, 1, 1),
+    Paint()..color = const Color(0xFFFFFFFF),
+  );
   return recorder.endRecording().toImage(1, 1);
 }
 
 void main() {
   group('ImageConverter', () {
-    test(
-        'uiImageToImageBytes returns bytes and precaches if context is '
+    test('uiImageToImageBytes returns bytes and precaches if context is '
         'provided', () async {
       final testImage = await createTestUiImage();
       final context = MockBuildContext();

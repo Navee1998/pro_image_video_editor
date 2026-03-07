@@ -49,8 +49,9 @@ class TuneAdjustmentMatrix {
     return {
       'id': id,
       'value': value.roundSmart(maxDecimalPlaces),
-      'matrix':
-          matrix.map((value) => value.roundSmart(maxDecimalPlaces)).toList(),
+      'matrix': matrix
+          .map((value) => value.roundSmart(maxDecimalPlaces))
+          .toList(),
     };
   }
 
@@ -59,11 +60,7 @@ class TuneAdjustmentMatrix {
   ///
   /// The [copy] method allows duplicating the matrix with identical properties.
   TuneAdjustmentMatrix copy() {
-    return TuneAdjustmentMatrix(
-      id: id,
-      value: value,
-      matrix: [...matrix],
-    );
+    return TuneAdjustmentMatrix(id: id, value: value, matrix: [...matrix]);
   }
 
   @override

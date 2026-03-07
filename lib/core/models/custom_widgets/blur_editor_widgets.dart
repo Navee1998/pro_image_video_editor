@@ -44,11 +44,15 @@ class BlurEditorWidgets extends CustomWidgetsStandaloneEditor<BlurEditorState> {
   @override
   BlurEditorWidgets copyWith({
     ReactiveAppbar? Function(
-            BlurEditorState editorState, Stream<void> rebuildStream)?
-        appBar,
+      BlurEditorState editorState,
+      Stream<void> rebuildStream,
+    )?
+    appBar,
     ReactiveWidget? Function(
-            BlurEditorState editorState, Stream<void> rebuildStream)?
-        bottomBar,
+      BlurEditorState editorState,
+      Stream<void> rebuildStream,
+    )?
+    bottomBar,
     CustomBodyItems<BlurEditorState>? bodyItems,
     CustomBodyItems<BlurEditorState>? bodyItemsRecorded,
     CustomSlider<BlurEditorState>? slider,

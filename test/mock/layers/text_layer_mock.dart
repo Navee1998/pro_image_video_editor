@@ -31,9 +31,7 @@ TextLayer textLayerMock = TextLayer(
     enableScale: false,
     enableSelection: true,
   ),
-  meta: {
-    'text-mock': 'meta',
-  },
+  meta: {'text-mock': 'meta'},
   offset: const Offset(34, 67),
   rotation: pi * 2,
   scale: 3.1,

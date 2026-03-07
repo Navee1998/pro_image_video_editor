@@ -4,9 +4,7 @@
 class Point {
   Point([this.x = 0, this.y = 0]);
 
-  Point.from(Point other)
-      : x = other.x,
-        y = other.y;
+  Point.from(Point other) : x = other.x, y = other.y;
   num x;
   num y;
 

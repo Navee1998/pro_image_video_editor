@@ -7,11 +7,12 @@ import 'package:flutter/material.dart';
 import '/plugins/emoji_picker_flutter/emoji_picker_flutter.dart';
 
 /// Callback function for custom view
-typedef EmojiViewBuilder = Widget Function(
-  Config config,
-  EmojiViewState state,
-  VoidCallback showSearchBar,
-);
+typedef EmojiViewBuilder =
+    Widget Function(
+      Config config,
+      EmojiViewState state,
+      VoidCallback showSearchBar,
+    );
 
 /// Default Widget if no recent is available
 const DefaultNoRecentsWidget = Text(

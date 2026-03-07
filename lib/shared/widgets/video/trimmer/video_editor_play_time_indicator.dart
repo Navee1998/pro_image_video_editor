@@ -23,29 +23,31 @@ class VideoEditorPlayTimeIndicator extends StatelessWidget {
     double barWidth = areaWidth; // - 2 * handlerWidth;
 
     return ValueListenableBuilder(
-        valueListenable: player.controller.trimDurationSpanNotifier,
-        builder: (_, durationSpan, __) {
-          Duration startDuration = durationSpan.start;
-          int areaDuration = durationSpan.duration.inMicroseconds;
+      valueListenable: player.controller.trimDurationSpanNotifier,
+      builder: (_, durationSpan, _) {
+        Duration startDuration = durationSpan.start;
+        int areaDuration = durationSpan.duration.inMicroseconds;
 
-          return ValueListenableBuilder(
-              valueListenable: player.controller.playTimeNotifier,
-              builder: (_, playTime, __) {
-                int convertedPlay = (playTime - startDuration).inMicroseconds;
+        return ValueListenableBuilder(
+          valueListenable: player.controller.playTimeNotifier,
+          builder: (_, playTime, _) {
+            int convertedPlay = (playTime - startDuration).inMicroseconds;
 
-                double startX = barWidth / areaDuration * convertedPlay;
+            double startX = barWidth / areaDuration * convertedPlay;
 
-                return AnimatedPositioned(
-                  duration: player.configs.playTimeSmoothingDuration,
-                  left: startX, // handlerWidth +
-                  top: player.style.trimBarBorderWidth,
-                  bottom: player.style.trimBarBorderWidth,
-                  width: player.style.trimBarPlayTimeIndicatorWidth,
-                  child: Container(
-                    color: player.style.trimBarPlayTimeIndicatorColor,
-                  ),
-                );
-              });
-        });
+            return AnimatedPositioned(
+              duration: player.configs.playTimeSmoothingDuration,
+              left: startX, // handlerWidth +
+              top: player.style.trimBarBorderWidth,
+              bottom: player.style.trimBarBorderWidth,
+              width: player.style.trimBarPlayTimeIndicatorWidth,
+              child: Container(
+                color: player.style.trimBarPlayTimeIndicatorColor,
+              ),
+            );
+          },
+        );
+      },
+    );
   }
 }

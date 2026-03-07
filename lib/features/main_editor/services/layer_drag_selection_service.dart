@@ -82,10 +82,7 @@ class LayerDragSelectionService {
   void startDragging(Offset offset) {
     if (!_isEnabled) return;
 
-    _rect = _rect.copyWith(
-      offset: offset,
-      isVisible: true,
-    );
+    _rect = _rect.copyWith(offset: offset, isVisible: true);
   }
 
   /// Updates the selection rectangle based on the current [offset].
@@ -104,10 +101,7 @@ class LayerDragSelectionService {
       offset.dy < _rect.offset.dy ? offset.dy : _rect.offset.dy,
     );
 
-    final updatedRect = _rect.copyWith(
-      offset: newOffset,
-      size: newSize,
-    );
+    final updatedRect = _rect.copyWith(offset: newOffset, size: newSize);
     dragRectNotifier.value = updatedRect;
 
     _checkLayersOverlay(updatedRect);
@@ -123,10 +117,7 @@ class LayerDragSelectionService {
   ///
   /// Updates the selected layer IDs in the [layerInteractionManager].
   void _checkLayersOverlay(_DragRect updatedRect) {
-    final halfBodyOffset = Offset(
-      bodySize().width / 2,
-      bodySize().height / 2,
-    );
+    final halfBodyOffset = Offset(bodySize().width / 2, bodySize().height / 2);
 
     final realOffset = (updatedRect.offset - _viewerOffset) / _viewerScale;
     final realSize = updatedRect.size / _viewerScale;
@@ -157,15 +148,16 @@ class LayerDragSelectionService {
       Offset fractionalOffset = layer.isTextLayer
           ? textOffset
           : layer.isPaintLayer
-              ? paintOffset
-              : layer.isEmojiLayer
-                  ? emojiOffset
-                  : layer.isWidgetLayer
-                      ? widgetOffset
-                      : const Offset(-0.5, -0.5);
+          ? paintOffset
+          : layer.isEmojiLayer
+          ? emojiOffset
+          : layer.isWidgetLayer
+          ? widgetOffset
+          : const Offset(-0.5, -0.5);
       fractionalOffset += const Offset(0.5, 0.5);
 
-      final center = layer.offset +
+      final center =
+          layer.offset +
           Offset(
             size.width * fractionalOffset.dx,
             size.height * fractionalOffset.dy,
@@ -255,11 +247,7 @@ class _DragRect {
   final bool isVisible;
 
   /// Creates a copy of this rectangle with optional new values.
-  _DragRect copyWith({
-    Offset? offset,
-    Size? size,
-    bool? isVisible,
-  }) {
+  _DragRect copyWith({Offset? offset, Size? size, bool? isVisible}) {
     return _DragRect(
       offset: offset ?? this.offset,
       size: size ?? this.size,

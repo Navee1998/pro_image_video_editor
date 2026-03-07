@@ -33,9 +33,7 @@ PaintLayer paintLayerMock = PaintLayer(
     enableScale: true,
     enableSelection: false,
   ),
-  meta: {
-    'paint-mock': 'meta',
-  },
+  meta: {'paint-mock': 'meta'},
   offset: const Offset(123, 652),
   rotation: pi / 2,
   scale: 3.75,

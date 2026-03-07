@@ -16,10 +16,7 @@ abstract class Thread {
   ///
   /// The constructor generates a unique ID for the thread, initializes the
   /// [readyState] completer, and calls the [init] method to set up the thread.
-  Thread({
-    required this.onMessage,
-    required this.coreNumber,
-  }) {
+  Thread({required this.onMessage, required this.coreNumber}) {
     id = generateUniqueId();
     readyState = Completer();
     init();

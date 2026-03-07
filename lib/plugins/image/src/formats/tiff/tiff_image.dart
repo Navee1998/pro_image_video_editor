@@ -283,7 +283,7 @@ enum TiffPhotometricType {
   colorFilterArray, // = 32803
   linearRaw, // = 34892
   depth, // = 51177
-  unknown
+  unknown,
 }
 
 enum TiffImageType {
@@ -296,7 +296,7 @@ enum TiffImageType {
   rgba,
   yCbCrSub,
   generic,
-  invalid
+  invalid,
 }
 
 class TiffCompression {

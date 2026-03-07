@@ -43,20 +43,19 @@ void _handleImageConvertRequest(
   var destroy$ = Completer();
   tasks[id] = destroy$;
 
-  convertRawImage(message, destroy$: destroy$).then((res) {
-    port.send(res);
-  }).whenComplete(() {
-    if (tasks[id]?.isCompleted != true) {
-      tasks[id]?.complete(null);
-    }
-    tasks.remove(id);
-  });
+  convertRawImage(message, destroy$: destroy$)
+      .then((res) {
+        port.send(res);
+      })
+      .whenComplete(() {
+        if (tasks[id]?.isCompleted != true) {
+          tasks[id]?.complete(null);
+        }
+        tasks.remove(id);
+      });
 }
 
-Future<void> _handleThreadRequest(
-  ThreadRequest message,
-  SendPort port,
-) async {
+Future<void> _handleThreadRequest(ThreadRequest message, SendPort port) async {
   var bytes = await encodeImage(
     image: message.image,
     outputFormat: message.outputFormat,
@@ -67,10 +66,7 @@ Future<void> _handleThreadRequest(
     pngFilter: message.pngFilter,
     pngLevel: message.pngLevel,
   );
-  port.send(ThreadResponse(
-    id: message.id,
-    bytes: bytes,
-  ));
+  port.send(ThreadResponse(id: message.id, bytes: bytes));
 }
 
 void _handleKillRequest(

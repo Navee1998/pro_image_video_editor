@@ -58,12 +58,13 @@ import '/shared/widgets/reactive_widgets/reactive_custom_widget.dart';
 /// },
 /// ```
 /// {@endtemplate}
-typedef RemoveLayerArea = Widget Function(
-  GlobalKey removeAreaKey,
-  ProImageEditorState editor,
-  Stream<void> rebuildStream,
-  bool isLayerBeingTransformed,
-);
+typedef RemoveLayerArea =
+    Widget Function(
+      GlobalKey removeAreaKey,
+      ProImageEditorState editor,
+      Stream<void> rebuildStream,
+      bool isLayerBeingTransformed,
+    );
 
 /// A typedef for creating a [ReactiveWidget] that manages crop editor
 /// aspect ratio options.
@@ -76,12 +77,13 @@ typedef RemoveLayerArea = Widget Function(
 ///
 /// Returns a [ReactiveWidget] that provides options for crop editor
 /// aspect ratios.
-typedef CropEditorAspectRatioOptions<T> = ReactiveWidget Function(
-  T editorState,
-  Stream<void> rebuildStream,
-  double aspectRatio,
-  double originalAspectRatio,
-);
+typedef CropEditorAspectRatioOptions<T> =
+    ReactiveWidget Function(
+      T editorState,
+      Stream<void> rebuildStream,
+      double aspectRatio,
+      double originalAspectRatio,
+    );
 
 /// A typedef for creating a [ReactiveWidget] that includes a custom
 /// color picker.
@@ -114,12 +116,13 @@ typedef CropEditorAspectRatioOptions<T> = ReactiveWidget Function(
 /// ),
 /// ```
 /// {@endtemplate}
-typedef CustomColorPicker<T> = ReactiveWidget? Function(
-  T editorState,
-  Stream<void> rebuildStream,
-  Color currentColor,
-  void Function(Color color) setColor,
-);
+typedef CustomColorPicker<T> =
+    ReactiveWidget? Function(
+      T editorState,
+      Stream<void> rebuildStream,
+      Color currentColor,
+      void Function(Color color) setColor,
+    );
 
 /// A typedef for creating a [ReactiveWidget] that includes a custom
 /// slider.
@@ -150,13 +153,14 @@ typedef CustomColorPicker<T> = ReactiveWidget? Function(
 /// },
 /// ```
 /// {@endtemplate}
-typedef CustomSlider<T> = ReactiveWidget Function(
-  T editorState,
-  Stream<void> rebuildStream,
-  double value,
-  Function(double value) onChanged,
-  Function(double value) onChangeEnd,
-);
+typedef CustomSlider<T> =
+    ReactiveWidget Function(
+      T editorState,
+      Stream<void> rebuildStream,
+      double value,
+      Function(double value) onChanged,
+      Function(double value) onChangeEnd,
+    );
 
 /// A typedef for a function that creates a [ReactiveWidget] for a tap
 /// interaction.
@@ -171,11 +175,12 @@ typedef CustomSlider<T> = ReactiveWidget Function(
 /// widget.
 ///
 /// Returns a nullable [ReactiveWidget].
-typedef LayerInteractionTapButton = ReactiveWidget? Function(
-  Stream<void> rebuildStream,
-  Function() onTap,
-  double rotation,
-);
+typedef LayerInteractionTapButton =
+    ReactiveWidget? Function(
+      Stream<void> rebuildStream,
+      Function() onTap,
+      double rotation,
+    );
 
 /// A typedef for a function that creates a [ReactiveWidget] for scale
 /// and rotate interactions.
@@ -193,12 +198,13 @@ typedef LayerInteractionTapButton = ReactiveWidget? Function(
 /// widget.
 ///
 /// Returns a nullable [ReactiveWidget].
-typedef LayerInteractionScaleRotateButton = ReactiveWidget? Function(
-  Stream<void> rebuildStream,
-  Function(PointerDownEvent) onScaleRotateDown,
-  Function(PointerUpEvent) onScaleRotateUp,
-  double rotation,
-);
+typedef LayerInteractionScaleRotateButton =
+    ReactiveWidget? Function(
+      Stream<void> rebuildStream,
+      Function(PointerDownEvent) onScaleRotateDown,
+      Function(PointerUpEvent) onScaleRotateUp,
+      double rotation,
+    );
 
 /// A typedef for a function that builds a reactive widget for a layer item.
 ///
@@ -206,11 +212,12 @@ typedef LayerInteractionScaleRotateButton = ReactiveWidget? Function(
 /// and the interactions available for the layer item.
 /// It is responsible for building a reactive widget that responds to
 /// changes in the rebuild stream and updates accordingly.
-typedef LayerInteractionItem = ReactiveWidget Function(
-  Stream<void> rebuildStream,
-  Layer layer,
-  LayerItemInteractions interactions,
-);
+typedef LayerInteractionItem =
+    ReactiveWidget Function(
+      Stream<void> rebuildStream,
+      Layer layer,
+      LayerItemInteractions interactions,
+    );
 
 /// Signature for building a reactive overlay widget for a given layer.
 ///
@@ -218,20 +225,21 @@ typedef LayerInteractionItem = ReactiveWidget Function(
 /// [info] contains layout details of the overlay child.
 /// [layer] is the current layer to render.
 /// [interactions] provides callbacks for interacting with the layer.
-typedef LayerOverlayBuilder = ReactiveWidget Function(
-  Stream<void> rebuildStream,
-  OverlayChildLayoutInfo info,
-  Layer layer,
-  LayerItemInteractions interactions,
-);
+typedef LayerOverlayBuilder =
+    ReactiveWidget Function(
+      Stream<void> rebuildStream,
+      OverlayChildLayoutInfo info,
+      Layer layer,
+      LayerItemInteractions interactions,
+    );
 
 /// A typedef for a function that builds a widget for the layer border.
 ///
 /// This function receives the layer widget and the layer data as
 /// parameters. It is responsible for building a widget that
 /// represents the border around the layer.
-typedef LayerInteractionBorder = Widget Function(
-    Widget layerWidget, Layer layerData);
+typedef LayerInteractionBorder =
+    Widget Function(Widget layerWidget, Layer layerData);
 
 /// {@template customBodyItem}
 /// Add custom widgets at a specific position inside the body, which will not
@@ -297,7 +305,5 @@ typedef LayerInteractionBorder = Widget Function(
 ///   ),
 /// ];
 /// ```
-typedef CustomBodyItems<T> = List<ReactiveWidget> Function(
-  T editor,
-  Stream<void> rebuildStream,
-);
+typedef CustomBodyItems<T> =
+    List<ReactiveWidget> Function(T editor, Stream<void> rebuildStream);

@@ -22,10 +22,11 @@ abstract class Quantizer {
   /// Convert the [image] to a palette image.
   Image getIndexImage(Image image) {
     final target = Image(
-        width: image.width,
-        height: image.height,
-        numChannels: 1,
-        palette: palette);
+      width: image.width,
+      height: image.height,
+      numChannels: 1,
+      palette: palette,
+    );
 
     final ti = target.iterator..moveNext();
     target

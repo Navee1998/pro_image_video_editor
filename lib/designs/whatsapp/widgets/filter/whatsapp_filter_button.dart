@@ -125,10 +125,7 @@ class _WhatsAppFilterBtnState extends State<WhatsAppFilterBtn> {
                       duration: const Duration(milliseconds: 200),
                       transitionBuilder: (child, animation) => FadeTransition(
                         opacity: animation,
-                        child: ScaleTransition(
-                          scale: animation,
-                          child: child,
-                        ),
+                        child: ScaleTransition(scale: animation, child: child),
                       ),
                       child: widget.isSelected
                           ? Container(

@@ -7,10 +7,7 @@ void main() {
     final mockPaintModel = PaintedModel(
       color: Colors.red,
       mode: PaintMode.arrow,
-      offsets: [
-        Offset.zero,
-        const Offset(50, 50),
-      ],
+      offsets: [Offset.zero, const Offset(50, 50)],
       erasedOffsets: [],
       opacity: 1,
       strokeWidth: 5,
@@ -55,23 +52,23 @@ void main() {
           'enableMove': true,
           'enableScale': true,
           'enableRotate': true,
-          'enableSelection': true
+          'enableSelection': true,
         },
         'type': 'paint',
         'item': {
           'mode': 'arrow',
           'offsets': [
             {'x': 5.0, 'y': 68},
-            {'x': 70, 'y': 5.0}
+            {'x': 70, 'y': 5.0},
           ],
           'erasedOffsets': [],
           'color': 4294901760,
           'strokeWidth': 10.0,
           'opacity': 1.0,
-          'fill': false
+          'fill': false,
         },
         'rawSize': {'w': 100, 'h': 50},
-        'opacity': 0.8
+        'opacity': 0.8,
       };
 
       final paintLayer = PaintLayer.fromMap(layer, map);

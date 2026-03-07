@@ -17,15 +17,19 @@ void main() {
 
     test('containsShader returns false if shader not loaded', () {
       expect(
-          ShaderManager.instance.containsShader(ShaderMode.pixelate), isFalse);
-    });
-
-    test('isShaderFilterSupported returns ImageFilter.isShaderFilterSupported',
-        () {
-      expect(
-        ShaderManager.instance.isShaderFilterSupported,
-        ui.ImageFilter.isShaderFilterSupported,
+        ShaderManager.instance.containsShader(ShaderMode.pixelate),
+        isFalse,
       );
     });
+
+    test(
+      'isShaderFilterSupported returns ImageFilter.isShaderFilterSupported',
+      () {
+        expect(
+          ShaderManager.instance.isShaderFilterSupported,
+          ui.ImageFilter.isShaderFilterSupported,
+        );
+      },
+    );
   });
 }

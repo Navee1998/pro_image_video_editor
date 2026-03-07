@@ -49,10 +49,7 @@ class _WhatsAppOpenFilterBtnState extends State<WhatsAppOpenFilterBtn>
     _animation = Tween<double>(
       begin: -3,
       end: 3,
-    ).animate(CurvedAnimation(
-      parent: _controller,
-      curve: Curves.easeInOut,
-    ));
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
 
     _controller
       ..addStatusListener((status) {

@@ -1,6 +1,3 @@
-// ignore_for_file: deprecated_member_use_from_same_package
-// TODO: Remove the deprecated values when releasing version 12.0.0.
-
 import 'dart:async';
 import 'dart:math';
 
@@ -29,7 +26,6 @@ import '/shared/widgets/extended/interactive_viewer/extended_interactive_viewer.
 import '/shared/widgets/layer/layer_stack.dart';
 import '/shared/widgets/slider_bottom_sheet.dart';
 import '/shared/widgets/transform/transformed_content_generator.dart';
-import '../filter_editor/widgets/filtered_widget.dart';
 import '../main_editor/services/layer_copy_manager.dart';
 import 'controllers/paint_controller.dart';
 import 'models/paint_editor_response_model.dart';
@@ -160,12 +156,12 @@ class PaintEditor extends StatefulWidget
       editorImage: videoController != null
           ? null
           : editorImage ??
-              EditorImage(
-                byteArray: byteArray,
-                file: file,
-                networkUrl: networkUrl,
-                assetPath: assetPath,
-              ),
+                EditorImage(
+                  byteArray: byteArray,
+                  file: file,
+                  networkUrl: networkUrl,
+                  assetPath: assetPath,
+                ),
       videoController: videoController,
       initConfigs: initConfigs,
     );
@@ -315,8 +311,9 @@ class PaintEditorState extends State<PaintEditor>
     setTools(paintEditorConfigs.tools);
 
     _bottomBarScrollCtrl = ScrollController();
-    _desktopInteractionManager =
-        PaintDesktopInteractionManager(context: context);
+    _desktopInteractionManager = PaintDesktopInteractionManager(
+      context: context,
+    );
     ServicesBinding.instance.keyboard.addHandler(_onKeyEvent);
 
     /// Important to set state after view init to set action icons
@@ -328,7 +325,7 @@ class PaintEditorState extends State<PaintEditor>
     });
 
     /// Preload pixelate shader if enabled and supported
-    if (paintEditorConfigs.enableModePixelate &&
+    if (paintEditorConfigs.tools.contains(PaintMode.pixelate) &&
         ShaderManager.instance.isShaderFilterSupported) {
       ShaderManager.instance.loadShader(ShaderMode.pixelate);
     }
@@ -362,42 +359,51 @@ class PaintEditorState extends State<PaintEditor>
     PaintModeHelper? buildPaintModeHelper(PaintMode mode) {
       switch (mode) {
         case PaintMode.freeStyle:
-          if (!paintEditorConfigs.enableModeFreeStyle) return null;
           return PaintModeHelper(
             icon: paintEditorConfigs.icons.freeStyle,
             label: i18n.paintEditor.freestyle,
           );
+        case PaintMode.freeStyleArrowStart:
+          return PaintModeHelper(
+            icon: paintEditorConfigs.icons.freeStyleArrowStart,
+            label: i18n.paintEditor.freestyleArrowStart,
+          );
+        case PaintMode.freeStyleArrowEnd:
+          return PaintModeHelper(
+            icon: paintEditorConfigs.icons.freeStyleArrowEnd,
+            label: i18n.paintEditor.freestyleArrowEnd,
+          );
+        case PaintMode.freeStyleArrowStartEnd:
+          return PaintModeHelper(
+            icon: paintEditorConfigs.icons.freeStyleArrowStartEnd,
+            label: i18n.paintEditor.freestyleArrowStartEnd,
+          );
 
         case PaintMode.arrow:
-          if (!paintEditorConfigs.enableModeArrow) return null;
           return PaintModeHelper(
             icon: paintEditorConfigs.icons.arrow,
             label: i18n.paintEditor.arrow,
           );
 
         case PaintMode.line:
-          if (!paintEditorConfigs.enableModeLine) return null;
           return PaintModeHelper(
             icon: paintEditorConfigs.icons.line,
             label: i18n.paintEditor.line,
           );
 
         case PaintMode.rect:
-          if (!paintEditorConfigs.enableModeRect) return null;
           return PaintModeHelper(
             icon: paintEditorConfigs.icons.rectangle,
             label: i18n.paintEditor.rectangle,
           );
 
         case PaintMode.circle:
-          if (!paintEditorConfigs.enableModeCircle) return null;
           return PaintModeHelper(
             icon: paintEditorConfigs.icons.circle,
             label: i18n.paintEditor.circle,
           );
 
         case PaintMode.dashLine:
-          if (!paintEditorConfigs.enableModeDashLine) return null;
           return PaintModeHelper(
             icon: paintEditorConfigs.icons.dashLine,
             label: i18n.paintEditor.dashLine,
@@ -409,16 +415,20 @@ class PaintEditorState extends State<PaintEditor>
             label: i18n.paintEditor.dashDotLine,
           );
 
+        case PaintMode.hexagon:
+          return PaintModeHelper(
+            icon: paintEditorConfigs.icons.hexagon,
+            label: i18n.paintEditor.hexagon,
+          );
+
         case PaintMode.polygon:
-          if (!paintEditorConfigs.enableModePolygon) return null;
           return PaintModeHelper(
             icon: paintEditorConfigs.icons.polygon,
             label: i18n.paintEditor.polygon,
           );
 
         case PaintMode.pixelate:
-          if (!paintEditorConfigs.enableModePixelate ||
-              !ShaderManager.instance.isShaderFilterSupported) {
+          if (!ShaderManager.instance.isShaderFilterSupported) {
             return null;
           }
           return PaintModeHelper(
@@ -427,14 +437,12 @@ class PaintEditorState extends State<PaintEditor>
           );
 
         case PaintMode.blur:
-          if (!paintEditorConfigs.enableModeBlur) return null;
           return PaintModeHelper(
             icon: paintEditorConfigs.icons.blur,
             label: i18n.paintEditor.blur,
           );
 
         case PaintMode.eraser:
-          if (!paintEditorConfigs.enableModeEraser) return null;
           return PaintModeHelper(
             icon: paintEditorConfigs.icons.eraser,
             label: i18n.paintEditor.eraser,
@@ -444,6 +452,39 @@ class PaintEditorState extends State<PaintEditor>
           return PaintModeHelper(
             icon: paintEditorConfigs.icons.moveAndZoom,
             label: i18n.paintEditor.moveAndZoom,
+          );
+
+        case PaintMode.custom1:
+          if (!paintEditorConfigs.customPathBuilders.containsKey(
+            PaintMode.custom1,
+          )) {
+            return null;
+          }
+          return PaintModeHelper(
+            icon: paintEditorConfigs.icons.custom1,
+            label: i18n.paintEditor.custom1,
+          );
+
+        case PaintMode.custom2:
+          if (!paintEditorConfigs.customPathBuilders.containsKey(
+            PaintMode.custom2,
+          )) {
+            return null;
+          }
+          return PaintModeHelper(
+            icon: paintEditorConfigs.icons.custom2,
+            label: i18n.paintEditor.custom2,
+          );
+
+        case PaintMode.custom3:
+          if (!paintEditorConfigs.customPathBuilders.containsKey(
+            PaintMode.custom3,
+          )) {
+            return null;
+          }
+          return PaintModeHelper(
+            icon: paintEditorConfigs.icons.custom3,
+            label: i18n.paintEditor.custom3,
           );
       }
     }
@@ -455,12 +496,12 @@ class PaintEditorState extends State<PaintEditor>
       if (element == null) continue;
 
       this.tools.add(
-            PaintModeBottomBarItem(
-              mode: tool,
-              icon: element.icon,
-              label: element.label,
-            ),
-          );
+        PaintModeBottomBarItem(
+          mode: tool,
+          icon: element.icon,
+          label: element.label,
+        ),
+      );
     }
   }
 
@@ -626,10 +667,12 @@ class PaintEditorState extends State<PaintEditor>
 
         final scale = _layerStackTransformHelper.scale;
 
-        final originalLayers =
-            (widget.initConfigs.layers ?? []).whereType<PaintLayer>().toList();
-        final newLayers =
-            activeHistory.layers.whereType<PaintLayer>().where((layer) {
+        final originalLayers = (widget.initConfigs.layers ?? [])
+            .whereType<PaintLayer>()
+            .toList();
+        final newLayers = activeHistory.layers.whereType<PaintLayer>().where((
+          layer,
+        ) {
           return originalLayers.indexWhere(
                 (el) =>
                     el.id == layer.id &&
@@ -642,15 +685,18 @@ class PaintEditorState extends State<PaintEditor>
             ..offset *= scale
             ..scale *= scale;
         }).toList();
-        Navigator.of(context).pop(PaintEditorResponse(
-          layers: transformedLayers,
-          removedLayers: activeHistory.removedLayers,
-        ));
+        Navigator.of(context).pop(
+          PaintEditorResponse(
+            layers: transformedLayers,
+            removedLayers: activeHistory.removedLayers,
+          ),
+        );
       },
       blur: appliedBlurFactor,
       matrixFilterList: appliedFilters,
-      matrixTuneAdjustmentsList:
-          appliedTuneAdjustments.map((item) => item.matrix).toList(),
+      matrixTuneAdjustmentsList: appliedTuneAdjustments
+          .map((item) => item.matrix)
+          .toList(),
       transform: initialTransformConfigs,
     );
     paintEditorCallbacks?.handleDone();
@@ -740,14 +786,16 @@ class PaintEditorState extends State<PaintEditor>
 
     Size size = layerRect.size;
 
-    bool onlyStrokeMode = rawLayer.mode == PaintMode.freeStyle ||
+    bool onlyStrokeMode =
+        rawLayer.mode.isFreeStyleMode ||
         rawLayer.mode == PaintMode.line ||
         rawLayer.mode == PaintMode.dashLine ||
         rawLayer.mode == PaintMode.dashDotLine ||
         rawLayer.mode == PaintMode.arrow ||
         ((rawLayer.mode == PaintMode.polygon ||
                 rawLayer.mode == PaintMode.rect ||
-                rawLayer.mode == PaintMode.circle) &&
+                rawLayer.mode == PaintMode.circle ||
+                rawLayer.mode == PaintMode.hexagon) &&
             !rawLayer.fill);
 
     // Scale and offset the offsets of the paint layer
@@ -798,12 +846,6 @@ class PaintEditorState extends State<PaintEditor>
     setState(() {});
   }
 
-  /// Handles changes in the selected color.
-  @Deprecated('Use [setColor] instead')
-  void colorChanged(Color color) {
-    setColor(color);
-  }
-
   /// Sets the current color for the paint editor.
   ///
   /// This method updates the color in the paint controller, triggers the
@@ -827,7 +869,8 @@ class PaintEditorState extends State<PaintEditor>
         canPop: paintEditorConfigs.enableGesturePop,
         child: Theme(
           data: theme.copyWith(
-              tooltipTheme: theme.tooltipTheme.copyWith(preferBelow: true)),
+            tooltipTheme: theme.tooltipTheme.copyWith(preferBelow: true),
+          ),
           child: SafeArea(
             top: paintEditorConfigs.safeArea.top,
             bottom: paintEditorConfigs.safeArea.bottom,
@@ -835,15 +878,17 @@ class PaintEditorState extends State<PaintEditor>
             right: paintEditorConfigs.safeArea.right,
             child: RecordInvisibleWidget(
               controller: screenshotCtrl,
-              child: LayoutBuilder(builder: (context, constraints) {
-                return Scaffold(
-                  resizeToAvoidBottomInset: false,
-                  backgroundColor: paintEditorConfigs.style.background,
-                  appBar: _buildAppBar(constraints),
-                  body: _buildBody(),
-                  bottomNavigationBar: _buildBottomBar(),
-                );
-              }),
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  return Scaffold(
+                    resizeToAvoidBottomInset: false,
+                    backgroundColor: paintEditorConfigs.style.background,
+                    appBar: _buildAppBar(constraints),
+                    body: _buildBody(),
+                    bottomNavigationBar: _buildBottomBar(),
+                  );
+                },
+              ),
             ),
           ),
         ),
@@ -855,8 +900,10 @@ class PaintEditorState extends State<PaintEditor>
   /// Returns a [PreferredSizeWidget] representing the app bar.
   PreferredSizeWidget? _buildAppBar(BoxConstraints constraints) {
     if (paintEditorConfigs.widgets.appBar != null) {
-      return paintEditorConfigs.widgets.appBar!
-          .call(this, rebuildController.stream);
+      return paintEditorConfigs.widgets.appBar!.call(
+        this,
+        rebuildController.stream,
+      );
     }
 
     return ReactiveAppbar(
@@ -890,26 +937,28 @@ class PaintEditorState extends State<PaintEditor>
   /// Builds the main body of the paint editor.
   /// Returns a [Widget] representing the editor's body.
   Widget _buildBody() {
-    return LayoutBuilder(builder: (context, constraints) {
-      editorBodySize = constraints.biggest;
-      return Theme(
-        data: theme,
-        child: Material(
-          color:
-              initConfigs.convertToUint8List && initConfigs.convertToUint8List
-                  ? paintEditorConfigs.style.background
-                  : Colors.transparent,
-          textStyle: platformTextStyle(context, designMode),
-          child: Stack(
-            alignment: Alignment.center,
-            fit: StackFit.expand,
-            children: _fakeHeroBytes != null
-                ? _buildFakeHero()
-                : _buildInteractiveContent(),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        editorBodySize = constraints.biggest;
+        return Theme(
+          data: theme,
+          child: Material(
+            color:
+                initConfigs.convertToUint8List && initConfigs.convertToUint8List
+                ? paintEditorConfigs.style.background
+                : Colors.transparent,
+            textStyle: platformTextStyle(context, designMode),
+            child: Stack(
+              alignment: Alignment.center,
+              fit: StackFit.expand,
+              children: _fakeHeroBytes != null
+                  ? _buildFakeHero()
+                  : _buildInteractiveContent(),
+            ),
           ),
-        ),
-      );
-    });
+        );
+      },
+    );
   }
 
   List<Widget> _buildFakeHero() {
@@ -944,8 +993,9 @@ class PaintEditorState extends State<PaintEditor>
           zoomConfigs: paintEditorConfigs,
           enableInteraction: paintMode == PaintMode.moveAndZoom,
           onInteractionStart: (details) {
-            callbacks.paintEditorCallbacks?.onEditorZoomScaleStart
-                ?.call(details);
+            callbacks.paintEditorCallbacks?.onEditorZoomScaleStart?.call(
+              details,
+            );
             setState(() {});
           },
           onInteractionUpdate:
@@ -979,7 +1029,6 @@ class PaintEditorState extends State<PaintEditor>
                         ),
 
                     /// Build layers
-
                     StreamBuilder(
                       stream: _layerStackStream.stream,
                       builder: (context, asyncSnapshot) {
@@ -1001,7 +1050,9 @@ class PaintEditorState extends State<PaintEditor>
                     _buildPainter(),
                     if (paintEditorConfigs.widgets.bodyItemsRecorded != null)
                       ...paintEditorConfigs.widgets.bodyItemsRecorded!(
-                          this, rebuildController.stream),
+                        this,
+                        rebuildController.stream,
+                      ),
                   ],
                 ),
               ),
@@ -1018,7 +1069,9 @@ class PaintEditorState extends State<PaintEditor>
       ),
       if (paintEditorConfigs.widgets.bodyItems != null)
         ...paintEditorConfigs.widgets.bodyItems!(
-            this, rebuildController.stream),
+          this,
+          rebuildController.stream,
+        ),
     ];
   }
 
@@ -1045,8 +1098,10 @@ class PaintEditorState extends State<PaintEditor>
   /// Returns a [Widget] representing the bottom navigation bar.
   Widget? _buildBottomBar() {
     if (paintEditorConfigs.widgets.bottomBar != null) {
-      return paintEditorConfigs.widgets.bottomBar!
-          .call(this, rebuildController.stream);
+      return paintEditorConfigs.widgets.bottomBar!.call(
+        this,
+        rebuildController.stream,
+      );
     }
 
     if (tools.length <= 1) return const SizedBox.shrink();
@@ -1097,10 +1152,12 @@ class PaintEditorState extends State<PaintEditor>
           stateHistory.removeLast();
         }
 
-        stateHistory.add(PaintEditorResponse(
-          layers: [...updatedList],
-          removedLayers: [...activeHistory.removedLayers, ...removedLayers],
-        ));
+        stateHistory.add(
+          PaintEditorResponse(
+            layers: [...updatedList],
+            removedLayers: [...activeHistory.removedLayers, ...removedLayers],
+          ),
+        );
         historyPointer++;
         setState(() {});
 
@@ -1111,18 +1168,19 @@ class PaintEditorState extends State<PaintEditor>
       onRemovePartialStart: () {
         LayerCopyManager copyManager = LayerCopyManager();
 
-        final updatedList =
-            activeHistory.layers.whereType<PaintLayer>().map((layer) {
-          return copyManager.createCopyPaintLayer(layer);
+        final updatedList = activeHistory.layers.map((layer) {
+          return copyManager.copyLayer(layer);
         });
 
         while (canRedo) {
           stateHistory.removeLast();
         }
-        stateHistory.add(PaintEditorResponse(
-          layers: [...updatedList],
-          removedLayers: [...activeHistory.removedLayers],
-        ));
+        stateHistory.add(
+          PaintEditorResponse(
+            layers: [...updatedList],
+            removedLayers: [...activeHistory.removedLayers],
+          ),
+        );
         historyPointer++;
         setState(() {});
         WidgetsBinding.instance.drawFrame();
@@ -1162,16 +1220,35 @@ class PaintEditorState extends State<PaintEditor>
 
     properties
       ..add(
-          DiagnosticsProperty<EditorImage?>('editorImage', widget.editorImage))
-      ..add(DiagnosticsProperty<ProVideoController?>(
-          'videoController', widget.videoController))
-      ..add(DiagnosticsProperty<PaintEditorInitConfigs>(
-          'initConfigs', widget.initConfigs))
-      ..add(FlagProperty('paintOnly',
-          value: widget.paintOnly, ifTrue: 'paint-only mode'))
+        DiagnosticsProperty<EditorImage?>('editorImage', widget.editorImage),
+      )
+      ..add(
+        DiagnosticsProperty<ProVideoController?>(
+          'videoController',
+          widget.videoController,
+        ),
+      )
+      ..add(
+        DiagnosticsProperty<PaintEditorInitConfigs>(
+          'initConfigs',
+          widget.initConfigs,
+        ),
+      )
+      ..add(
+        FlagProperty(
+          'paintOnly',
+          value: widget.paintOnly,
+          ifTrue: 'paint-only mode',
+        ),
+      )
       ..add(DiagnosticsProperty<PaintController>('paintCtrl', paintCtrl))
-      ..add(FlagProperty('_isFillMode',
-          value: _isFillMode, ifTrue: 'fill mode enabled'))
+      ..add(
+        FlagProperty(
+          '_isFillMode',
+          value: _isFillMode,
+          ifTrue: 'fill mode enabled',
+        ),
+      )
       ..add(FlagProperty('isActive', value: isActive, ifTrue: 'drawing active'))
       ..add(EnumProperty<PaintMode>('paintMode', paintMode))
       ..add(ColorProperty('activeColor', activeColor))
@@ -1181,9 +1258,15 @@ class PaintEditorState extends State<PaintEditor>
       ..add(IntProperty('stateHistoryLength', stateHistory.length))
       ..add(FlagProperty('canUndo', value: canUndo, ifTrue: 'can undo'))
       ..add(FlagProperty('canRedo', value: canRedo, ifTrue: 'can redo'))
-      ..add(FlagProperty('_enableZoom',
-          value: _enableZoom, ifTrue: 'zoom enabled'))
-      ..add(FlagProperty('hasFakeHeroBytes',
-          value: _fakeHeroBytes != null, ifTrue: 'fake hero set'));
+      ..add(
+        FlagProperty('_enableZoom', value: _enableZoom, ifTrue: 'zoom enabled'),
+      )
+      ..add(
+        FlagProperty(
+          'hasFakeHeroBytes',
+          value: _fakeHeroBytes != null,
+          ifTrue: 'fake hero set',
+        ),
+      );
   }
 }

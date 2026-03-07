@@ -14,25 +14,27 @@ class ColorUint4 extends Color {
   ColorUint4(this.length) : data = Uint8List(length < 3 ? 1 : 2);
 
   ColorUint4.from(ColorUint4 other)
-      : length = other.length,
-        data = Uint8List.fromList(other.data);
+    : length = other.length,
+      data = Uint8List.fromList(other.data);
 
   ColorUint4.fromList(List<int> color)
-      : length = color.length,
-        data = Uint8List(color.length < 3 ? 1 : 2) {
-    setRgba(length > 0 ? color[0] : 0, length > 1 ? color[1] : 0,
-        length > 2 ? color[2] : 0, length > 3 ? color[3] : 0);
+    : length = color.length,
+      data = Uint8List(color.length < 3 ? 1 : 2) {
+    setRgba(
+      length > 0 ? color[0] : 0,
+      length > 1 ? color[1] : 0,
+      length > 2 ? color[2] : 0,
+      length > 3 ? color[3] : 0,
+    );
   }
 
-  ColorUint4.rgb(int r, int g, int b)
-      : length = 3,
-        data = Uint8List(2) {
+  ColorUint4.rgb(int r, int g, int b) : length = 3, data = Uint8List(2) {
     setRgb(r, g, b);
   }
 
   ColorUint4.rgba(int r, int g, int b, int a)
-      : length = 4,
-        data = Uint8List(2) {
+    : length = 4,
+      data = Uint8List(2) {
     setRgba(r, g, b, a);
   }
   @override
@@ -60,8 +62,8 @@ class ColorUint4 extends Color {
   int _getChannel(int ci) => ci < 0 || ci >= length
       ? 0
       : ci < 2
-          ? (data[0] >> (4 - (ci << 2))) & 0xf
-          : (data[1] >> (4 - ((ci & 0x1) << 2)) & 0xf);
+      ? (data[0] >> (4 - (ci << 2))) & 0xf
+      : (data[1] >> (4 - ((ci & 0x1) << 2)) & 0xf);
 
   void _setChannel(int ci, num value) {
     if (ci >= length) {
@@ -180,7 +182,10 @@ class ColorUint4 extends Color {
   int get hashCode => Object.hashAll(toList());
 
   @override
-  Color convert({Format? format, int? numChannels, num? alpha}) =>
-      convertColor(this,
-          format: format, numChannels: numChannels, alpha: alpha);
+  Color convert({Format? format, int? numChannels, num? alpha}) => convertColor(
+    this,
+    format: format,
+    numChannels: numChannels,
+    alpha: alpha,
+  );
 }

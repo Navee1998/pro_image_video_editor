@@ -18,22 +18,40 @@ class _ZLibEncoder extends ZLibEncoderBase {
   static const _deflate = 8;
 
   @override
-  Uint8List encodeBytes(List<int> bytes,
-      {int? level, int? windowBits, bool raw = false}) {
+  Uint8List encodeBytes(
+    List<int> bytes, {
+    int? level,
+    int? windowBits,
+    bool raw = false,
+  }) {
     final output = OutputMemoryStream(byteOrder: ByteOrder.bigEndian);
-    encodeStream(InputMemoryStream(bytes), output,
-        level: level, windowBits: windowBits, raw: raw);
+    encodeStream(
+      InputMemoryStream(bytes),
+      output,
+      level: level,
+      windowBits: windowBits,
+      raw: raw,
+    );
     return output.getBytes();
   }
 
   @override
-  void encodeStream(InputStream input, OutputStream output,
-      {int? level, int? windowBits, bool raw = false}) {
+  void encodeStream(
+    InputStream input,
+    OutputStream output, {
+    int? level,
+    int? windowBits,
+    bool raw = false,
+  }) {
     output.byteOrder = ByteOrder.bigEndian;
 
     if (raw) {
-      Deflate.stream(input,
-          level: level ?? 6, windowBits: windowBits ?? 15, output: output);
+      Deflate.stream(
+        input,
+        level: level ?? 6,
+        windowBits: windowBits ?? 15,
+        output: output,
+      );
       return;
     }
 
@@ -67,8 +85,12 @@ class _ZLibEncoder extends ZLibEncoderBase {
 
     input.setPosition(startPos);
 
-    Deflate.stream(input,
-        level: level ?? 6, windowBits: windowBits ?? 15, output: output);
+    Deflate.stream(
+      input,
+      level: level ?? 6,
+      windowBits: windowBits ?? 15,
+      output: output,
+    );
 
     output
       ..writeUint32(adler32)

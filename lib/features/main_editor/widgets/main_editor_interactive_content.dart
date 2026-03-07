@@ -131,7 +131,8 @@ class MainEditorInteractiveContent extends StatelessWidget {
           MainEditorFontPreloader(
               emojiEditorConfigs: configs.emojiEditor),
           Padding(
-            padding: hasSelectedLayers &&
+            padding:
+                hasSelectedLayers &&
                     configs.layerInteraction.hideToolbarOnInteraction
                 ? EdgeInsets.only(
                     top: sizesManager.appBarHeight,
@@ -146,7 +147,7 @@ class MainEditorInteractiveContent extends StatelessWidget {
             _buildCropAreaOverlay(),
 
           /// Build video controls
-          if (isVideoEditor)
+          if (isVideoEditor && configs.videoEditor.showControls)
             AnimatedOpacity(
               opacity: hasSelectedLayers ? 0 : 1,
               duration:
@@ -212,10 +213,7 @@ class MainEditorInteractiveContent extends StatelessWidget {
           ? Stack(
               alignment: Alignment.center,
               fit: StackFit.expand,
-              children: [
-                buildVideo(),
-                _buildContentRecorder(),
-              ],
+              children: [buildVideo(), _buildContentRecorder()],
             )
           : _buildContentRecorder(),
     );
@@ -234,7 +232,9 @@ class MainEditorInteractiveContent extends StatelessWidget {
           buildLayers(),
           if (configs.mainEditor.widgets.bodyItemsRecorded != null)
             ...configs.mainEditor.widgets.bodyItemsRecorded!(
-                state, rebuildController.stream),
+              state,
+              rebuildController.stream,
+            ),
         ],
       ),
     );

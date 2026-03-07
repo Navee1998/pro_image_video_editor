@@ -109,26 +109,36 @@ class StateManager {
     _activeFilters = [];
 
     _activeFilters = activeHistory
-        .lastWhere((item) => item.filters.isNotEmpty,
-            orElse: EditorStateHistory.new)
+        .lastWhere(
+          (item) => item.filters.isNotEmpty,
+          orElse: EditorStateHistory.new,
+        )
         .filters;
 
     _activeTuneAdjustments = activeHistory
-        .lastWhere((item) => item.tuneAdjustments.isNotEmpty,
-            orElse: EditorStateHistory.new)
+        .lastWhere(
+          (item) => item.tuneAdjustments.isNotEmpty,
+          orElse: EditorStateHistory.new,
+        )
         .tuneAdjustments;
 
     activeLayers = _stateHistory[historyPointer].layers;
 
-    _transformConfigs = activeHistory
-            .lastWhere((item) => item.transformConfigs != null,
-                orElse: EditorStateHistory.new)
+    _transformConfigs =
+        activeHistory
+            .lastWhere(
+              (item) => item.transformConfigs != null,
+              orElse: EditorStateHistory.new,
+            )
             .transformConfigs ??
         TransformConfigs.empty();
 
-    _activeBlur = activeHistory
-            .lastWhere((item) => item.blur != null,
-                orElse: EditorStateHistory.new)
+    _activeBlur =
+        activeHistory
+            .lastWhere(
+              (item) => item.blur != null,
+              orElse: EditorStateHistory.new,
+            )
             .blur ??
         0.0;
 

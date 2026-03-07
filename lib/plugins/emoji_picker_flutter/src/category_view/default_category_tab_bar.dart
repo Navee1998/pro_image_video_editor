@@ -48,7 +48,8 @@ class DefaultCategoryTabBar extends StatelessWidget {
             .asMap()
             .entries
             .map<Widget>(
-                (item) => _buildCategoryTab(item.key, item.value.category))
+              (item) => _buildCategoryTab(item.key, item.value.category),
+            )
             .toList(),
       ),
     );

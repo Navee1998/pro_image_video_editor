@@ -29,28 +29,29 @@ class LayerDragSelectionAreaWidget extends StatelessWidget {
     final style = configs.style;
 
     return ValueListenableBuilder(
-        valueListenable: service.dragRectNotifier,
-        builder: (_, dragRect, __) {
-          return Positioned(
-            left: dragRect.offset.dx,
-            top: dragRect.offset.dy,
-            width: dragRect.size.width,
-            height: dragRect.size.height,
-            child: AnimatedSwitcher(
-              duration: const Duration(milliseconds: 200),
-              child: dragRect.isVisible && configs.enableLayerDragSelection
-                  ? Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: style.dragSelectionBorderColor,
-                          width: style.dragSelectionBorderWidth,
-                        ),
-                        color: style.dragSelectionBackground,
+      valueListenable: service.dragRectNotifier,
+      builder: (_, dragRect, _) {
+        return Positioned(
+          left: dragRect.offset.dx,
+          top: dragRect.offset.dy,
+          width: dragRect.size.width,
+          height: dragRect.size.height,
+          child: AnimatedSwitcher(
+            duration: const Duration(milliseconds: 200),
+            child: dragRect.isVisible && configs.enableLayerDragSelection
+                ? Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: style.dragSelectionBorderColor,
+                        width: style.dragSelectionBorderWidth,
                       ),
-                    )
-                  : const SizedBox.shrink(),
-            ),
-          );
-        });
+                      color: style.dragSelectionBackground,
+                    ),
+                  )
+                : const SizedBox.shrink(),
+          ),
+        );
+      },
+    );
   }
 }

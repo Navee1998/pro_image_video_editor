@@ -1,7 +1,3 @@
-// ignore_for_file: deprecated_member_use_from_same_package
-// TODO: Remove the deprecated values when releasing version 12.0.0.
-
-// Flutter imports:
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -58,9 +54,8 @@ class _FrostedGlassStickerPageState extends State<FrostedGlassStickerPage> {
   late TextEditingController _searchCtrl;
   late FocusNode _searchFocus;
 
-  late final bool _isStickerEditorEnabled =
-      widget.configs.stickerEditor.enabled &&
-          widget.configs.mainEditor.tools.contains(SubEditorMode.sticker);
+  late final bool _isStickerEditorEnabled = widget.configs.mainEditor.tools
+      .contains(SubEditorMode.sticker);
 
   @override
   void initState() {
@@ -104,7 +99,8 @@ class _FrostedGlassStickerPageState extends State<FrostedGlassStickerPage> {
                     ),
                     if (_isStickerEditorEnabled)
                       Offstage(
-                        offstage: temporaryStickerMode !=
+                        offstage:
+                            temporaryStickerMode !=
                             FrostedGlassStickerMode.sticker,
                         child: StickerEditor(
                           configs: widget.configs,
@@ -131,9 +127,7 @@ class _FrostedGlassStickerPageState extends State<FrostedGlassStickerPage> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             IconButton(
-              style: IconButton.styleFrom(
-                backgroundColor: Colors.black38,
-              ),
+              style: IconButton.styleFrom(backgroundColor: Colors.black38),
               tooltip: widget.configs.i18n.cancel,
               onPressed: () {
                 if (_activeSearch) {
@@ -153,9 +147,7 @@ class _FrostedGlassStickerPageState extends State<FrostedGlassStickerPage> {
               ),
             ),
             IconButton(
-              style: IconButton.styleFrom(
-                backgroundColor: Colors.black38,
-              ),
+              style: IconButton.styleFrom(backgroundColor: Colors.black38),
               onPressed: null,
               icon: Icon(
                 widget.configs.stickerEditor.icons.bottomNavBar,
@@ -205,21 +197,23 @@ class _FrostedGlassStickerPageState extends State<FrostedGlassStickerPage> {
                             ButtonSegment(
                               value: FrostedGlassStickerMode.sticker,
                               label: Text(
-                                widget.configs.i18n.stickerEditor
+                                widget
+                                    .configs
+                                    .i18n
+                                    .stickerEditor
                                     .bottomNavigationBarText,
-                                style: const TextStyle(
-                                  fontSize: 13,
-                                ),
+                                style: const TextStyle(fontSize: 13),
                               ),
                             ),
                             ButtonSegment(
                               value: FrostedGlassStickerMode.emoji,
                               label: Text(
-                                widget.configs.i18n.emojiEditor
+                                widget
+                                    .configs
+                                    .i18n
+                                    .emojiEditor
                                     .bottomNavigationBarText,
-                                style: const TextStyle(
-                                  fontSize: 13,
-                                ),
+                                style: const TextStyle(fontSize: 13),
                               ),
                             ),
                           ],
@@ -230,7 +224,7 @@ class _FrostedGlassStickerPageState extends State<FrostedGlassStickerPage> {
                             });
                           },
                         ),
-                      )
+                      ),
                   ],
                 ),
         ),
@@ -254,15 +248,14 @@ class _FrostedGlassStickerPageState extends State<FrostedGlassStickerPage> {
                   widget.callbacks.stickerEditorCallbacks?.onSearchChanged
                       ?.call(value);
                   _searchFocus.requestFocus();
-                  Future.delayed(const Duration(milliseconds: 1))
-                      .whenComplete(() {
-                    _searchFocus.requestFocus();
-                  });
+                  Future.delayed(const Duration(milliseconds: 1)).whenComplete(
+                    () {
+                      _searchFocus.requestFocus();
+                    },
+                  );
                 },
                 itemColor: const Color.fromARGB(255, 243, 243, 243),
-                style: const TextStyle(
-                  color: Colors.white,
-                ),
+                style: const TextStyle(color: Colors.white),
               ),
             ),
             CupertinoButton(
@@ -279,15 +272,14 @@ class _FrostedGlassStickerPageState extends State<FrostedGlassStickerPage> {
     } else {
       return Container(
         decoration: BoxDecoration(
-            color: Colors.white, borderRadius: BorderRadius.circular(100)),
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(100),
+        ),
         padding: const EdgeInsets.symmetric(horizontal: 14),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const Icon(
-              Icons.search,
-              color: Color(0xFF161616),
-            ),
+            const Icon(Icons.search, color: Color(0xFF161616)),
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.only(left: 12.0),
@@ -312,10 +304,7 @@ class _FrostedGlassStickerPageState extends State<FrostedGlassStickerPage> {
               ),
             ),
             IconButton(
-              icon: const Icon(
-                Icons.close,
-                color: Color(0xFF161616),
-              ),
+              icon: const Icon(Icons.close, color: Color(0xFF161616)),
               onPressed: () {
                 setState(() {
                   if (_searchCtrl.text.isNotEmpty) {

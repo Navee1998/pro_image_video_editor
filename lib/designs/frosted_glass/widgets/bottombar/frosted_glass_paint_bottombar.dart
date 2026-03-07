@@ -22,10 +22,7 @@ class FrostedGlassPaintBottomBar extends StatefulWidget {
   ///   paintEditor: myPaintEditorState,
   /// )
   /// ```
-  const FrostedGlassPaintBottomBar({
-    super.key,
-    required this.paintEditor,
-  });
+  const FrostedGlassPaintBottomBar({super.key, required this.paintEditor});
 
   /// The state of the paint editor associated with this bottom bar.
   ///
@@ -50,7 +47,10 @@ class _FrostedGlassPaintBottomBarState
     _buttonStyle = IconButton.styleFrom(
       backgroundColor: Colors.black38,
       foregroundColor: widget
-          .paintEditor.paintEditorConfigs.style.bottomBarInactiveItemColor,
+          .paintEditor
+          .paintEditorConfigs
+          .style
+          .bottomBarInactiveItemColor,
       padding: const EdgeInsets.all(10),
       iconSize: 22,
       minimumSize: const Size.fromRadius(10),
@@ -78,19 +78,20 @@ class _FrostedGlassPaintBottomBarState
                         _mode = _mode == _Mode.color
                             ? _Mode.lineWidth
                             : _mode == _Mode.lineWidth
-                                ? _Mode.mode
-                                : _Mode.color;
+                            ? _Mode.mode
+                            : _Mode.color;
                       });
                     },
                     icon: Icon(
                       _mode == _Mode.color
                           ? Icons.draw
                           : _mode == _Mode.lineWidth
-                              ? Icons.category
-                              : Icons.color_lens,
+                          ? Icons.category
+                          : Icons.color_lens,
                     ),
-                    style:
-                        IconButton.styleFrom(backgroundColor: Colors.black38),
+                    style: IconButton.styleFrom(
+                      backgroundColor: Colors.black38,
+                    ),
                   ),
                   Container(
                     margin: const EdgeInsets.fromLTRB(14, 2, 0, 2),
@@ -111,8 +112,8 @@ class _FrostedGlassPaintBottomBarState
                           ),
                         )
                       : _mode == _Mode.lineWidth
-                          ? _buildLineWidth()
-                          : _buildModes(),
+                      ? _buildLineWidth()
+                      : _buildModes(),
                 ],
               ),
             ),
@@ -195,12 +196,13 @@ class _FrostedGlassPaintBottomBarState
               tooltip: item.label,
               icon: Icon(item.icon),
               style: _buttonStyle.copyWith(
-                  backgroundColor: !isSelected
-                      ? null
-                      : const WidgetStatePropertyAll(Colors.white),
-                  foregroundColor: !isSelected
-                      ? null
-                      : const WidgetStatePropertyAll(Colors.black)),
+                backgroundColor: !isSelected
+                    ? null
+                    : const WidgetStatePropertyAll(Colors.white),
+                foregroundColor: !isSelected
+                    ? null
+                    : const WidgetStatePropertyAll(Colors.black),
+              ),
             );
           }),
         ),

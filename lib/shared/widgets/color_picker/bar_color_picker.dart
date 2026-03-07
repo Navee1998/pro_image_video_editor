@@ -124,10 +124,7 @@ class _BarColorPickerState extends State<BarColorPicker>
     _scaleAnimation = Tween<double>(
       begin: 0,
       end: 1,
-    ).animate(CurvedAnimation(
-      parent: _controller,
-      curve: Curves.easeIn,
-    ));
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeIn));
 
     _controller.forward();
   }
@@ -148,7 +145,7 @@ class _BarColorPickerState extends State<BarColorPicker>
   }
 
   void _updateColorPosition() {
-// Initialize the 'colors' list and 'percent' based on 'pickMode'.
+    // Initialize the 'colors' list and 'percent' based on 'pickMode'.
     switch (widget.pickMode) {
       case PickMode.color:
         colors = const [
@@ -174,7 +171,9 @@ class _BarColorPickerState extends State<BarColorPicker>
 
   /// Estimates the position of a color within the gradient.
   double _estimateColorPositionInGradient(
-      List<Color> gradientColors, Color targetColor) {
+    List<Color> gradientColors,
+    Color targetColor,
+  ) {
     double minDistance = double.infinity;
     double estimatedPosition = 0.0;
 
@@ -287,9 +286,10 @@ class _BarColorPickerState extends State<BarColorPicker>
 
       thumbTop = barHeight * percent;
       gradient = LinearGradient(
-          colors: colors,
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter);
+        colors: colors,
+        begin: Alignment.topCenter,
+        end: Alignment.bottomCenter,
+      );
 
       left = (thumbRadius * 2 - barWidth) / 2;
       top = thumbRadius;
@@ -355,11 +355,7 @@ class _BarColorPickerState extends State<BarColorPicker>
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(thumbRadius),
           boxShadow: const [
-            BoxShadow(
-              color: Color(0x45000000),
-              spreadRadius: 2,
-              blurRadius: 3,
-            )
+            BoxShadow(color: Color(0x45000000), spreadRadius: 2, blurRadius: 3),
           ],
           color: widget.thumbColor,
         ),
@@ -383,10 +379,7 @@ class _BarColorPickerState extends State<BarColorPicker>
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(widget.cornerRadius),
           border: borderWidth != 0
-              ? Border.all(
-                  color: Colors.white,
-                  width: borderWidth,
-                )
+              ? Border.all(color: Colors.white, width: borderWidth)
               : null,
           gradient: gradient,
         ),
@@ -412,7 +405,10 @@ class _BarColorPickerState extends State<BarColorPicker>
 
   /// calculate colors picked from palette and update our states.
   void handleTouch(
-      Offset globalPosition, BuildContext context, Gradient gradient) {
+    Offset globalPosition,
+    BuildContext context,
+    Gradient gradient,
+  ) {
     var box = context.findRenderObject() as RenderBox?;
     if (box == null) return;
     var localPosition = box.globalToLocal(globalPosition);
@@ -434,7 +430,8 @@ class _BarColorPickerState extends State<BarColorPicker>
       case PickMode.grey:
         final channel = (0xff * percent).toInt();
         widget.colorListener(
-            Color.fromARGB(0xff, channel, channel, channel).toHex());
+          Color.fromARGB(0xff, channel, channel, channel).toHex(),
+        );
         break;
     }
   }
@@ -451,12 +448,27 @@ class _BarColorPickerState extends State<BarColorPicker>
       ..add(DoubleProperty('cornerRadius', widget.cornerRadius))
       ..add(DoubleProperty('borderWidth', widget.borderWidth))
       ..add(DiagnosticsProperty<EdgeInsets>('padding', widget.padding))
-      ..add(DiagnosticsProperty<Duration>(
-          'animationDuration', widget.animationDuration))
-      ..add(FlagProperty('horizontal',
-          value: widget.horizontal, ifTrue: 'horizontal', ifFalse: 'vertical'))
-      ..add(FlagProperty('showThumb',
-          value: widget.showThumb, ifTrue: 'thumb visible'))
+      ..add(
+        DiagnosticsProperty<Duration>(
+          'animationDuration',
+          widget.animationDuration,
+        ),
+      )
+      ..add(
+        FlagProperty(
+          'horizontal',
+          value: widget.horizontal,
+          ifTrue: 'horizontal',
+          ifFalse: 'vertical',
+        ),
+      )
+      ..add(
+        FlagProperty(
+          'showThumb',
+          value: widget.showThumb,
+          ifTrue: 'thumb visible',
+        ),
+      )
       ..add(PercentProperty('percent', percent))
       ..add(IterableProperty<Color>('colors', colors));
   }

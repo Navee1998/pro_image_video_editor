@@ -8,16 +8,20 @@ import 'input_stream.dart';
 
 /// Stream in data from a memory buffer.
 class InputMemoryStream extends InputStream {
-  InputMemoryStream.fromList(List<int> bytes,
-      {super.byteOrder = ByteOrder.littleEndian})
-      : buffer = Uint8List.fromList(bytes),
-        _position = 0,
-        _length = bytes.length;
+  InputMemoryStream.fromList(
+    List<int> bytes, {
+    super.byteOrder = ByteOrder.littleEndian,
+  }) : buffer = Uint8List.fromList(bytes),
+       _position = 0,
+       _length = bytes.length;
 
   /// Create a [InputStream] for reading from a Uint8List
-  InputMemoryStream(List<int> bytes,
-      {super.byteOrder = ByteOrder.littleEndian, int? offset, int? length})
-      : _position = 0 {
+  InputMemoryStream(
+    List<int> bytes, {
+    super.byteOrder = ByteOrder.littleEndian,
+    int? offset,
+    int? length,
+  }) : _position = 0 {
     offset ??= 0;
     length ??= bytes.length - offset;
     if ((offset + length) > bytes.length) {
@@ -31,17 +35,17 @@ class InputMemoryStream extends InputStream {
   }
 
   InputMemoryStream.empty()
-      : buffer = Uint8List(0),
-        _position = 0,
-        _length = 0,
-        super(byteOrder: ByteOrder.littleEndian);
+    : buffer = Uint8List(0),
+      _position = 0,
+      _length = 0,
+      super(byteOrder: ByteOrder.littleEndian);
 
   /// Create a copy of [other].
   InputMemoryStream.from(InputMemoryStream other)
-      : buffer = other.buffer,
-        _position = other._position,
-        _length = other._length,
-        super(byteOrder: other.byteOrder);
+    : buffer = other.buffer,
+      _position = other._position,
+      _length = other._length,
+      super(byteOrder: other.byteOrder);
   Uint8List? buffer;
   // The read offset into the buffer.
   int _position;
@@ -115,8 +119,12 @@ class InputMemoryStream extends InputStream {
     }
     position ??= _position;
     length ??= _length - position;
-    return InputMemoryStream(buffer!,
-        byteOrder: byteOrder, offset: position, length: length);
+    return InputMemoryStream(
+      buffer!,
+      byteOrder: byteOrder,
+      offset: position,
+      length: length,
+    );
   }
 
   /// Read a single byte.
@@ -136,8 +144,11 @@ class InputMemoryStream extends InputStream {
       len = buffer!.length - _position;
     }
 
-    final bytes =
-        Uint8List.view(buffer!.buffer, buffer!.offsetInBytes + _position, len);
+    final bytes = Uint8List.view(
+      buffer!.buffer,
+      buffer!.offsetInBytes + _position,
+      len,
+    );
 
     return bytes;
   }

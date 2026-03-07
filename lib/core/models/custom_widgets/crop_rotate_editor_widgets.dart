@@ -50,11 +50,15 @@ class CropRotateEditorWidgets
   @override
   CropRotateEditorWidgets copyWith({
     ReactiveAppbar? Function(
-            CropRotateEditorState editorState, Stream<void> rebuildStream)?
-        appBar,
+      CropRotateEditorState editorState,
+      Stream<void> rebuildStream,
+    )?
+    appBar,
     ReactiveWidget? Function(
-            CropRotateEditorState editorState, Stream<void> rebuildStream)?
-        bottomBar,
+      CropRotateEditorState editorState,
+      Stream<void> rebuildStream,
+    )?
+    bottomBar,
     CustomBodyItems<CropRotateEditorState>? bodyItems,
     CropEditorAspectRatioOptions<CropRotateEditorState>? aspectRatioOptions,
   }) {

@@ -52,8 +52,10 @@ class WhatsappFilters extends StatelessWidget {
     final sizesManager = editor.sizesManager;
     final stateManager = editor.stateManager;
     final activeFilters = stateManager.activeFilters;
-    final double showFactor =
-        max(0, min(1, 1 / 120 * whatsAppHelper.filterShowHelper));
+    final double showFactor = max(
+      0,
+      min(1, 1 / 120 * whatsAppHelper.filterShowHelper),
+    );
     return Positioned(
       left: 0,
       right: 0,
@@ -72,8 +74,9 @@ class WhatsappFilters extends StatelessWidget {
               editorImage: editor.editorImage!,
               blurFactor: stateManager.activeBlur,
               configs: editor.configs,
-              selectedFilter:
-                  activeFilters.isNotEmpty ? activeFilters : emptyFilter,
+              selectedFilter: activeFilters.isNotEmpty
+                  ? activeFilters
+                  : emptyFilter,
               onSelectFilter: (filter) {
                 editor.addHistory(filters: filter.filters);
               },

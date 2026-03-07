@@ -91,26 +91,28 @@ class RoundedBackgroundText extends StatelessWidget {
     double horizontalSpace = enableHitBoxCorrection ? height * 0.3 : 0;
     double verticalSpace = enableHitBoxCorrection ? height * 0.1 : 0;
 
-    return LayoutBuilder(builder: (context, constraints) {
-      painter.layout(maxWidth: maxTextWidth);
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        painter.layout(maxWidth: maxTextWidth);
 
-      return CustomPaint(
-        isComplex: true,
-        painter: RoundedBackgroundTextPainter(
-          backgroundColor: backgroundColor ?? Colors.transparent,
-          painter: painter,
-          onHitTestResult: onHitTestResult,
-          textAlign: align,
-          cursorWidth: cursorWidth,
-          textDirection: Directionality.of(context),
-          hitBoxCorrectionOffset: Offset(horizontalSpace, verticalSpace),
-        ),
-        size: Size(
-          painter.width.clamp(0, constraints.maxWidth) + horizontalSpace * 2,
-          painter.height.clamp(0, constraints.maxHeight) + verticalSpace * 2,
-        ),
-      );
-    });
+        return CustomPaint(
+          isComplex: true,
+          painter: RoundedBackgroundTextPainter(
+            backgroundColor: backgroundColor ?? Colors.transparent,
+            painter: painter,
+            onHitTestResult: onHitTestResult,
+            textAlign: align,
+            cursorWidth: cursorWidth,
+            textDirection: Directionality.of(context),
+            hitBoxCorrectionOffset: Offset(horizontalSpace, verticalSpace),
+          ),
+          size: Size(
+            painter.width.clamp(0, constraints.maxWidth) + horizontalSpace * 2,
+            painter.height.clamp(0, constraints.maxHeight) + verticalSpace * 2,
+          ),
+        );
+      },
+    );
   }
 
   @override
@@ -121,18 +123,23 @@ class RoundedBackgroundText extends StatelessWidget {
       ..add(DiagnosticsProperty<InlineSpan>('text', text))
       ..add(EnumProperty<TextAlign>('textAlign', textAlign, defaultValue: null))
       ..add(
-          ColorProperty('backgroundColor', backgroundColor, defaultValue: null))
+        ColorProperty('backgroundColor', backgroundColor, defaultValue: null),
+      )
       ..add(DoubleProperty('maxTextWidth', maxTextWidth))
       ..add(DoubleProperty('cursorWidth', cursorWidth, defaultValue: 0))
-      ..add(FlagProperty(
-        'enableHitBoxCorrection',
-        value: enableHitBoxCorrection,
-        ifTrue: 'hitBoxCorrection enabled',
-      ))
-      ..add(FlagProperty(
-        'hasOnHitTestResult',
-        value: onHitTestResult != null,
-        ifTrue: 'callback set',
-      ));
+      ..add(
+        FlagProperty(
+          'enableHitBoxCorrection',
+          value: enableHitBoxCorrection,
+          ifTrue: 'hitBoxCorrection enabled',
+        ),
+      )
+      ..add(
+        FlagProperty(
+          'hasOnHitTestResult',
+          value: onHitTestResult != null,
+          ifTrue: 'callback set',
+        ),
+      );
   }
 }

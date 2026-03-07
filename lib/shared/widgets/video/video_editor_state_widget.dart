@@ -15,7 +15,7 @@ class VideoEditorStateWidget extends StatelessWidget {
     return Center(
       child: ValueListenableBuilder(
         valueListenable: player.isPlayingNotifier,
-        builder: (_, isPlaying, __) {
+        builder: (_, isPlaying, _) {
           return AnimatedSwitcher(
             duration: player.configs.animatedIndicatorDuration,
             switchInCurve: player.configs.animatedIndicatorSwitchInCurve,
@@ -23,21 +23,21 @@ class VideoEditorStateWidget extends StatelessWidget {
             child: isPlaying
                 ? player.widgets.pauseIndicator ?? const SizedBox.shrink()
                 : player.widgets.playIndicator ??
-                    IgnorePointer(
-                      child: Container(
-                        width: 64,
-                        height: 64,
-                        decoration: ShapeDecoration(
-                          shape: const CircleBorder(),
-                          color: player.style.playIndicatorBackground,
-                        ),
-                        child: Icon(
-                          player.icons.playIndicator,
-                          color: player.style.playIndicatorColor,
-                          size: 44,
+                      IgnorePointer(
+                        child: Container(
+                          width: 64,
+                          height: 64,
+                          decoration: ShapeDecoration(
+                            shape: const CircleBorder(),
+                            color: player.style.playIndicatorBackground,
+                          ),
+                          child: Icon(
+                            player.icons.playIndicator,
+                            color: player.style.playIndicatorColor,
+                            size: 44,
+                          ),
                         ),
                       ),
-                    ),
           );
         },
       ),

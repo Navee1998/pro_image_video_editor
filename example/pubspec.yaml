@@ -18,7 +18,7 @@ dependencies:
   
   bot_toast: ^4.1.0
   cupertino_icons: ^1.0.8
-  file_picker: ^10.2.1
+  file_picker: 10.2.1
   gal: ^2.3.2
   google_fonts: ^6.3.0
   file_saver: ^0.3.1
@@ -35,7 +35,8 @@ dependencies:
   vibration: ^3.1.1
 
   # Video-Editing
-  pro_video_editor: ^0.2.3
+  pro_video_editor: ^1.6.0
+  audioplayers: ^6.5.1
   ### Choose one player below
   video_player: ^2.10.0
   chewie: ^1.12.1
@@ -54,8 +55,5 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
-    - assets/demo.png
-    - assets/demo.mp4
-    - assets/frame.png
-    - assets/frame1.png
+    - assets/
     - assets/google_fonts/

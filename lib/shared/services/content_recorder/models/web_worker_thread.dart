@@ -20,10 +20,7 @@ class WebWorkerThread extends Thread {
   ///
   /// The [onMessage] callback is required to handle messages received
   /// from the web worker.
-  WebWorkerThread({
-    required super.onMessage,
-    required super.coreNumber,
-  });
+  WebWorkerThread({required super.onMessage, required super.coreNumber});
 
   /// The [web.Worker] instance managing the web worker.
   ///
@@ -36,9 +33,7 @@ class WebWorkerThread extends Thread {
     try {
       worker = web.Worker(
         kImageEditorWebWorkerPath.toJS,
-        web.WorkerOptions(
-          name: '$debugThreadName-$coreNumber',
-        ),
+        web.WorkerOptions(name: '$debugThreadName-$coreNumber'),
       );
 
       if (worker.isDefinedAndNotNull) {
@@ -58,10 +53,9 @@ class WebWorkerThread extends Thread {
             final dartBytes = (jsBytes as js.JSArrayBuffer?)?.toDart;
 
             activeTasks--;
-            onMessage(ThreadResponse(
-              bytes: dartBytes?.asUint8List(),
-              id: dartId,
-            ));
+            onMessage(
+              ThreadResponse(bytes: dartBytes?.asUint8List(), id: dartId),
+            );
           } catch (e) {
             debugPrint(e.toString());
           }
@@ -89,10 +83,9 @@ class WebWorkerThread extends Thread {
 
   @override
   void destroyActiveTasks(String ignoreTaskId) async {
-    worker.postMessage(jsify({
-      'mode': 'destroyActiveTasks',
-      'ignoreTaskId': ignoreTaskId,
-    }));
+    worker.postMessage(
+      jsify({'mode': 'destroyActiveTasks', 'ignoreTaskId': ignoreTaskId}),
+    );
   }
 
   @override

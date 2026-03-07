@@ -1,8 +1,11 @@
 import 'package:flutter/widgets.dart';
 
+import '/core/models/editor_callbacks/audio_editor_callbacks.dart';
 import '/core/models/editor_callbacks/video_editor_callbacks.dart';
-import '/core/models/editor_configs/video_editor_configs.dart';
+import '/core/models/editor_configs/video/video_editor_configs.dart';
 import '/core/models/video/trim_duration_span_model.dart';
+import '/features/audio_editor/models/audio_track.dart';
+import '/features/clips_editor/models/video_clip.dart';
 
 /// Controls video playback and trimming for the video editor.
 class ProVideoController {
@@ -13,25 +16,46 @@ class ProVideoController {
   ProVideoController({
     required this.videoPlayer,
     required this.videoDuration,
-    required this.initialResolution,
+    required Size initialResolution,
     required this.fileSize,
     this.bitrate,
+    this.audioTrack,
+    this.clips,
     List<ImageProvider>? thumbnails,
-  }) {
+    this.initialTrimSpan,
+  }) : resolutionNotifier = ValueNotifier<Size>(initialResolution) {
     this.thumbnails = thumbnails;
   }
+
+  /// The list of video clips to be loaded or edited in the current session.
+  ///
+  /// Each [VideoClip] contains metadata such as source, duration, and
+  /// transformation settings. Can be `null` if no clips are loaded yet.
+  List<VideoClip>? clips;
+
+  /// The currently selected audio track.
+  AudioTrack? audioTrack;
 
   /// The video player widget.
   final Widget videoPlayer;
 
   /// The total duration of the video.
-  final Duration videoDuration;
+  Duration videoDuration;
+
+  /// A [ValueNotifier] that holds the current video resolution.
+  ///
+  /// The [resolutionNotifier] notifies listeners when resolution changes,
+  /// e.g., after merging clips with different dimensions.
+  final ValueNotifier<Size> resolutionNotifier;
 
   /// The initial resolution of the video.
-  final Size initialResolution;
+  Size get initialResolution => resolutionNotifier.value;
+
+  /// Sets the video resolution and notifies listeners.
+  set initialResolution(Size value) => resolutionNotifier.value = value;
 
   /// The size of the video file in bytes.
-  final int fileSize;
+  int fileSize;
 
   /// The bitrate of the video in bits per second.
   ///
@@ -44,7 +68,7 @@ class ProVideoController {
   /// If unsupported, the encoder may silently fall back to VBR
   /// (Variable Bitrate), and the actual bitrate may be constrained by
   /// device-specific minimum and maximum limits.
-  final int? bitrate;
+  int? bitrate;
 
   /// A [ValueNotifier] that holds a list of [ImageProvider] objects
   /// representing video thumbnails.
@@ -62,11 +86,15 @@ class ProVideoController {
   set thumbnails(List<ImageProvider>? value) =>
       thumbnailsNotifier.value = value;
 
+  late AudioEditorCallbacks Function() _callbacksAudioFunction;
   late VideoEditorCallbacks Function() _callbacksFunction;
   late VideoEditorConfigs Function() _configsFunction;
 
   /// Returns the configured video editor callbacks.
   VideoEditorCallbacks get callbacks => _callbacksFunction();
+
+  /// Returns the configured audio editor callbacks.
+  AudioEditorCallbacks get callbacksAudio => _callbacksAudioFunction();
 
   /// Returns the video editor configuration settings.
   VideoEditorConfigs get configs => _configsFunction();
@@ -80,15 +108,20 @@ class ProVideoController {
   /// Notifies listeners of the current mute state.
   late final isMutedNotifier = ValueNotifier<bool>(configs.initialMuted);
 
+  /// The initial trim range applied when the editor is opened.
+  final TrimDurationSpan? initialTrimSpan;
+
   /// Notifies listeners of the selected trim duration span.
   late final trimDurationSpanNotifier = ValueNotifier<TrimDurationSpan>(
-    TrimDurationSpan(
-      start: Duration.zero,
-      end: configs.maxTrimDuration == null ||
-              configs.maxTrimDuration! > videoDuration
-          ? videoDuration
-          : configs.maxTrimDuration!,
-    ),
+    initialTrimSpan ??
+        TrimDurationSpan(
+          start: Duration.zero,
+          end:
+              configs.maxTrimDuration == null ||
+                  configs.maxTrimDuration! > videoDuration
+              ? videoDuration
+              : configs.maxTrimDuration!,
+        ),
   );
 
   /// Notifier that indicates whether the trim time span UI should be shown.
@@ -113,9 +146,11 @@ class ProVideoController {
 
   /// Initializes the controller with provided callback and config functions.
   void initialize({
+    required AudioEditorCallbacks Function() callbacksAudioFunction,
     required VideoEditorCallbacks Function() callbacksFunction,
     required VideoEditorConfigs Function() configsFunction,
   }) {
+    _callbacksAudioFunction = callbacksAudioFunction;
     _callbacksFunction = callbacksFunction;
     _configsFunction = configsFunction;
   }
@@ -123,6 +158,7 @@ class ProVideoController {
   /// Dispose the video controller.
   void dispose() {
     thumbnailsNotifier.dispose();
+    resolutionNotifier.dispose();
     playTimeNotifier.dispose();
     isPlayingNotifier.dispose();
     isMutedNotifier.dispose();
@@ -143,18 +179,23 @@ class ProVideoController {
   void play() {
     isPlayingNotifier.value = true;
     callbacks.onPlay?.call();
+    if (audioTrack?.audio != null) {
+      callbacksAudio.onPlay?.call(audioTrack!);
+    }
   }
 
   /// Pauses video playback and triggers the pause callback.
   void pause() {
     isPlayingNotifier.value = false;
     callbacks.onPause?.call();
+    callbacksAudio.onStop?.call(audioTrack);
   }
 
   /// Sets the mute state and triggers the mute toggle callback.
   void setMuteState(bool isMuted) {
     isMutedNotifier.value = isMuted;
     callbacks.onMuteToggle?.call(isMuted);
+    callbacksAudio.onMuteToggle?.call(isMuted);
   }
 
   /// Updates the trim span and triggers the trim update callback.

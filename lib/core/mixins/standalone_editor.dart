@@ -37,8 +37,10 @@ mixin StandaloneEditor<T extends EditorInitConfigs> {
 
 /// A mixin providing access to standalone editor configurations and image
 /// within a state.
-mixin StandaloneEditorState<T extends StatefulWidget,
-        I extends EditorInitConfigs>
+mixin StandaloneEditorState<
+  T extends StatefulWidget,
+  I extends EditorInitConfigs
+>
     on State<T>, ImageEditorConvertedConfigs, ImageEditorConvertedCallbacks {
   /// Returns the initialization configurations for the editor.
   I get initConfigs => (widget as StandaloneEditor<I>).initConfigs;
@@ -124,8 +126,9 @@ mixin StandaloneEditorState<T extends StatefulWidget,
   }) async {
     if (imageInfos == null || forceUpdate == true) {
       imageInfos = (await decodeImageInfos(
-        bytes: await (editorImage?.safeByteArray(context) ??
-            _createTransparentImage()),
+        bytes:
+            await (editorImage?.safeByteArray(context) ??
+                _createTransparentImage()),
         screenSize: editorBodySize,
         configs: activeHistory,
       ));
@@ -166,7 +169,8 @@ mixin StandaloneEditorState<T extends StatefulWidget,
       }
 
       /// Capture the final screenshot
-      bool screenshotIsCaptured = screenshotHistoryPosition > 0 &&
+      bool screenshotIsCaptured =
+          screenshotHistoryPosition > 0 &&
           screenshotHistoryPosition <= screenshotHistory.length;
       Uint8List? bytes = await screenshotCtrl.captureFinalScreenshot(
         imageInfos: imageInfos!,
@@ -302,8 +306,9 @@ mixin StandaloneEditorState<T extends StatefulWidget,
   Future<Uint8List> _createTransparentImage() async {
     if (_transparentImageBytes != null) return _transparentImageBytes!;
 
-    _transparentImageBytes =
-        await createTransparentImage(videoController!.initialResolution);
+    _transparentImageBytes = await createTransparentImage(
+      videoController!.initialResolution,
+    );
     return _transparentImageBytes!;
   }
 }

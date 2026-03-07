@@ -136,20 +136,11 @@ class LayerTransformGenerator {
     var angleSide = getRotateAngleSide(rotationAngle);
 
     if (angleSide == RotateAngleSide.bottom) {
-      layer.offset = Offset(
-        -layer.offset.dx,
-        -layer.offset.dy,
-      );
+      layer.offset = Offset(-layer.offset.dx, -layer.offset.dy);
     } else if (angleSide == RotateAngleSide.right) {
-      layer.offset = Offset(
-        layer.offset.dy,
-        -layer.offset.dx,
-      );
+      layer.offset = Offset(layer.offset.dy, -layer.offset.dx);
     } else if (angleSide == RotateAngleSide.left) {
-      layer.offset = Offset(
-        -layer.offset.dy,
-        layer.offset.dx,
-      );
+      layer.offset = Offset(-layer.offset.dy, layer.offset.dx);
     } else {
       return;
     }
@@ -159,7 +150,8 @@ class LayerTransformGenerator {
         ..offset /= activeTransformConfigs.scaleRotation
         ..scale /= activeTransformConfigs.scaleRotation;
     } else {
-      double scaleRotation = newTransformConfigs.scaleRotation /
+      double scaleRotation =
+          newTransformConfigs.scaleRotation /
           activeTransformConfigs.scaleRotation;
 
       layer
@@ -178,35 +170,23 @@ class LayerTransformGenerator {
       if (shouldFlipX) {
         layer
           ..flipY = !layer.flipY
-          ..offset = Offset(
-            layer.offset.dx,
-            -layer.offset.dy,
-          );
+          ..offset = Offset(layer.offset.dx, -layer.offset.dy);
       }
       if (shouldFlipY) {
         layer
           ..flipX = !layer.flipX
-          ..offset = Offset(
-            -layer.offset.dx,
-            layer.offset.dy,
-          );
+          ..offset = Offset(-layer.offset.dx, layer.offset.dy);
       }
     } else {
       if (shouldFlipX) {
         layer
           ..flipX = !layer.flipX
-          ..offset = Offset(
-            -layer.offset.dx,
-            layer.offset.dy,
-          );
+          ..offset = Offset(-layer.offset.dx, layer.offset.dy);
       }
       if (shouldFlipY) {
         layer
           ..flipY = !layer.flipY
-          ..offset = Offset(
-            layer.offset.dx,
-            -layer.offset.dy,
-          );
+          ..offset = Offset(layer.offset.dx, -layer.offset.dy);
       }
     }
   }
@@ -215,7 +195,8 @@ class LayerTransformGenerator {
     Offset newOffset =
         newTransformConfigs.offset * newTransformConfigs.scaleUser;
 
-    Offset oldOffset = activeTransformConfigs.offset *
+    Offset oldOffset =
+        activeTransformConfigs.offset *
         (undoChanges
             ? activeTransformConfigs.scaleUser
             : newTransformConfigs.scaleUser);

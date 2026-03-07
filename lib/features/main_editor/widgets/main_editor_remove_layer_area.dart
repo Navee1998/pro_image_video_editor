@@ -68,7 +68,7 @@ class MainEditorRemoveLayerArea extends StatelessWidget {
             bottom: false,
             child: StreamBuilder(
               stream: controllers.removeBtnCtrl.stream,
-              builder: (_, __) => _buildRemoveWidget(),
+              builder: (_, _) => _buildRemoveWidget(),
             ),
           ),
         );
@@ -85,8 +85,9 @@ class MainEditorRemoveLayerArea extends StatelessWidget {
                 color: layerInteractionManager.hoverRemoveBtn
                     ? layerInteraction.style.removeAreaBackgroundActive
                     : layerInteraction.style.removeAreaBackgroundInactive,
-                borderRadius:
-                    const BorderRadius.only(bottomRight: Radius.circular(100)),
+                borderRadius: const BorderRadius.only(
+                  bottomRight: Radius.circular(100),
+                ),
               ),
               padding: const EdgeInsets.only(right: 12, bottom: 7),
               child: Center(

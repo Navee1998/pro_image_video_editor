@@ -7,9 +7,13 @@ import '/plugins/emoji_picker_flutter/emoji_picker_flutter.dart';
 /// Backspace Button Widget
 class BackspaceButton extends StatefulWidget {
   /// Constructor
-  const BackspaceButton(this.config, this.onBackspacePressed,
-      this.onBackspaceLongPressed, this.iconColor,
-      {super.key});
+  const BackspaceButton(
+    this.config,
+    this.onBackspacePressed,
+    this.onBackspaceLongPressed,
+    this.iconColor, {
+    super.key,
+  });
 
   /// Config
   final Config config;
@@ -39,11 +43,9 @@ class _BackspaceButtonState extends State<BackspaceButton> {
         onLongPressEnd: (_) => _stopOnBackspacePressedCallback(),
         child: IconButton(
           padding: const EdgeInsets.only(bottom: 2),
-          icon: widget.config.customBackspaceIcon ??
-              Icon(
-                Icons.backspace,
-                color: widget.iconColor,
-              ),
+          icon:
+              widget.config.customBackspaceIcon ??
+              Icon(Icons.backspace, color: widget.iconColor),
           onPressed: () {
             widget.onBackspacePressed?.call();
           },
@@ -78,8 +80,10 @@ class _BackspaceButtonState extends State<BackspaceButton> {
         // Cancel the existing timer and start a new one with the updated
         // interval
         _onBackspacePressedCallbackTimer?.cancel();
-        _onBackspacePressedCallbackTimer =
-            Timer.periodic(callbackInterval, callback);
+        _onBackspacePressedCallbackTimer = Timer.periodic(
+          callbackInterval,
+          callback,
+        );
 
         // Reset the elapsed time for the new interval
         millisecondsSincePressed = 0;
@@ -94,8 +98,10 @@ class _BackspaceButtonState extends State<BackspaceButton> {
     }
 
     // Start the initial timer with the short-press interval
-    _onBackspacePressedCallbackTimer =
-        Timer.periodic(callbackInterval, callback);
+    _onBackspacePressedCallbackTimer = Timer.periodic(
+      callbackInterval,
+      callback,
+    );
   }
 
   /// Stop the callback for long-pressing the backspace button.

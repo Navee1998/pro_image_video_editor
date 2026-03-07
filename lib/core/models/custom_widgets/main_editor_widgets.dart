@@ -79,7 +79,8 @@ class MainEditorWidgets {
     ProImageEditorState editor,
     Stream<void> rebuildStream,
     Widget content,
-  )? wrapBody;
+  )?
+  wrapBody;
 
   /// A custom app bar widget.
   ///
@@ -95,7 +96,8 @@ class MainEditorWidgets {
   final ReactiveAppbar? Function(
     ProImageEditorState editor,
     Stream<void> rebuildStream,
-  )? appBar;
+  )?
+  appBar;
 
   /// A custom bottom bar widget.
   ///
@@ -118,7 +120,8 @@ class MainEditorWidgets {
     ProImageEditorState editor,
     Stream<void> rebuildStream,
     Key key,
-  )? bottomBar;
+  )?
+  bottomBar;
 
   /// {@macro customBodyItem}
   final CustomBodyItems<ProImageEditorState>? bodyItems;
@@ -139,16 +142,19 @@ class MainEditorWidgets {
       ProImageEditorState editor,
       Stream<void> rebuildStream,
       Widget content,
-    )? wrapBody,
+    )?
+    wrapBody,
     ReactiveAppbar? Function(
       ProImageEditorState editor,
       Stream<void> rebuildStream,
-    )? appBar,
+    )?
+    appBar,
     ReactiveWidget? Function(
       ProImageEditorState editor,
       Stream<void> rebuildStream,
       Key key,
-    )? bottomBar,
+    )?
+    bottomBar,
     CustomBodyItems<ProImageEditorState>? bodyItems,
     CustomBodyItems<ProImageEditorState>? bodyItemsRecorded,
   }) {

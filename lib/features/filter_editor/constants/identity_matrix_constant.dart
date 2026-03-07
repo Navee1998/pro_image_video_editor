@@ -7,5 +7,5 @@ const identityMatrix = <double>[
   // Row B
   0, 0, 1, 0, 0,
   // Row A
-  0, 0, 0, 1, 0
+  0, 0, 0, 1, 0,
 ];

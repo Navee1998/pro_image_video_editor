@@ -136,18 +136,24 @@ void main() {
 
     test('undoChanges reverses transformations', () {
       final layer = _makeLayer(
-          offset: const Offset(10, 10),
-          rotation: 0.5,
-          scale: 2.0,
-          flipX: true,
-          flipY: false);
+        offset: const Offset(10, 10),
+        rotation: 0.5,
+        scale: 2.0,
+        flipX: true,
+        flipY: false,
+      );
       final active = _configs(
-          angle: 0.5,
-          flipX: true,
-          scaleUser: 2.0,
-          offset: const Offset(10, 10));
+        angle: 0.5,
+        flipX: true,
+        scaleUser: 2.0,
+        offset: const Offset(10, 10),
+      );
       final next = _configs(
-          angle: 0.0, flipX: false, scaleUser: 1.0, offset: const Offset(0, 0));
+        angle: 0.0,
+        flipX: false,
+        scaleUser: 1.0,
+        offset: const Offset(0, 0),
+      );
 
       final generator = LayerTransformGenerator(
         layers: [layer],

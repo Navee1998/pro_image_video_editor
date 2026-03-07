@@ -170,7 +170,8 @@ Future<img.Image> _resizeCropRect(
   final numFrames = src.numFrames;
   for (var i = 0; i < numFrames; ++i) {
     final frame = src.frames[i];
-    final dst = firstFrame?.addFrame() ??
+    final dst =
+        firstFrame?.addFrame() ??
         img.Image.fromResized(
           frame,
           width: width,

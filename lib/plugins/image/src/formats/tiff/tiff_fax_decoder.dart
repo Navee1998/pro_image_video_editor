@@ -185,8 +185,13 @@ class TiffFaxDecoder {
   }
 
   // Two-dimensional decoding methods
-  void decode2D(InputBuffer out, InputBuffer compData, int startX, int height,
-      int tiffT4Options) {
+  void decode2D(
+    InputBuffer out,
+    InputBuffer compData,
+    int startX,
+    int height,
+    int tiffT4Options,
+  ) {
     data = compData;
     compression = 3;
 
@@ -329,8 +334,13 @@ class TiffFaxDecoder {
     }
   }
 
-  void decodeT6(InputBuffer out, InputBuffer compData, int startX, int height,
-      int tiffT6Options) {
+  void decodeT6(
+    InputBuffer out,
+    InputBuffer compData,
+    int startX,
+    int height,
+    int tiffT6Options,
+  ) {
     data = compData;
     compression = 4;
 
@@ -721,7 +731,11 @@ class TiffFaxDecoder {
   }
 
   void _setToBlack(
-      InputBuffer buffer, int lineOffset, int bitOffset, int numBits) {
+    InputBuffer buffer,
+    int lineOffset,
+    int bitOffset,
+    int numBits,
+  ) {
     var bitNum = 8 * lineOffset + bitOffset;
     final lastBit = bitNum + numBits;
 
@@ -806,7 +820,8 @@ class TiffFaxDecoder {
     var i3 = 0;
     if (bitsFromNext2NextByte != 0) {
       i2 <<= bitsFromNext2NextByte;
-      i3 = (next2next & _table2[bitsFromNext2NextByte]) >>
+      i3 =
+          (next2next & _table2[bitsFromNext2NextByte]) >>
           (8 - bitsFromNext2NextByte);
       i2 |= i3;
       bytePointer = bytePointer! + 1;
@@ -901,7 +916,7 @@ class TiffFaxDecoder {
     0x1f, // 5 bits are left in first byte
     0x3f, // 6 bits are left in first byte
     0x7f, // 7 bits are left in first byte
-    0xff
+    0xff,
   ]; // 8 bits are left in first byte
 
   static const List<int> _table2 = [
@@ -913,7 +928,7 @@ class TiffFaxDecoder {
     0xf8, // 5
     0xfc, // 6
     0xfe, // 7
-    0xff
+    0xff,
   ]; // 8
 
   // Table to be used when fillOrder = 2, for flipping bytes.
@@ -1173,7 +1188,7 @@ class TiffFaxDecoder {
     63,
     -65,
     127,
-    -1
+    -1,
   ];
 
   // The main 10 bit white runs lookup table
@@ -1433,7 +1448,7 @@ class TiffFaxDecoder {
     // 1008 - 1015
     232, 232, 232, 232, 232, 232, 232, 232,
     // 1016 - 1023
-    232, 232, 232, 232, 232, 232, 232, 232
+    232, 232, 232, 232, 232, 232, 232, 232,
   ];
 
   // Additional make up codes for both White and Black runs
@@ -1453,7 +1468,7 @@ class TiffFaxDecoder {
     -27639,
     -26615,
     -25591,
-    -24567
+    -24567,
   ];
 
   // Initial black run look up table, uses the first 4 bits of a code
@@ -1461,7 +1476,7 @@ class TiffFaxDecoder {
     // 0 - 7
     3226, 6412, 200, 168, 38, 38, 134, 134,
     // 8 - 15
-    100, 100, 100, 100, 68, 68, 68, 68
+    100, 100, 100, 100, 68, 68, 68, 68,
   ];
 
   //
@@ -1596,7 +1611,7 @@ class TiffFaxDecoder {
     // 496 - 503
     390, 390, 390, 390, 390, 390, 390, 390,
     // 504 - 511
-    390, 390, 390, 390, 390, 390, 390, 390
+    390, 390, 390, 390, 390, 390, 390, 390,
   ];
 
   static const List<int> _twoDCodes = [
@@ -1631,6 +1646,6 @@ class TiffFaxDecoder {
     // 112 - 119
     41, 41, 41, 41, 41, 41, 41, 41,
     // 120 - 127
-    41, 41, 41, 41, 41, 41, 41, 41
+    41, 41, 41, 41, 41, 41, 41, 41,
   ];
 }

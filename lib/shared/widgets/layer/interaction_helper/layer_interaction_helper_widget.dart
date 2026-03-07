@@ -254,7 +254,9 @@ class _LayerInteractionHelperWidgetState
   Widget build(BuildContext context) {
     if (widget.forceIgnoreGestures) {
       return IgnorePointer(
-          ignoring: widget.forceIgnoreGestures, child: widget.child);
+        ignoring: widget.forceIgnoreGestures,
+        child: widget.child,
+      );
     }
 
     String layerId = _layer.id;
@@ -279,16 +281,17 @@ class _LayerInteractionHelperWidgetState
       overlayChildBuilder: (context, info) {
         if (layerInteraction.widgets.overlayChildBuilder != null) {
           return ValueListenableBuilder(
-              valueListenable: _isOverlayVisibleNotifier,
-              builder: (_, isVisible, __) {
-                if (!isVisible) return const SizedBox.shrink();
-                return layerInteraction.widgets.overlayChildBuilder!(
-                  _rebuildStream.stream,
-                  info,
-                  _layer,
-                  _layerInteractions,
-                );
-              });
+            valueListenable: _isOverlayVisibleNotifier,
+            builder: (_, isVisible, _) {
+              if (!isVisible) return const SizedBox.shrink();
+              return layerInteraction.widgets.overlayChildBuilder!(
+                _rebuildStream.stream,
+                info,
+                _layer,
+                _layerInteractions,
+              );
+            },
+          );
         }
 
         final Matrix4 transform = info.childPaintTransform.clone();
@@ -306,20 +309,21 @@ class _LayerInteractionHelperWidgetState
           height: paddedHeight,
           left: 0,
           child: ValueListenableBuilder(
-              valueListenable: _isOverlayVisibleNotifier,
-              builder: (_, isVisible, __) {
-                if (!isVisible) return const SizedBox.shrink();
+            valueListenable: _isOverlayVisibleNotifier,
+            builder: (_, isVisible, _) {
+              if (!isVisible) return const SizedBox.shrink();
 
-                return Transform(
-                  transform: transform,
-                  alignment: Alignment.topLeft,
-                  child: Transform.flip(
-                    flipX: _layer.flipX,
-                    flipY: _layer.flipY,
-                    child: _buildSelectionOverlay(),
-                  ),
-                );
-              }),
+              return Transform(
+                transform: transform,
+                alignment: Alignment.topLeft,
+                child: Transform.flip(
+                  flipX: _layer.flipX,
+                  flipY: _layer.flipY,
+                  child: _buildSelectionOverlay(),
+                ),
+              );
+            },
+          ),
         );
       },
       child: DeferPointer(
@@ -352,11 +356,8 @@ class _LayerInteractionHelperWidgetState
                 ),
               ),
           ...children.map(
-            (item) => item.call(
-              _rebuildStream.stream,
-              _layer,
-              _layerInteractions,
-            ),
+            (item) =>
+                item.call(_rebuildStream.stream, _layer, _layerInteractions),
           ),
         ],
       ),
@@ -367,17 +368,17 @@ class _LayerInteractionHelperWidgetState
     return [
       if (_isLayerEditable())
         (rebuildStream, layer, interactions) => ReactiveWidget(
-              stream: rebuildStream,
-              builder: (_) => _buildEditButton(interactions),
-            ),
+          stream: rebuildStream,
+          builder: (_) => _buildEditButton(interactions),
+        ),
       (rebuildStream, layer, interactions) => ReactiveWidget(
-            stream: rebuildStream,
-            builder: (_) => _buildRemoveButton(interactions),
-          ),
+        stream: rebuildStream,
+        builder: (_) => _buildRemoveButton(interactions),
+      ),
       (rebuildStream, layer, interactions) => ReactiveWidget(
-            stream: rebuildStream,
-            builder: (_) => _buildRotateScaleButton(interactions),
-          ),
+        stream: rebuildStream,
+        builder: (_) => _buildRotateScaleButton(interactions),
+      ),
     ];
   }
 
@@ -459,16 +460,26 @@ class _LayerInteractionHelperWidgetState
       ..add(
         FlagProperty('selected', value: widget.selected, ifTrue: 'selected'),
       )
-      ..add(FlagProperty('isInteractive',
-          value: widget.isInteractive, ifTrue: 'interactive'))
       ..add(
-        FlagProperty('forceIgnoreGestures',
-            value: widget.forceIgnoreGestures, ifTrue: 'force ignore gestures'),
+        FlagProperty(
+          'isInteractive',
+          value: widget.isInteractive,
+          ifTrue: 'interactive',
+        ),
       )
       ..add(
-        FlagProperty('enableVisibleOverlay',
-            value: widget.enableVisibleOverlay,
-            ifTrue: 'visible overlay enabled'),
+        FlagProperty(
+          'forceIgnoreGestures',
+          value: widget.forceIgnoreGestures,
+          ifTrue: 'force ignore gestures',
+        ),
+      )
+      ..add(
+        FlagProperty(
+          'enableVisibleOverlay',
+          value: widget.enableVisibleOverlay,
+          ifTrue: 'visible overlay enabled',
+        ),
       )
       ..add(
         ObjectFlagProperty<Function()>.has('onEditLayer', widget.onEditLayer),
@@ -476,15 +487,35 @@ class _LayerInteractionHelperWidgetState
       ..add(
         ObjectFlagProperty<Function()>.has('onDuplicate', widget.onDuplicate),
       )
-      ..add(ObjectFlagProperty<Function()>.has(
-          'onRemoveLayer', widget.onRemoveLayer))
-      ..add(ObjectFlagProperty<Function(PointerDownEvent)>.has(
-          'onScaleRotateDown', widget.onScaleRotateDown))
-      ..add(ObjectFlagProperty<Function(PointerUpEvent)>.has(
-          'onScaleRotateUp', widget.onScaleRotateUp))
-      ..add(ObjectFlagProperty<Function()>.has(
-          'onGroupLayers', widget.onGroupLayers))
-      ..add(ObjectFlagProperty<Function()>.has(
-          'onUngroupLayers', widget.onUngroupLayers));
+      ..add(
+        ObjectFlagProperty<Function()>.has(
+          'onRemoveLayer',
+          widget.onRemoveLayer,
+        ),
+      )
+      ..add(
+        ObjectFlagProperty<Function(PointerDownEvent)>.has(
+          'onScaleRotateDown',
+          widget.onScaleRotateDown,
+        ),
+      )
+      ..add(
+        ObjectFlagProperty<Function(PointerUpEvent)>.has(
+          'onScaleRotateUp',
+          widget.onScaleRotateUp,
+        ),
+      )
+      ..add(
+        ObjectFlagProperty<Function()>.has(
+          'onGroupLayers',
+          widget.onGroupLayers,
+        ),
+      )
+      ..add(
+        ObjectFlagProperty<Function()>.has(
+          'onUngroupLayers',
+          widget.onUngroupLayers,
+        ),
+      );
   }
 }

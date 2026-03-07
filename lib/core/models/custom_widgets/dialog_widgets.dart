@@ -5,9 +5,7 @@ import '../editor_configs/pro_image_editor_configs.dart';
 /// Defines customizable widgets for the dialog in the editor.
 class DialogWidgets {
   /// Creates a new instance of [DialogWidgets].
-  const DialogWidgets({
-    this.loadingDialog,
-  });
+  const DialogWidgets({this.loadingDialog});
 
   /// Replace the existing loading dialog.
   ///
@@ -71,12 +69,12 @@ class DialogWidgets {
   /// ),
   /// ```
   final Widget Function(String message, ProImageEditorConfigs configs)?
-      loadingDialog;
+  loadingDialog;
 
   /// Creates a copy of this widget configuration with specified overrides.
   DialogWidgets copyWith({
     Widget Function(String message, ProImageEditorConfigs configs)?
-        loadingDialog,
+    loadingDialog,
   }) {
     return DialogWidgets(loadingDialog: loadingDialog ?? this.loadingDialog);
   }

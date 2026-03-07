@@ -100,23 +100,22 @@ class _PlatformPopupBtnState extends State<PlatformPopupBtn> {
     return PopupMenuButton<PopupMenuOption>(
       tooltip: widget.title,
       onSelected: (option) {},
-      itemBuilder: (context) => widget.options.map(
-        (option) {
-          return PopupMenuItem(
-            value: option,
-            height: kMinInteractiveDimension,
-            onTap: option.onTap,
-            child: option.child ??
-                Row(
-                  children: [
-                    option.icon,
-                    const SizedBox(width: 12),
-                    Text(option.label ?? ''),
-                  ],
-                ),
-          );
-        },
-      ).toList(),
+      itemBuilder: (context) => widget.options.map((option) {
+        return PopupMenuItem(
+          value: option,
+          height: kMinInteractiveDimension,
+          onTap: option.onTap,
+          child:
+              option.child ??
+              Row(
+                children: [
+                  option.icon,
+                  const SizedBox(width: 12),
+                  Text(option.label ?? ''),
+                ],
+              ),
+        );
+      }).toList(),
       icon: const Icon(Icons.more_vert),
     );
   }
@@ -125,16 +124,14 @@ class _PlatformPopupBtnState extends State<PlatformPopupBtn> {
     return CupertinoActionSheet(
       title: Text(widget.title),
       message: widget.message != null ? Text(widget.message!) : null,
-      actions: widget.options.map(
-        (option) {
-          return CupertinoActionSheetAction(
-            isDefaultAction: false,
-            isDestructiveAction: false,
-            onPressed: option.onTap,
-            child: option.child ?? Text(option.label!),
-          );
-        },
-      ).toList(),
+      actions: widget.options.map((option) {
+        return CupertinoActionSheetAction(
+          isDefaultAction: false,
+          isDestructiveAction: false,
+          onPressed: option.onTap,
+          child: option.child ?? Text(option.label!),
+        );
+      }).toList(),
       cancelButton: CupertinoActionSheetAction(
         isDefaultAction: false,
         isDestructiveAction: true,

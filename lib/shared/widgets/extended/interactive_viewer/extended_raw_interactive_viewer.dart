@@ -1,4 +1,4 @@
-// ignore_for_file: lines_longer_than_80_chars, deprecated_member_use_from_same_package
+// ignore_for_file: lines_longer_than_80_chars
 
 import 'dart:math' as math;
 
@@ -24,7 +24,7 @@ class ExtendedTransformationController extends ValueNotifier<Matrix4> {
   /// The [value] defaults to the identity matrix, which corresponds to no
   /// transformation.
   ExtendedTransformationController([Matrix4? value])
-      : super(value ?? Matrix4.identity());
+    : super(value ?? Matrix4.identity());
 
   /// Return the scene point at the given viewport point.
   ///
@@ -79,8 +79,8 @@ class ExtendedTransformationController extends ValueNotifier<Matrix4> {
 ///
 ///   * [ExtendedRawInteractiveViewer.builder], whose builder is of this type.
 ///   * [WidgetBuilder], which is similar, but takes no viewport.
-typedef InteractiveViewerWidgetBuilder = Widget Function(
-    BuildContext context, Quad viewport);
+typedef InteractiveViewerWidgetBuilder =
+    Widget Function(BuildContext context, Quad viewport);
 
 /// A widget that enables pan and zoom interactions with its child.
 ///
@@ -135,23 +135,23 @@ class ExtendedRawInteractiveViewer extends StatefulWidget {
     this.trackpadScrollCausesScale = false,
     this.invertTrackpadDirection = false,
     required Widget this.child,
-  })  : assert(minScale > 0),
-        assert(interactionEndFrictionCoefficient > 0),
-        assert(minScale.isFinite),
-        assert(maxScale > 0),
-        assert(!maxScale.isNaN),
-        assert(maxScale >= minScale),
-        // boundaryMargin must be either fully infinite or fully finite, but not
-        // a mix of both.
-        assert(
-          (boundaryMargin.horizontal.isInfinite &&
-                  boundaryMargin.vertical.isInfinite) ||
-              (boundaryMargin.top.isFinite &&
-                  boundaryMargin.right.isFinite &&
-                  boundaryMargin.bottom.isFinite &&
-                  boundaryMargin.left.isFinite),
-        ),
-        builder = null;
+  }) : assert(minScale > 0),
+       assert(interactionEndFrictionCoefficient > 0),
+       assert(minScale.isFinite),
+       assert(maxScale > 0),
+       assert(!maxScale.isNaN),
+       assert(maxScale >= minScale),
+       // boundaryMargin must be either fully infinite or fully finite, but not
+       // a mix of both.
+       assert(
+         (boundaryMargin.horizontal.isInfinite &&
+                 boundaryMargin.vertical.isInfinite) ||
+             (boundaryMargin.top.isFinite &&
+                 boundaryMargin.right.isFinite &&
+                 boundaryMargin.bottom.isFinite &&
+                 boundaryMargin.left.isFinite),
+       ),
+       builder = null;
 
   /// Creates an InteractiveViewer for a child that is created on demand.
   ///
@@ -182,24 +182,24 @@ class ExtendedRawInteractiveViewer extends StatefulWidget {
     this.trackpadScrollCausesScale = true,
     this.invertTrackpadDirection = false,
     required InteractiveViewerWidgetBuilder this.builder,
-  })  : assert(minScale > 0),
-        assert(interactionEndFrictionCoefficient > 0),
-        assert(minScale.isFinite),
-        assert(maxScale > 0),
-        assert(!maxScale.isNaN),
-        assert(maxScale >= minScale),
-        // boundaryMargin must be either fully infinite or fully finite, but not
-        // a mix of both.
-        assert(
-          (boundaryMargin.horizontal.isInfinite &&
-                  boundaryMargin.vertical.isInfinite) ||
-              (boundaryMargin.top.isFinite &&
-                  boundaryMargin.right.isFinite &&
-                  boundaryMargin.bottom.isFinite &&
-                  boundaryMargin.left.isFinite),
-        ),
-        constrained = false,
-        child = null;
+  }) : assert(minScale > 0),
+       assert(interactionEndFrictionCoefficient > 0),
+       assert(minScale.isFinite),
+       assert(maxScale > 0),
+       assert(!maxScale.isNaN),
+       assert(maxScale >= minScale),
+       // boundaryMargin must be either fully infinite or fully finite, but not
+       // a mix of both.
+       assert(
+         (boundaryMargin.horizontal.isInfinite &&
+                 boundaryMargin.vertical.isInfinite) ||
+             (boundaryMargin.top.isFinite &&
+                 boundaryMargin.right.isFinite &&
+                 boundaryMargin.bottom.isFinite &&
+                 boundaryMargin.left.isFinite),
+       ),
+       constrained = false,
+       child = null;
 
   /// The alignment of the child's origin, relative to the size of the box.
   final Alignment? alignment;
@@ -467,7 +467,8 @@ class ExtendedRawInteractiveViewer extends StatefulWidget {
   /// Returns the closest point to the given point on the given line segment.
   @visibleForTesting
   static Vector3 getNearestPointOnLine(Vector3 point, Vector3 l1, Vector3 l2) {
-    final double lengthSquared = math.pow(l2.x - l1.x, 2.0).toDouble() +
+    final double lengthSquared =
+        math.pow(l2.x - l1.x, 2.0).toDouble() +
         math.pow(l2.y - l1.y, 2.0).toDouble();
 
     // In this case, l1 == l2.
@@ -479,8 +480,11 @@ class ExtendedRawInteractiveViewer extends StatefulWidget {
     // the point.
     final Vector3 l1P = point - l1;
     final Vector3 l1L2 = l2 - l1;
-    final double fraction =
-        clampDouble(l1P.dot(l1L2) / lengthSquared, 0.0, 1.0);
+    final double fraction = clampDouble(
+      l1P.dot(l1L2) / lengthSquared,
+      0.0,
+      1.0,
+    );
     return l1 + l1L2 * fraction;
   }
 
@@ -541,13 +545,25 @@ class ExtendedRawInteractiveViewer extends StatefulWidget {
     // Otherwise, return the nearest point on the quad.
     final List<Vector3> closestPoints = <Vector3>[
       ExtendedRawInteractiveViewer.getNearestPointOnLine(
-          point, quad.point0, quad.point1),
+        point,
+        quad.point0,
+        quad.point1,
+      ),
       ExtendedRawInteractiveViewer.getNearestPointOnLine(
-          point, quad.point1, quad.point2),
+        point,
+        quad.point1,
+        quad.point2,
+      ),
       ExtendedRawInteractiveViewer.getNearestPointOnLine(
-          point, quad.point2, quad.point3),
+        point,
+        quad.point2,
+        quad.point3,
+      ),
       ExtendedRawInteractiveViewer.getNearestPointOnLine(
-          point, quad.point3, quad.point0),
+        point,
+        quad.point3,
+        quad.point0,
+      ),
     ];
     double minDistance = double.infinity;
     late Vector3 closestOverall;
@@ -579,7 +595,8 @@ class ExtendedRawInteractiveViewer extends StatefulWidget {
 /// provide advanced image or content manipulation features such as
 /// zooming, panning, and rotation.
 class ExtendedRawInteractiveViewerState
-    extends State<ExtendedRawInteractiveViewer> with TickerProviderStateMixin {
+    extends State<ExtendedRawInteractiveViewer>
+    with TickerProviderStateMixin {
   late ExtendedTransformationController _transformer =
       widget.transformationController ?? ExtendedTransformationController();
 
@@ -610,10 +627,13 @@ class ExtendedRawInteractiveViewerState
     final RenderBox childRenderBox =
         _childKey.currentContext!.findRenderObject()! as RenderBox;
     final Size childSize = childRenderBox.size;
-    final Rect boundaryRect =
-        widget.boundaryMargin.inflateRect(Offset.zero & childSize);
-    assert(!boundaryRect.isEmpty,
-        "InteractiveViewer's child must have nonzero dimensions.");
+    final Rect boundaryRect = widget.boundaryMargin.inflateRect(
+      Offset.zero & childSize,
+    );
+    assert(
+      !boundaryRect.isEmpty,
+      "InteractiveViewer's child must have nonzero dimensions.",
+    );
     // Boundaries that are partially infinite are not allowed because Matrix4's
     // rotation and translation methods don't handle infinites well.
     assert(
@@ -658,7 +678,11 @@ class ExtendedRawInteractiveViewerState
 
     final Matrix4 nextMatrix = matrix.clone()
       ..translateByDouble(
-          alignedTranslation.dx, alignedTranslation.dy, 0.0, 1.0);
+        alignedTranslation.dx,
+        alignedTranslation.dy,
+        0.0,
+        1.0,
+      );
 
     // Transform the viewport to determine where its four corners will be after
     // the child has been transformed.
@@ -680,8 +704,10 @@ class ExtendedRawInteractiveViewerState
     );
 
     // If the given translation fits completely within the boundaries, allow it.
-    final Offset offendingDistance =
-        _exceedsBy(boundariesAabbQuad, nextViewport);
+    final Offset offendingDistance = _exceedsBy(
+      boundariesAabbQuad,
+      nextViewport,
+    );
     if (offendingDistance == Offset.zero) {
       return nextMatrix;
     }
@@ -697,14 +723,21 @@ class ExtendedRawInteractiveViewerState
     final Matrix4 correctedMatrix = matrix.clone()
       ..setTranslation(
         Vector3(
-            correctedTotalTranslation.dx, correctedTotalTranslation.dy, 0.0),
+          correctedTotalTranslation.dx,
+          correctedTotalTranslation.dy,
+          0.0,
+        ),
       );
 
     // Double check that the corrected translation fits.
-    final Quad correctedViewport =
-        _transformViewport(correctedMatrix, _viewport);
-    final Offset offendingCorrectedDistance =
-        _exceedsBy(boundariesAabbQuad, correctedViewport);
+    final Quad correctedViewport = _transformViewport(
+      correctedMatrix,
+      _viewport,
+    );
+    final Offset offendingCorrectedDistance = _exceedsBy(
+      boundariesAabbQuad,
+      correctedViewport,
+    );
     if (offendingCorrectedDistance == Offset.zero) {
       return correctedMatrix;
     }
@@ -723,14 +756,13 @@ class ExtendedRawInteractiveViewerState
       offendingCorrectedDistance.dx == 0.0 ? correctedTotalTranslation.dx : 0.0,
       offendingCorrectedDistance.dy == 0.0 ? correctedTotalTranslation.dy : 0.0,
     );
-    return matrix.clone()
-      ..setTranslation(
-        Vector3(
-          unidirectionalCorrectedTotalTranslation.dx,
-          unidirectionalCorrectedTotalTranslation.dy,
-          0.0,
-        ),
-      );
+    return matrix.clone()..setTranslation(
+      Vector3(
+        unidirectionalCorrectedTotalTranslation.dx,
+        unidirectionalCorrectedTotalTranslation.dy,
+        0.0,
+      ),
+    );
   }
 
   // Return a new matrix representing the given matrix after applying the given
@@ -748,11 +780,16 @@ class ExtendedRawInteractiveViewerState
       currentScale * scale,
       // Ensure that the scale cannot make the child so big that it can't fit
       // inside the boundaries (in either direction).
-      math.max(_viewport.width / _boundaryRect.width,
-          _viewport.height / _boundaryRect.height),
+      math.max(
+        _viewport.width / _boundaryRect.width,
+        _viewport.height / _boundaryRect.height,
+      ),
     );
-    final double clampedTotalScale =
-        clampDouble(totalScale, widget.minScale, widget.maxScale);
+    final double clampedTotalScale = clampDouble(
+      totalScale,
+      widget.minScale,
+      widget.maxScale,
+    );
     final double clampedScale = clampedTotalScale / currentScale;
     return matrix.clone()
       ..scaleByDouble(clampedScale, clampedScale, clampedScale, 1.0);
@@ -828,8 +865,9 @@ class ExtendedRawInteractiveViewerState
   void onScaleUpdate(ScaleUpdateDetails details) {
     final double scale = _transformer.value.getMaxScaleOnAxis();
     _scaleAnimationFocalPoint = details.localFocalPoint;
-    final Offset focalPointScene =
-        _transformer.toScene(details.localFocalPoint);
+    final Offset focalPointScene = _transformer.toScene(
+      details.localFocalPoint,
+    );
 
     if (_gestureType == _GestureType.pan) {
       // When a gesture first starts, it sometimes has no change in scale and
@@ -850,8 +888,9 @@ class ExtendedRawInteractiveViewerState
         // Handle case where trackpad gestures might skip onScaleStart
         if (_scaleStart == null) {
           _scaleStart = _transformer.value.getMaxScaleOnAxis();
-          _referenceFocalPoint ??=
-              _transformer.toScene(details.localFocalPoint);
+          _referenceFocalPoint ??= _transformer.toScene(
+            details.localFocalPoint,
+          );
         }
         // details.scale gives us the amount to change the scale as of the
         // start of this gesture, so calculate the amount to scale as of the
@@ -864,8 +903,9 @@ class ExtendedRawInteractiveViewerState
         // the same places in the scene. That means that the focal point of
         // the scale should be on the same place in the scene before and after
         // the scale.
-        final Offset focalPointSceneScaled =
-            _transformer.toScene(details.localFocalPoint);
+        final Offset focalPointSceneScaled = _transformer.toScene(
+          details.localFocalPoint,
+        );
         _transformer.value = _matrixTranslate(
           _transformer.value,
           focalPointSceneScaled - _referenceFocalPoint!,
@@ -876,8 +916,9 @@ class ExtendedRawInteractiveViewerState
         // the translate came in contact with a boundary. In that case, update
         // _referenceFocalPoint so subsequent updates happen in relation to
         // the new effective focal point.
-        final Offset focalPointSceneCheck =
-            _transformer.toScene(details.localFocalPoint);
+        final Offset focalPointSceneCheck = _transformer.toScene(
+          details.localFocalPoint,
+        );
         if (_round(_referenceFocalPoint!) != _round(focalPointSceneCheck)) {
           _referenceFocalPoint = focalPointSceneCheck;
         }
@@ -911,8 +952,10 @@ class ExtendedRawInteractiveViewerState
         final Offset translationChange =
             focalPointScene - _referenceFocalPoint!;
 
-        _transformer.value =
-            _matrixTranslate(_transformer.value, translationChange);
+        _transformer.value = _matrixTranslate(
+          _transformer.value,
+          translationChange,
+        );
         _referenceFocalPoint = _transformer.toScene(details.localFocalPoint);
     }
     widget.onInteractionUpdate?.call(details);
@@ -943,8 +986,10 @@ class ExtendedRawInteractiveViewerState
           return;
         }
         final Vector3 translationVector = _transformer.value.getTranslation();
-        final Offset translation =
-            Offset(translationVector.x, translationVector.y);
+        final Offset translation = Offset(
+          translationVector.x,
+          translationVector.y,
+        );
         final FrictionSimulation frictionSimulationX = FrictionSimulation(
           widget.interactionEndFrictionCoefficient,
           translation.dx,
@@ -959,11 +1004,16 @@ class ExtendedRawInteractiveViewerState
           details.velocity.pixelsPerSecond.distance,
           widget.interactionEndFrictionCoefficient,
         );
-        _animation = Tween<Offset>(
-          begin: translation,
-          end: Offset(frictionSimulationX.finalX, frictionSimulationY.finalX),
-        ).animate(
-            CurvedAnimation(parent: _controller, curve: Curves.decelerate));
+        _animation =
+            Tween<Offset>(
+              begin: translation,
+              end: Offset(
+                frictionSimulationX.finalX,
+                frictionSimulationY.finalX,
+              ),
+            ).animate(
+              CurvedAnimation(parent: _controller, curve: Curves.decelerate),
+            );
         _controller.duration = Duration(milliseconds: (tFinal * 1000).round());
         _animation!.addListener(_handleInertiaAnimation);
         _controller.forward();
@@ -983,13 +1033,19 @@ class ExtendedRawInteractiveViewerState
           widget.interactionEndFrictionCoefficient,
           effectivelyMotionless: 0.1,
         );
-        _scaleAnimation = Tween<double>(
-          begin: scale,
-          end: frictionSimulation.x(tFinal),
-        ).animate(CurvedAnimation(
-            parent: _scaleController, curve: Curves.decelerate));
-        _scaleController.duration =
-            Duration(milliseconds: (tFinal * 1000).round());
+        _scaleAnimation =
+            Tween<double>(
+              begin: scale,
+              end: frictionSimulation.x(tFinal),
+            ).animate(
+              CurvedAnimation(
+                parent: _scaleController,
+                curve: Curves.decelerate,
+              ),
+            );
+        _scaleController.duration = Duration(
+          milliseconds: (tFinal * 1000).round(),
+        );
         _scaleAnimation!.addListener(_handleScaleAnimation);
         _scaleController.forward();
       case _GestureType.rotate || null:
@@ -1029,8 +1085,9 @@ class ExtendedRawInteractiveViewerState
         }
 
         final Offset focalPointScene = _transformer.toScene(local);
-        final Offset newFocalPointScene =
-            _transformer.toScene(local - localDelta);
+        final Offset newFocalPointScene = _transformer.toScene(
+          local - localDelta,
+        );
 
         _transformer.value = _matrixTranslate(
           _transformer.value,
@@ -1057,13 +1114,17 @@ class ExtendedRawInteractiveViewerState
     } else {
       return;
     }
-    widget.onInteractionStart
-        ?.call(ScaleStartDetails(focalPoint: global, localFocalPoint: local));
+    widget.onInteractionStart?.call(
+      ScaleStartDetails(focalPoint: global, localFocalPoint: local),
+    );
 
     if (!_gestureIsSupported(_GestureType.scale)) {
       widget.onInteractionUpdate?.call(
         ScaleUpdateDetails(
-            focalPoint: global, localFocalPoint: local, scale: scaleChange),
+          focalPoint: global,
+          localFocalPoint: local,
+          scale: scaleChange,
+        ),
       );
       widget.onInteractionEnd?.call(ScaleEndDetails());
       return;
@@ -1082,7 +1143,10 @@ class ExtendedRawInteractiveViewerState
 
     widget.onInteractionUpdate?.call(
       ScaleUpdateDetails(
-          focalPoint: global, localFocalPoint: local, scale: scaleChange),
+        focalPoint: global,
+        localFocalPoint: local,
+        scale: scaleChange,
+      ),
     );
     widget.onInteractionEnd?.call(ScaleEndDetails());
   }
@@ -1107,13 +1171,15 @@ class ExtendedRawInteractiveViewerState
       // Apply natural scrolling inversion if enabled
       final Offset adjustedPanDelta = widget.invertTrackpadDirection
           ? -event
-              .localPanDelta // Natural scrolling: pan left moves content left
+                .localPanDelta // Natural scrolling: pan left moves content left
           : event
-              .localPanDelta; // Traditional scrolling: pan left moves content right
+                .localPanDelta; // Traditional scrolling: pan left moves content right
 
       // Direct translation for pan-only gestures
-      _transformer.value =
-          _matrixTranslate(_transformer.value, adjustedPanDelta);
+      _transformer.value = _matrixTranslate(
+        _transformer.value,
+        adjustedPanDelta,
+      );
 
       // Create synthetic ScaleUpdateDetails for callbacks
       final ScaleUpdateDetails details = ScaleUpdateDetails(
@@ -1184,16 +1250,18 @@ class ExtendedRawInteractiveViewerState
     final double desiredScale = _scaleAnimation!.value;
     final double scaleChange =
         desiredScale / _transformer.value.getMaxScaleOnAxis();
-    final Offset referenceFocalPoint =
-        _transformer.toScene(_scaleAnimationFocalPoint);
+    final Offset referenceFocalPoint = _transformer.toScene(
+      _scaleAnimationFocalPoint,
+    );
     _transformer.value = _matrixScale(_transformer.value, scaleChange);
 
     // While scaling, translate such that the user's two fingers stay on
     // the same places in the scene. That means that the focal point of
     // the scale should be on the same place in the scene before and after
     // the scale.
-    final Offset focalPointSceneScaled =
-        _transformer.toScene(_scaleAnimationFocalPoint);
+    final Offset focalPointSceneScaled = _transformer.toScene(
+      _scaleAnimationFocalPoint,
+    );
     _transformer.value = _matrixTranslate(
       _transformer.value,
       focalPointSceneScaled - referenceFocalPoint,
@@ -1352,8 +1420,11 @@ enum _GestureType { pan, scale, rotate }
 
 // Given a velocity and drag, calculate the time at which motion will come to
 // a stop, within the margin of effectivelyMotionless.
-double _getFinalTime(double velocity, double drag,
-    {double effectivelyMotionless = 10}) {
+double _getFinalTime(
+  double velocity,
+  double drag, {
+  double effectivelyMotionless = 10,
+}) {
   return math.log(effectivelyMotionless / velocity) / math.log(drag / 100);
 }
 
@@ -1370,14 +1441,18 @@ Offset _getMatrixTranslation(Matrix4 matrix) {
 Quad _transformViewport(Matrix4 matrix, Rect viewport) {
   final Matrix4 inverseMatrix = matrix.clone()..invert();
   return Quad.points(
-    inverseMatrix
-        .transform3(Vector3(viewport.topLeft.dx, viewport.topLeft.dy, 0.0)),
-    inverseMatrix
-        .transform3(Vector3(viewport.topRight.dx, viewport.topRight.dy, 0.0)),
     inverseMatrix.transform3(
-        Vector3(viewport.bottomRight.dx, viewport.bottomRight.dy, 0.0)),
+      Vector3(viewport.topLeft.dx, viewport.topLeft.dy, 0.0),
+    ),
     inverseMatrix.transform3(
-        Vector3(viewport.bottomLeft.dx, viewport.bottomLeft.dy, 0.0)),
+      Vector3(viewport.topRight.dx, viewport.topRight.dy, 0.0),
+    ),
+    inverseMatrix.transform3(
+      Vector3(viewport.bottomRight.dx, viewport.bottomRight.dy, 0.0),
+    ),
+    inverseMatrix.transform3(
+      Vector3(viewport.bottomLeft.dx, viewport.bottomLeft.dy, 0.0),
+    ),
   );
 }
 
@@ -1395,7 +1470,8 @@ Quad _getAxisAlignedBoundingBoxWithRotation(Rect rect, double rotation) {
     rotationMatrix.transform3(Vector3(rect.left, rect.bottom, 0.0)),
   );
   return ExtendedRawInteractiveViewer.getAxisAlignedBoundingBox(
-      boundariesRotated);
+    boundariesRotated,
+  );
 }
 
 // Return the amount that viewport lies outside of boundary. If the viewport
@@ -1412,8 +1488,10 @@ Offset _exceedsBy(Quad boundary, Quad viewport) {
   for (final Vector3 point in viewportPoints) {
     final Vector3 pointInside =
         ExtendedRawInteractiveViewer.getNearestPointInside(point, boundary);
-    final Offset excess =
-        Offset(pointInside.x - point.x, pointInside.y - point.y);
+    final Offset excess = Offset(
+      pointInside.x - point.x,
+      pointInside.y - point.y,
+    );
     if (excess.dx.abs() > largestExcess.dx.abs()) {
       largestExcess = Offset(excess.dx, largestExcess.dy);
     }

@@ -13,9 +13,7 @@ class PaintDesktopInteractionManager {
   /// Creates an instance of [PaintDesktopInteractionManager].
   ///
   /// [context] is the build context used for interactions.
-  PaintDesktopInteractionManager({
-    required this.context,
-  });
+  PaintDesktopInteractionManager({required this.context});
 
   /// The build context used for interactions.
   final BuildContext context;
@@ -29,10 +27,7 @@ class PaintDesktopInteractionManager {
   /// pressed keys.
   /// If the 'Escape' key is pressed and the widget is still mounted, it
   /// triggers the navigator to pop the current context.
-  bool onKey(
-    KeyEvent event, {
-    required Function(bool) onUndoRedo,
-  }) {
+  bool onKey(KeyEvent event, {required Function(bool) onUndoRedo}) {
     final key = event.logicalKey.keyLabel;
     if (context.mounted) {
       if (event is KeyDownEvent) {
@@ -46,7 +41,9 @@ class PaintDesktopInteractionManager {
             _shiftDown = true;
             break;
           case 'Z':
-            if (_ctrlDown) onUndoRedo(!_shiftDown);
+            if (_ctrlDown && !HardwareKeyboard.instance.isAltPressed) {
+              onUndoRedo(!_shiftDown);
+            }
             break;
         }
       } else if (event is KeyUpEvent) {

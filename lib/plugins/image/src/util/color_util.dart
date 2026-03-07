@@ -61,8 +61,13 @@ Color _convertColor(Color c, Color c2, num a) {
   return c2;
 }
 
-Color convertColor(Color c,
-    {Color? to, Format? format, int? numChannels, num? alpha}) {
+Color convertColor(
+  Color c, {
+  Color? to,
+  Format? format,
+  int? numChannels,
+  num? alpha,
+}) {
   final fromFormat = c.palette?.format ?? c.format;
   format = to?.format ?? format ?? c.format;
   numChannels = to?.length ?? numChannels ?? c.length;

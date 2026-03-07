@@ -14,10 +14,10 @@ class ColorFloat32 extends Color {
   ColorFloat32(int numChannels) : data = Float32List(numChannels);
 
   ColorFloat32.from(ColorFloat32 other)
-      : data = Float32List.fromList(other.data);
+    : data = Float32List.fromList(other.data);
 
   ColorFloat32.fromList(List<double> color)
-      : data = Float32List.fromList(color);
+    : data = Float32List.fromList(color);
 
   ColorFloat32.rgb(num r, num g, num b) : data = Float32List(3) {
     data[0] = r.toDouble();
@@ -136,8 +136,8 @@ class ColorFloat32 extends Color {
   num getChannel(Channel channel) => channel == Channel.luminance
       ? luminance
       : channel.index < data.length
-          ? data[channel.index]
-          : 0;
+      ? data[channel.index]
+      : 0;
 
   @override
   num getChannelNormalized(Channel channel) =>
@@ -189,7 +189,10 @@ class ColorFloat32 extends Color {
   int get hashCode => Object.hashAll(toList());
 
   @override
-  Color convert({Format? format, int? numChannels, num? alpha}) =>
-      convertColor(this,
-          format: format, numChannels: numChannels, alpha: alpha);
+  Color convert({Format? format, int? numChannels, num? alpha}) => convertColor(
+    this,
+    format: format,
+    numChannels: numChannels,
+    alpha: alpha,
+  );
 }

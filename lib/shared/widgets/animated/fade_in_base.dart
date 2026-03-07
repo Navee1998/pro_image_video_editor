@@ -81,30 +81,21 @@ abstract class FadeInBaseState<T extends FadeInBase> extends State<T>
     super.initState();
 
     // Initialize the animation controller with the provided duration.
-    controller = AnimationController(
-      vsync: this,
-      duration: widget.duration,
-    );
+    controller = AnimationController(vsync: this, duration: widget.duration);
 
     // Configure the opacity animation from invisible (0.0) to fully visible
     // (1.0).
-    opacityAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(
-        parent: controller,
-        curve: Curves.easeInOut,
-      ),
-    );
+    opacityAnimation = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(CurvedAnimation(parent: controller, curve: Curves.easeInOut));
 
     // Configure the offset animation to slide in from the initial offset to
     //the final position (Offset.zero).
-    offsetAnimation =
-        Tween<Offset>(begin: buildInitialOffsetPosition(), end: Offset.zero)
-            .animate(
-      CurvedAnimation(
-        parent: controller,
-        curve: Curves.easeInOut,
-      ),
-    );
+    offsetAnimation = Tween<Offset>(
+      begin: buildInitialOffsetPosition(),
+      end: Offset.zero,
+    ).animate(CurvedAnimation(parent: controller, curve: Curves.easeInOut));
 
     // Start the animation after the specified delay.
     WidgetsBinding.instance.addPostFrameCallback((_) {

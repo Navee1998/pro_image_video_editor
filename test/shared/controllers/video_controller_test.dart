@@ -2,8 +2,9 @@ import 'dart:typed_data';
 
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:pro_image_editor/core/models/editor_callbacks/audio_editor_callbacks.dart';
 import 'package:pro_image_editor/core/models/editor_callbacks/video_editor_callbacks.dart';
-import 'package:pro_image_editor/core/models/editor_configs/video_editor_configs.dart';
+import 'package:pro_image_editor/core/models/editor_configs/video/video_editor_configs.dart';
 import 'package:pro_image_editor/core/models/video/trim_duration_span_model.dart';
 import 'package:pro_image_editor/shared/controllers/video_controller.dart';
 
@@ -17,26 +18,28 @@ class DummyCallbacks extends VideoEditorCallbacks {
 
   @override
   VoidCallback? get onPlay => () {
-        played = true;
-      };
+    played = true;
+  };
 
   @override
   VoidCallback? get onPause => () {
-        paused = true;
-      };
+    paused = true;
+  };
 
   @override
   void Function(bool)? get onMuteToggle => (isMuted) {
-        muted = true;
-        lastMuteState = isMuted;
-      };
+    muted = true;
+    lastMuteState = isMuted;
+  };
 
   @override
   void Function(TrimDurationSpan)? get onTrimSpanUpdate => (span) {
-        trimUpdated = true;
-        lastTrimSpan = span;
-      };
+    trimUpdated = true;
+    lastTrimSpan = span;
+  };
 }
+
+class DummyAudioCallbacks extends AudioEditorCallbacks {}
 
 class DummyConfigs extends VideoEditorConfigs {
   @override
@@ -59,15 +62,17 @@ void main() {
     setUp(() {
       callbacks = DummyCallbacks();
       configs = DummyConfigs();
-      controller = ProVideoController(
-        videoPlayer: dummyWidget,
-        videoDuration: dummyDuration,
-        initialResolution: dummyResolution,
-        fileSize: dummyFileSize,
-      )..initialize(
-          callbacksFunction: () => callbacks,
-          configsFunction: () => configs,
-        );
+      controller =
+          ProVideoController(
+            videoPlayer: dummyWidget,
+            videoDuration: dummyDuration,
+            initialResolution: dummyResolution,
+            fileSize: dummyFileSize,
+          )..initialize(
+            callbacksAudioFunction: DummyAudioCallbacks.new,
+            callbacksFunction: () => callbacks,
+            configsFunction: () => configs,
+          );
     });
 
     tearDown(() {
@@ -128,11 +133,12 @@ void main() {
       expect(callbacks.lastMuteState, isFalse);
     });
 
-    test(
-        'setTrimSpan updates trimDurationSpanNotifier and calls '
+    test('setTrimSpan updates trimDurationSpanNotifier and calls '
         'onTrimSpanUpdate', () {
       const span = TrimDurationSpan(
-          start: Duration(seconds: 2), end: Duration(seconds: 8));
+        start: Duration(seconds: 2),
+        end: Duration(seconds: 8),
+      );
       controller.setTrimSpan(span);
       expect(controller.trimDurationSpanNotifier.value.start, span.start);
       expect(controller.trimDurationSpanNotifier.value.end, span.end);

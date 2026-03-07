@@ -98,12 +98,6 @@ class CropCornerPainter extends CustomPainter {
   /// such as highlighting or accentuating elements during user actions.
   final double interactionOpacity;
 
-  /// The width of the helper lines.
-  ///
-  /// This double value specifies the thickness of auxiliary lines drawn to
-  /// assist with cropping, providing additional visual guides.
-  double helperLineWidth = 0.5;
-
   /// The scale factor for resizing elements.
   ///
   /// This double value determines how much the elements are scaled, allowing
@@ -129,10 +123,7 @@ class CropCornerPainter extends CustomPainter {
     _drawCorners(canvas: canvas, size: size);
   }
 
-  void _drawDarkenOutside({
-    required Canvas canvas,
-    required Size size,
-  }) {
+  void _drawDarkenOutside({required Canvas canvas, required Size size}) {
     /// Draw outline darken layers
     double cropWidth = _cropOffsetRight - _cropOffsetLeft;
     double cropHeight = _cropOffsetBottom - _cropOffsetTop;
@@ -140,14 +131,16 @@ class CropCornerPainter extends CustomPainter {
     Path path = Path()
       // FillType "evenOdd" is important for the canvas web renderer
       ..fillType = PathFillType.evenOdd
-      ..addRect(Rect.fromCenter(
-        center: Offset(
-          size.width / 2 + offset.dx * scaleFactor,
-          size.height / 2 + offset.dy * scaleFactor,
+      ..addRect(
+        Rect.fromCenter(
+          center: Offset(
+            size.width / 2 + offset.dx * scaleFactor,
+            size.height / 2 + offset.dy * scaleFactor,
+          ),
+          width: size.width * scaleFactor,
+          height: size.height * scaleFactor,
         ),
-        width: size.width * scaleFactor,
-        height: size.height * scaleFactor,
-      ));
+      );
     if (drawCircle) {
       /// Create a path for the current rectangle
       Path circlePath = Path()
@@ -190,7 +183,8 @@ class CropCornerPainter extends CustomPainter {
       fadeInOpacity,
     )!;
 
-    double opacity = style.cropOverlayOpacity -
+    double opacity =
+        style.cropOverlayOpacity -
         style.cropOverlayInteractionOpacity * interactionOpacity;
 
     double fadeInFactor = (1 - opacity) * (1 - fadeInOpacity);
@@ -200,15 +194,13 @@ class CropCornerPainter extends CustomPainter {
       path,
       Paint()
         ..color = interpolatedColor.withValues(
-            alpha: (opacity + fadeInFactor).clamp(0, 1))
+          alpha: (opacity + fadeInFactor).clamp(0, 1),
+        )
         ..style = PaintingStyle.fill,
     );
   }
 
-  void _drawCorners({
-    required Canvas canvas,
-    required Size size,
-  }) {
+  void _drawCorners({required Canvas canvas, required Size size}) {
     Path path = Path();
 
     double width = style.cropCornerThickness / rotationScaleFactor;
@@ -219,24 +211,57 @@ class CropCornerPainter extends CustomPainter {
       path
         ..addRect(Rect.fromLTWH(_cropOffsetLeft, _cropOffsetTop, length, width))
         ..addRect(Rect.fromLTWH(_cropOffsetLeft, _cropOffsetTop, width, length))
-
         /// Top-Right
-        ..addRect(Rect.fromLTWH(
-            _cropOffsetRight - length, _cropOffsetTop, length, width))
-        ..addRect(Rect.fromLTWH(
-            _cropOffsetRight - width, _cropOffsetTop, width, length))
-
+        ..addRect(
+          Rect.fromLTWH(
+            _cropOffsetRight - length,
+            _cropOffsetTop,
+            length,
+            width,
+          ),
+        )
+        ..addRect(
+          Rect.fromLTWH(
+            _cropOffsetRight - width,
+            _cropOffsetTop,
+            width,
+            length,
+          ),
+        )
         /// Bottom-Left
-        ..addRect(Rect.fromLTWH(
-            0 + _cropOffsetLeft, _cropOffsetBottom - width, length, width))
-        ..addRect(Rect.fromLTWH(
-            0 + _cropOffsetLeft, _cropOffsetBottom - length, width, length))
-
+        ..addRect(
+          Rect.fromLTWH(
+            0 + _cropOffsetLeft,
+            _cropOffsetBottom - width,
+            length,
+            width,
+          ),
+        )
+        ..addRect(
+          Rect.fromLTWH(
+            0 + _cropOffsetLeft,
+            _cropOffsetBottom - length,
+            width,
+            length,
+          ),
+        )
         /// Bottom-Right
-        ..addRect(Rect.fromLTWH(_cropOffsetRight - length,
-            _cropOffsetBottom - width, length, width))
-        ..addRect(Rect.fromLTWH(_cropOffsetRight - width,
-            _cropOffsetBottom - length, width, length));
+        ..addRect(
+          Rect.fromLTWH(
+            _cropOffsetRight - length,
+            _cropOffsetBottom - width,
+            length,
+            width,
+          ),
+        )
+        ..addRect(
+          Rect.fromLTWH(
+            _cropOffsetRight - width,
+            _cropOffsetBottom - length,
+            width,
+            length,
+          ),
+        );
 
       canvas.drawPath(
         path,
@@ -246,54 +271,60 @@ class CropCornerPainter extends CustomPainter {
       );
     } else {
       double calculateAngleFromArcLength(
-          double circumference, double arcLength) {
+        double circumference,
+        double arcLength,
+      ) {
         if (circumference <= 0 || arcLength <= 0) {
           throw ArgumentError(
-              'Circumference and arc length must be positive values.');
+            'Circumference and arc length must be positive values.',
+          );
         }
         return circumference / 360 * arcLength * pi / 180;
       }
 
-      double angleRadians =
-          calculateAngleFromArcLength(cropRect.width, width * 2);
+      double angleRadians = calculateAngleFromArcLength(
+        cropRect.width,
+        width * 2,
+      );
 
       /// Top
       path
         ..addArc(
           Rect.fromCenter(
-              center: cropRect.center,
-              width: cropRect.width,
-              height: cropRect.height),
+            center: cropRect.center,
+            width: cropRect.width,
+            height: cropRect.height,
+          ),
           3 * pi / 2 - angleRadians / 2,
           angleRadians,
         )
-
         /// Left
         ..addArc(
           Rect.fromCenter(
-              center: cropRect.center,
-              width: cropRect.width,
-              height: cropRect.height),
+            center: cropRect.center,
+            width: cropRect.width,
+            height: cropRect.height,
+          ),
           pi - angleRadians / 2,
           angleRadians,
         )
-
         /// Right
         ..addArc(
           Rect.fromCenter(
-              center: cropRect.center,
-              width: cropRect.width,
-              height: cropRect.height),
+            center: cropRect.center,
+            width: cropRect.width,
+            height: cropRect.height,
+          ),
           pi / 2 - angleRadians / 2,
           angleRadians,
         )
-
         /// Right
         ..addArc(
           Rect.fromCenter(
-              center: cropRect.center,
-              width: cropRect.width,
-              height: cropRect.height),
+            center: cropRect.center,
+            width: cropRect.width,
+            height: cropRect.height,
+          ),
           -angleRadians / 2,
           angleRadians,
         );
@@ -309,10 +340,10 @@ class CropCornerPainter extends CustomPainter {
     }
   }
 
-  void _drawHelperAreas({
-    required Canvas canvas,
-    required Size size,
-  }) {
+  void _drawHelperAreas({required Canvas canvas, required Size size}) {
+    final lineWidth = style.helperLineWidth;
+    if (lineWidth <= 0) return;
+
     Path path = Path();
 
     double cropWidth = _cropOffsetRight - _cropOffsetLeft;
@@ -322,15 +353,15 @@ class CropCornerPainter extends CustomPainter {
     double cropAreaSpaceH = cropHeight / 3;
 
     /// Calculation is important for the round-cropper
-    double lineWidth = !drawCircle
+    double drawWidth = !drawCircle
         ? cropWidth
         : sqrt(pow(cropWidth, 2) - pow(cropAreaSpaceW, 2));
-    double lineHeight = !drawCircle
+    double drawHeight = !drawCircle
         ? cropHeight
         : sqrt(pow(cropHeight, 2) - pow(cropAreaSpaceH, 2));
 
-    double gapW = (cropWidth - lineWidth) / 2;
-    double gapH = (cropHeight - lineHeight) / 2;
+    double gapW = (cropWidth - drawWidth) / 2;
+    double gapH = (cropHeight - drawHeight) / 2;
 
     for (var i = 1; i < 3; i++) {
       path
@@ -338,23 +369,24 @@ class CropCornerPainter extends CustomPainter {
           Rect.fromLTWH(
             cropAreaSpaceW * i + _cropOffsetLeft,
             gapH + _cropOffsetTop,
-            helperLineWidth,
-            lineHeight,
+            lineWidth,
+            drawHeight,
           ),
         )
         ..addRect(
           Rect.fromLTWH(
             gapW + _cropOffsetLeft,
             cropAreaSpaceH * i + _cropOffsetTop,
+            drawWidth,
             lineWidth,
-            helperLineWidth,
           ),
         );
     }
 
     final cornerPaint = Paint()
-      ..color = style.helperLineColor
-          .withValues(alpha: fadeInOpacity * interactionOpacity)
+      ..color = style.helperLineColor.withValues(
+        alpha: style.helperLineColor.a * fadeInOpacity * interactionOpacity,
+      )
       ..style = PaintingStyle.fill;
     canvas.drawPath(path, cornerPaint);
   }

@@ -5,8 +5,12 @@ import '/plugins/emoji_picker_flutter/emoji_picker_flutter.dart';
 /// Default Bottom Action Bar implementation
 class DefaultBottomActionBar extends BottomActionBar {
   /// Constructor
-  const DefaultBottomActionBar(super.config, super.state, super.showSearchView,
-      {super.key});
+  const DefaultBottomActionBar(
+    super.config,
+    super.state,
+    super.showSearchView, {
+    super.key,
+  });
 
   @override
   State<StatefulWidget> createState() => _DefaultBottomActionBarState();
@@ -19,10 +23,7 @@ class _DefaultBottomActionBarState extends State<DefaultBottomActionBar> {
       color: widget.config.bottomActionBarConfig.backgroundColor,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          _buildSearchViewButton(),
-          _buildBackspaceButton(),
-        ],
+        children: [_buildSearchViewButton(), _buildBackspaceButton()],
       ),
     );
   }

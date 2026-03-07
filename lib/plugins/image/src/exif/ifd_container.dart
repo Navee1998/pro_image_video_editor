@@ -13,8 +13,9 @@ class IfdContainer {
   IfdContainer() : directories = {};
 
   IfdContainer.from(IfdContainer? other) : directories = {} {
-    other?.directories
-        .forEach((key, value) => directories[key] = value.clone());
+    other?.directories.forEach(
+      (key, value) => directories[key] = value.clone(),
+    );
   }
   Map<String, IfdDirectory> directories;
 

@@ -11,15 +11,22 @@ class I18nPaintEditor {
     this.moveAndZoom = 'Zoom',
     this.bottomNavigationBarText = 'Paint',
     this.freestyle = 'Freestyle',
+    this.freestyleArrowStart = 'Freestyle arrow start',
+    this.freestyleArrowEnd = 'Freestyle arrow end',
+    this.freestyleArrowStartEnd = 'Freestyle arrow start-end',
     this.arrow = 'Arrow',
     this.line = 'Line',
     this.rectangle = 'Rectangle',
     this.circle = 'Circle',
     this.dashLine = 'Dash line',
     this.dashDotLine = 'Dash-dot line',
+    this.hexagon = 'Hexagon',
     this.polygon = 'Polygon',
     this.blur = 'Blur',
     this.pixelate = 'Pixelate',
+    this.custom1 = 'Custom 1',
+    this.custom2 = 'Custom 2',
+    this.custom3 = 'Custom 3',
     this.lineWidth = 'Line width',
     this.eraser = 'Eraser',
     this.toggleFill = 'Toggle fill',
@@ -45,6 +52,15 @@ class I18nPaintEditor {
   /// Text for the "Freestyle" paint mode.
   final String freestyle;
 
+  /// Text for the "Freestyle arrow start" paint mode.
+  final String freestyleArrowStart;
+
+  /// Text for the "Freestyle arrow end" paint mode.
+  final String freestyleArrowEnd;
+
+  /// Text for the "Freestyle arrow start-end" paint mode.
+  final String freestyleArrowStartEnd;
+
   /// Text for the "Arrow" paint mode.
   final String arrow;
 
@@ -63,6 +79,9 @@ class I18nPaintEditor {
   /// Text for the "Dash-dot line" paint mode.
   final String dashDotLine;
 
+  /// Text for the "Hexagon" paint mode.
+  final String hexagon;
+
   /// Text for the "Polygon" paint mode.
   final String polygon;
 
@@ -71,6 +90,15 @@ class I18nPaintEditor {
 
   /// Text for the "Pixelate" paint mode.
   final String pixelate;
+
+  /// Text for the "Custom 1" paint mode.
+  final String custom1;
+
+  /// Text for the "Custom 2" paint mode.
+  final String custom2;
+
+  /// Text for the "Custom 3" paint mode.
+  final String custom3;
 
   /// Text for the "Eraser" paint mode.
   final String eraser;
@@ -124,15 +152,22 @@ class I18nPaintEditor {
     String? bottomNavigationBarText,
     String? moveAndZoom,
     String? freestyle,
+    String? freestyleArrowStart,
+    String? freestyleArrowEnd,
+    String? freestyleArrowStartEnd,
     String? arrow,
     String? line,
     String? rectangle,
     String? circle,
     String? dashLine,
     String? dashDotLine,
+    String? hexagon,
     String? polygon,
     String? blur,
     String? pixelate,
+    String? custom1,
+    String? custom2,
+    String? custom3,
     String? eraser,
     String? lineWidth,
     String? toggleFill,
@@ -153,15 +188,23 @@ class I18nPaintEditor {
           bottomNavigationBarText ?? this.bottomNavigationBarText,
       moveAndZoom: moveAndZoom ?? this.moveAndZoom,
       freestyle: freestyle ?? this.freestyle,
+      freestyleArrowStart: freestyleArrowStart ?? this.freestyleArrowStart,
+      freestyleArrowEnd: freestyleArrowEnd ?? this.freestyleArrowEnd,
+      freestyleArrowStartEnd:
+          freestyleArrowStartEnd ?? this.freestyleArrowStartEnd,
       arrow: arrow ?? this.arrow,
       line: line ?? this.line,
       rectangle: rectangle ?? this.rectangle,
       circle: circle ?? this.circle,
       dashLine: dashLine ?? this.dashLine,
       dashDotLine: dashDotLine ?? this.dashDotLine,
+      hexagon: hexagon ?? this.hexagon,
       polygon: polygon ?? this.polygon,
       blur: blur ?? this.blur,
       pixelate: pixelate ?? this.pixelate,
+      custom1: custom1 ?? this.custom1,
+      custom2: custom2 ?? this.custom2,
+      custom3: custom3 ?? this.custom3,
       eraser: eraser ?? this.eraser,
       lineWidth: lineWidth ?? this.lineWidth,
       toggleFill: toggleFill ?? this.toggleFill,

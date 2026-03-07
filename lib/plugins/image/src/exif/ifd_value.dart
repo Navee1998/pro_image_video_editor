@@ -20,7 +20,7 @@ enum IfdValueType {
   sLong,
   sRational,
   single,
-  double
+  double,
 }
 
 const ifdValueTypeSize = [0, 1, 1, 2, 4, 8, 1, 1, 2, 4, 8, 4, 8];
@@ -80,7 +80,7 @@ class IfdByteValue extends IfdValue {
   IfdByteValue.list(Uint8List value) : value = Uint8List.fromList(value);
 
   IfdByteValue.data(InputBuffer data, int count)
-      : value = Uint8List.fromList(data.readBytes(count).toUint8List());
+    : value = Uint8List.fromList(data.readBytes(count).toUint8List());
   Uint8List value;
 
   @override
@@ -127,8 +127,8 @@ class IfdValueAscii extends IfdValue {
   IfdValueAscii.list(List<int> value) : value = String.fromCharCodes(value);
 
   IfdValueAscii.data(InputBuffer data, int count)
-      // The final byte is a null terminator
-      : value = count == 0 ? '' : data.readString(count - 1);
+    // The final byte is a null terminator
+    : value = count == 0 ? '' : data.readString(count - 1);
 
   IfdValueAscii.string(this.value);
   String value;
@@ -282,17 +282,19 @@ class IfdValueLong extends IfdValue {
 
 class IfdValueRational extends IfdValue {
   IfdValueRational(int numerator, int denominator)
-      : value = [Rational(numerator, denominator)];
+    : value = [Rational(numerator, denominator)];
 
   IfdValueRational.from(Rational r)
-      : value = [Rational(r.numerator, r.denominator)];
+    : value = [Rational(r.numerator, r.denominator)];
 
   IfdValueRational.list(List<Rational> value)
-      : value = List<Rational>.from(value);
+    : value = List<Rational>.from(value);
 
   IfdValueRational.data(InputBuffer data, int count)
-      : value = List<Rational>.generate(
-            count, (i) => Rational(data.readUint32(), data.readUint32()));
+    : value = List<Rational>.generate(
+        count,
+        (i) => Rational(data.readUint32(), data.readUint32()),
+      );
   List<Rational> value;
 
   @override
@@ -349,8 +351,9 @@ class IfdValueSByte extends IfdValue {
   IfdValueSByte.list(List<int> value) : value = Int8List.fromList(value);
 
   IfdValueSByte.data(InputBuffer data, int count)
-      : value = Int8List.fromList(
-            Int8List.view(data.toUint8List().buffer, 0, count));
+    : value = Int8List.fromList(
+        Int8List.view(data.toUint8List().buffer, 0, count),
+      );
   Int8List value;
 
   @override
@@ -506,16 +509,18 @@ class IfdValueSLong extends IfdValue {
 
 class IfdValueSRational extends IfdValue {
   IfdValueSRational(int numerator, int denominator)
-      : value = [Rational(numerator, denominator)];
+    : value = [Rational(numerator, denominator)];
 
   IfdValueSRational.from(Rational value) : value = [value];
 
   IfdValueSRational.data(InputBuffer data, int count)
-      : value = List<Rational>.generate(
-            count, (i) => Rational(data.readInt32(), data.readInt32()));
+    : value = List<Rational>.generate(
+        count,
+        (i) => Rational(data.readInt32(), data.readInt32()),
+      );
 
   IfdValueSRational.list(List<Rational> value)
-      : value = List<Rational>.from(value);
+    : value = List<Rational>.from(value);
   List<Rational> value;
 
   @override
@@ -569,7 +574,7 @@ class IfdValueSingle extends IfdValue {
   IfdValueSingle.list(List<double> value) : value = Float32List.fromList(value);
 
   IfdValueSingle.data(InputBuffer data, int count)
-      : value = Float32List(count) {
+    : value = Float32List(count) {
     for (int i = 0; i < count; ++i) {
       value[i] = data.readFloat32();
     }
@@ -625,7 +630,7 @@ class IfdValueDouble extends IfdValue {
   IfdValueDouble.list(List<double> value) : value = Float64List.fromList(value);
 
   IfdValueDouble.data(InputBuffer data, int count)
-      : value = Float64List(count) {
+    : value = Float64List(count) {
     for (int i = 0; i < count; ++i) {
       value[i] = data.readFloat64();
     }
@@ -677,7 +682,7 @@ class IfdValueUndefined extends IfdValue {
   IfdValueUndefined.list(List<int> value) : value = Uint8List.fromList(value);
 
   IfdValueUndefined.data(InputBuffer data, int count)
-      : value = Uint8List.fromList(data.readBytes(count).toUint8List());
+    : value = Uint8List.fromList(data.readBytes(count).toUint8List());
   Uint8List value;
 
   @override
