@@ -2,8 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
-import '../../../core/models/editor_configs/video_editor_configs.dart';
-import '../../../shared/widgets/video/trimmer/video_editor_trim_bar.dart';
 import '/core/models/editor_callbacks/pro_image_editor_callbacks.dart';
 import '/core/models/editor_configs/pro_image_editor_configs.dart';
 import '/features/crop_rotate_editor/widgets/crop_layer_painter.dart';

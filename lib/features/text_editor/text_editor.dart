@@ -368,7 +368,6 @@ class TextEditorState extends State<TextEditor>
                       textEditorConfigs.resizeToAvoidBottomInset,
                   backgroundColor: textEditorConfigs.style.background,
                   appBar: _buildAppBar(constraints),
-                  resizeToAvoidBottomInset: false,
                 body: _buildBody(),
                 bottomNavigationBar: _buildBottomBar(),),
               ),
