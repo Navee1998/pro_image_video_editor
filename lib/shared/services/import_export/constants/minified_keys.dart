@@ -20,6 +20,7 @@ const Map<String, String> kMinifiedHistoryKeys = {
   'tune': 'a',
   'blur': 'b',
   'transform': 't',
+  'meta': 'm',
 };
 
 /// A constant map containing minified layer keys for import/export services.
@@ -58,6 +59,12 @@ const Map<String, String> kMinifiedLayerKeys = {
   'boxConstraints': 'bx',
   'maxTextWidth': 'mt',
   'shadows': 'sh',
+  'startTime': 'st',
+  'endTime': 'et',
+  'enterDuration': 'ed',
+  'exitDuration': 'xd',
+  'enterCurve': 'ev',
+  'exitCurve': 'xv',
 
   /// Only in version < 8.0.0
   'enableInteraction': 'ei',

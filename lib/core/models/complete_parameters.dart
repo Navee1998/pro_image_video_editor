@@ -1,10 +1,14 @@
 import 'dart:convert';
+import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
 
 import '/features/audio_editor/models/audio_track.dart';
 import '/features/clips_editor/models/video_clip.dart';
+import '/features/filter_editor/types/filter_state.dart';
 import '/features/filter_editor/utils/combine_color_matrix_utils.dart';
+import '/features/tune_editor/models/tune_adjustment_matrix.dart';
+import 'layers/exported_layer.dart';
 import 'layers/layer.dart';
 
 /// A data class that contains all parameters needed for applying visual
@@ -43,6 +47,31 @@ class CompleteParameters {
       layers: List<Layer>.from(
         map['layers']?.map((x) => Layer.fromMap(x)) ?? [],
       ),
+      originalImageSize: map['originalImageSize'] != null
+          ? Size(
+              (map['originalImageSize']['width'] as num).toDouble(),
+              (map['originalImageSize']['height'] as num).toDouble(),
+            )
+          : null,
+      temporaryDecodedImageSize: map['temporaryDecodedImageSize'] != null
+          ? Size(
+              (map['temporaryDecodedImageSize']['width'] as num).toDouble(),
+              (map['temporaryDecodedImageSize']['height'] as num).toDouble(),
+            )
+          : null,
+      bodySize: map['bodySize'] != null
+          ? Size(
+              (map['bodySize']['width'] as num).toDouble(),
+              (map['bodySize']['height'] as num).toDouble(),
+            )
+          : null,
+      editorSize: map['editorSize'] != null
+          ? Size(
+              (map['editorSize']['width'] as num).toDouble(),
+              (map['editorSize']['height'] as num).toDouble(),
+            )
+          : null,
+      meta: Map<String, dynamic>.from(map['meta'] ?? {}),
     );
   }
 
@@ -67,8 +96,17 @@ class CompleteParameters {
     required this.image,
     required this.isTransformed,
     required this.layers,
+    this.filterStates = const [],
+    this.tuneAdjustments = const [],
+    this.capturedLayers = const [],
     this.videoClips = const [],
-    this.customAudioTrack,
+    @Deprecated('Use audioTracks instead') this.customAudioTrack,
+    this.audioTracks = const [],
+    required this.originalImageSize,
+    required this.temporaryDecodedImageSize,
+    required this.bodySize,
+    required this.editorSize,
+    this.meta = const {},
   });
 
   /// The blur strength to apply (in logical pixels).
@@ -133,6 +171,25 @@ class CompleteParameters {
   /// rendered on top of the video during export.
   final List<Layer> layers;
 
+  /// The active filter states with their timeline metadata.
+  ///
+  /// Each [FilterState] contains the filter matrices and optional
+  /// video-timeline metadata (startTime, endTime, enter/exit transitions).
+  final List<FilterState> filterStates;
+
+  /// The active tune adjustments with their timeline metadata.
+  ///
+  /// Each [TuneAdjustmentMatrix] contains the adjustment matrix and optional
+  /// video-timeline metadata (startTime, endTime, enter/exit transitions).
+  final List<TuneAdjustmentMatrix> tuneAdjustments;
+
+  /// The captured layer images, if [MainEditorConfigs.captureLayersOnDone]
+  /// was enabled.
+  ///
+  /// Each [ExportedLayer] contains the layer metadata, its rendered image
+  /// bytes, and its logical size.
+  final List<ExportedLayer> capturedLayers;
+
   /// The list of video clips currently included in the editor timeline.
   ///
   /// Each [VideoClip] represents a segment of video with its own
@@ -143,7 +200,29 @@ class CompleteParameters {
   ///
   /// When provided, this [AudioTrack] replaces or mixes with the
   /// original audio from the video sources depending on the editor settings.
+  @Deprecated('Use audioTracks instead')
   final AudioTrack? customAudioTrack;
+
+  /// The list of custom audio tracks to overlay on top of the video clips.
+  ///
+  /// When provided, these [AudioTrack]s replace or mix with the
+  /// original audio from the video sources depending on the editor settings.
+  final List<AudioTrack> audioTracks;
+
+  /// The raw original image size before any scaling or cropping.
+  final Size? originalImageSize;
+
+  /// A temporary decoded image size used during screen resizing.
+  final Size? temporaryDecodedImageSize;
+
+  /// The size of the editor body area.
+  final Size? bodySize;
+
+  /// The overall size of the editor widget.
+  final Size? editorSize;
+
+  /// Custom metadata associated with the current editor state.
+  final Map<String, dynamic> meta;
 
   /// Creates a copy of this [CompleteParameters] object with optional new
   /// values for specific fields.
@@ -151,6 +230,9 @@ class CompleteParameters {
     double? blur,
     List<List<double>>? matrixFilterList,
     List<List<double>>? matrixTuneAdjustmentsList,
+    List<FilterState>? filterStates,
+    List<TuneAdjustmentMatrix>? tuneAdjustments,
+    List<ExportedLayer>? capturedLayers,
     Duration? startTime,
     Duration? endTime,
     int? cropWidth,
@@ -164,13 +246,22 @@ class CompleteParameters {
     bool? isTransformed,
     List<Layer>? layers,
     List<VideoClip>? videoClips,
-    AudioTrack? customAudioTrack,
+    @Deprecated('Use audioTracks instead') AudioTrack? customAudioTrack,
+    List<AudioTrack>? audioTracks,
+    Size? originalImageSize,
+    Size? temporaryDecodedImageSize,
+    Size? bodySize,
+    Size? editorSize,
+    Map<String, dynamic>? meta,
   }) {
     return CompleteParameters(
       blur: blur ?? this.blur,
       matrixFilterList: matrixFilterList ?? this.matrixFilterList,
       matrixTuneAdjustmentsList:
           matrixTuneAdjustmentsList ?? this.matrixTuneAdjustmentsList,
+      filterStates: filterStates ?? this.filterStates,
+      tuneAdjustments: tuneAdjustments ?? this.tuneAdjustments,
+      capturedLayers: capturedLayers ?? this.capturedLayers,
       startTime: startTime ?? this.startTime,
       endTime: endTime ?? this.endTime,
       cropWidth: cropWidth ?? this.cropWidth,
@@ -184,7 +275,15 @@ class CompleteParameters {
       isTransformed: isTransformed ?? this.isTransformed,
       layers: layers ?? this.layers,
       videoClips: videoClips ?? this.videoClips,
+      // ignore: deprecated_member_use_from_same_package
       customAudioTrack: customAudioTrack ?? this.customAudioTrack,
+      audioTracks: audioTracks ?? this.audioTracks,
+      originalImageSize: originalImageSize ?? this.originalImageSize,
+      temporaryDecodedImageSize:
+          temporaryDecodedImageSize ?? this.temporaryDecodedImageSize,
+      bodySize: bodySize ?? this.bodySize,
+      editorSize: editorSize ?? this.editorSize,
+      meta: meta ?? this.meta,
     );
   }
 
@@ -211,7 +310,14 @@ class CompleteParameters {
         other.image == image &&
         other.isTransformed == isTransformed &&
         other.videoClips == videoClips &&
+        // ignore: deprecated_member_use_from_same_package
         other.customAudioTrack == customAudioTrack &&
+        listEquals(other.audioTracks, audioTracks) &&
+        other.originalImageSize == originalImageSize &&
+        other.temporaryDecodedImageSize == temporaryDecodedImageSize &&
+        other.bodySize == bodySize &&
+        other.editorSize == editorSize &&
+        mapEquals(other.meta, meta) &&
         listEquals(other.layers, layers);
   }
 
@@ -232,7 +338,14 @@ class CompleteParameters {
         image.hashCode ^
         isTransformed.hashCode ^
         videoClips.hashCode ^
+        // ignore: deprecated_member_use_from_same_package
         customAudioTrack.hashCode ^
+        audioTracks.hashCode ^
+        originalImageSize.hashCode ^
+        temporaryDecodedImageSize.hashCode ^
+        bodySize.hashCode ^
+        editorSize.hashCode ^
+        meta.hashCode ^
         layers.hashCode;
   }
 
@@ -256,6 +369,24 @@ class CompleteParameters {
       'image': image.toList(),
       'isTransformed': isTransformed,
       'layers': layers.map((x) => x.toMap()).toList(),
+      if (originalImageSize != null)
+        'originalImageSize': {
+          'width': originalImageSize!.width,
+          'height': originalImageSize!.height,
+        },
+      if (temporaryDecodedImageSize != null)
+        'temporaryDecodedImageSize': {
+          'width': temporaryDecodedImageSize!.width,
+          'height': temporaryDecodedImageSize!.height,
+        },
+      if (bodySize != null)
+        'bodySize': {'width': bodySize!.width, 'height': bodySize!.height},
+      if (editorSize != null)
+        'editorSize': {
+          'width': editorSize!.width,
+          'height': editorSize!.height,
+        },
+      'meta': meta,
     };
   }
 
@@ -278,6 +409,11 @@ class CompleteParameters {
         'flipY: $flipY, '
         'image: $image, '
         'isTransformed: $isTransformed, '
+        'originalImageSize: $originalImageSize, '
+        'temporaryDecodedImageSize: $temporaryDecodedImageSize, '
+        'bodySize: $bodySize, '
+        'editorSize: $editorSize, '
+        'meta: $meta, '
         'layers: $layers)';
   }
 }

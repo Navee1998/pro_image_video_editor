@@ -617,7 +617,6 @@ class ProImageEditorState extends State<ProImageEditor>
           ),
           blur: 0,
           layers: [],
-          filters: [],
           tuneAdjustments: [],
         ),
       );
@@ -693,6 +692,28 @@ class ProImageEditorState extends State<ProImageEditor>
     );
   }
 
+  Map<String, dynamic> _deepCopyMeta(Map<String, dynamic> source) {
+    return source.map((key, value) => MapEntry(key, _deepCopyValue(value)));
+  }
+
+  dynamic _deepCopyValue(dynamic value) {
+    if (value is Map) {
+      return Map<String, dynamic>.fromEntries(
+        value.entries.map(
+          (entry) =>
+              MapEntry(entry.key.toString(), _deepCopyValue(entry.value)),
+        ),
+      );
+    }
+    if (value is List) {
+      return value.map(_deepCopyValue).toList();
+    }
+    if (value is Set) {
+      return value.map(_deepCopyValue).toSet();
+    }
+    return value;
+  }
+
   /// Adds a new state to the history with the given configuration and updates
   /// the state manager.
   ///
@@ -729,13 +750,22 @@ class ProImageEditorState extends State<ProImageEditor>
     List<Layer>? layers,
     Layer? newLayer,
     TransformConfigs? transformConfigs,
-    FilterMatrix? filters,
+    List<FilterState>? filters,
     List<TuneAdjustmentMatrix>? tuneAdjustments,
     double? blur,
+    Map<String, dynamic>? meta,
     bool heroScreenshotRequired = false,
     bool blockCaptureScreenshot = false,
   }) {
     List<Layer> activeLayerList = _layerCopyManager.copyLayerList(activeLayers);
+    final resolvedFilters = (filters ?? stateManager.activeFilters)
+        .map((item) => item.copy())
+        .toList();
+    final resolvedTuneAdjustments =
+        (tuneAdjustments ?? stateManager.activeTuneAdjustments)
+            .map((item) => item.copy())
+            .toList();
+    final resolvedMeta = _deepCopyMeta(meta ?? stateManager.activeMeta);
 
     stateManager.addHistory(
       EditorStateHistory(
@@ -746,8 +776,9 @@ class ProImageEditorState extends State<ProImageEditor>
             (newLayer != null
                 ? [...activeLayerList, newLayer]
                 : activeLayerList),
-        filters: filters ?? [],
-        tuneAdjustments: tuneAdjustments ?? [],
+        filters: resolvedFilters,
+        tuneAdjustments: resolvedTuneAdjustments,
+        meta: resolvedMeta,
       ),
       historyLimit: stateHistoryConfigs.stateHistoryLimit,
       enableScreenshotLimit: imageGenerationConfigs.enableBackgroundGeneration,
@@ -798,6 +829,66 @@ class ProImageEditorState extends State<ProImageEditor>
         ..insert(index, layer),
     );
 
+    _controllers.uiLayerCtrl.add(null);
+  }
+
+  /// Updates the [startTime] and/or [endTime] of the layer at the given
+  /// [index] and records the change in the state history.
+  ///
+  /// Both [startTime] and [endTime] are optional. Only non-null values are
+  /// applied. This is primarily used by the video editor to define when a
+  /// layer is visible on the timeline.
+  void setLayerTimeline({
+    required int index,
+    Duration? startTime,
+    Duration? endTime,
+    Duration? enterDuration,
+    Duration? exitDuration,
+    Curve? enterCurve,
+    Curve? exitCurve,
+    LayerTimelineTransitionBuilder? transitionBuilder,
+    Map<String, dynamic>? meta,
+    bool skipUpdateHistory = false,
+  }) {
+    final current = activeLayers[index];
+
+    // Early return if nothing would change.
+    if ((startTime == null || startTime == current.startTime) &&
+        (endTime == null || endTime == current.endTime) &&
+        (enterDuration == null || enterDuration == current.enterDuration) &&
+        (exitDuration == null || exitDuration == current.exitDuration) &&
+        (enterCurve == null || enterCurve == current.enterCurve) &&
+        (exitCurve == null || exitCurve == current.exitCurve) &&
+        (transitionBuilder == null ||
+            transitionBuilder == current.transitionBuilder) &&
+        meta == null) {
+      return;
+    }
+
+    final List<Layer> layers;
+    final Layer layer;
+
+    if (skipUpdateHistory) {
+      layer = _layerCopyManager.copyLayer(activeLayers[index]);
+      activeLayers[index] = layer;
+      layers = activeLayers;
+    } else {
+      layers = _layerCopyManager.copyLayerList(activeLayers);
+      layer = layers[index];
+    }
+
+    if (startTime != null) layer.startTime = startTime;
+    if (endTime != null) layer.endTime = endTime;
+    if (enterDuration != null) layer.enterDuration = enterDuration;
+    if (exitDuration != null) layer.exitDuration = exitDuration;
+    if (enterCurve != null) layer.enterCurve = enterCurve;
+    if (exitCurve != null) layer.exitCurve = exitCurve;
+    if (transitionBuilder != null) layer.transitionBuilder = transitionBuilder;
+    if (meta != null) layer.meta = {...layer.meta ?? {}, ...meta};
+
+    if (!skipUpdateHistory) {
+      addHistory(layers: layers);
+    }
     _controllers.uiLayerCtrl.add(null);
   }
 
@@ -909,6 +1000,110 @@ class ProImageEditorState extends State<ProImageEditor>
     setState(() {});
   }
 
+  /// Removes the [FilterState] at the given [index] from the active filters
+  /// and records the change in the state history.
+  ///
+  /// Does nothing if [filter] is not found in the active filter list or
+  /// [index] is out of range.
+  ///
+  /// Either [filter] or [index] must be provided. If both are given, [index]
+  /// takes precedence.
+  ///
+  /// - [filter]: The [FilterState] instance to remove.
+  /// - [index]: Zero-based index of the filter to remove.
+  void removeFilter({FilterState? filter, int? index}) {
+    assert(
+      filter != null || index != null,
+      'Either filter or index must be provided.',
+    );
+    final filters = List<FilterState>.from(stateManager.activeFilters);
+    final i = index ?? (filter != null ? filters.indexOf(filter) : -1);
+    if (i < 0 || i >= filters.length) return;
+    filters.removeAt(i);
+    addHistory(filters: filters);
+    setState(() {});
+  }
+
+  /// Removes all active filters and records the change in the state history.
+  void clearFilters() {
+    addHistory(filters: []);
+    setState(() {});
+  }
+
+  /// Updates the timeline properties and/or metadata of the filter at the
+  /// given [index] and records the change in the state history.
+  ///
+  /// Only non-null values are applied. This mirrors [setLayerTimeline] but
+  /// operates on the active filter list instead of the layer list.
+  void setFilterTimeline({
+    required int index,
+    Duration? startTime,
+    Duration? endTime,
+    Duration? enterDuration,
+    Duration? exitDuration,
+    Curve? enterCurve,
+    Curve? exitCurve,
+    Map<String, dynamic>? meta,
+    bool skipUpdateHistory = false,
+  }) {
+    final filters = skipUpdateHistory
+        ? stateManager.activeFilters
+        : List<FilterState>.from(stateManager.activeFilters);
+    if (index < 0 || index >= filters.length) return;
+
+    filters[index] = filters[index].copyWith(
+      startTime: startTime,
+      endTime: endTime,
+      enterDuration: enterDuration,
+      exitDuration: exitDuration,
+      enterCurve: enterCurve,
+      exitCurve: exitCurve,
+      meta: meta != null ? {...filters[index].meta, ...meta} : null,
+    );
+
+    if (!skipUpdateHistory) {
+      addHistory(filters: filters);
+    }
+    setState(() {});
+  }
+
+  /// Updates the timeline properties and/or metadata of the tune adjustment
+  /// at the given [index] and records the change in the state history.
+  ///
+  /// Only non-null values are applied. This mirrors [setFilterTimeline] but
+  /// operates on the active tune adjustments list.
+  void setTuneTimeline({
+    required int index,
+    Duration? startTime,
+    Duration? endTime,
+    Duration? enterDuration,
+    Duration? exitDuration,
+    Curve? enterCurve,
+    Curve? exitCurve,
+    Map<String, dynamic>? meta,
+    bool skipUpdateHistory = false,
+  }) {
+    final tunes = skipUpdateHistory
+        ? stateManager.activeTuneAdjustments
+        : List<TuneAdjustmentMatrix>.from(stateManager.activeTuneAdjustments);
+    if (index < 0 || index >= tunes.length) return;
+
+    tunes[index] = tunes[index].copyWith(
+      startTime: startTime,
+      endTime: endTime,
+      enterDuration: enterDuration,
+      exitDuration: exitDuration,
+      enterCurve: enterCurve,
+      exitCurve: exitCurve,
+      meta: meta != null ? {...tunes[index].meta, ...meta} : null,
+    );
+
+    if (!skipUpdateHistory) {
+      addHistory(tuneAdjustments: tunes);
+    }
+    setState(() {});
+  }
+
   /// Initializes the video editor functionality.
   void initializeVideoEditor() async {
     if (!_isVideoEditor) return;
@@ -961,7 +1156,6 @@ class ProImageEditorState extends State<ProImageEditor>
         transformConfigs: transformSetup.transformConfigs,
         blur: 0,
         layers: [],
-        filters: [],
         tuneAdjustments: [],
       ),
     );
@@ -1336,6 +1530,9 @@ class ProImageEditorState extends State<ProImageEditor>
   /// lines and flags.
   void _onScaleEnd(ScaleEndDetails details) async {
     mainEditorCallbacks?.handleScaleEnd(details);
+    if (selectedLayers.isNotEmpty) {
+      mainEditorCallbacks?.handleLayerInteractionEnd(List.of(selectedLayers));
+    }
     layerInteractionManager.activeInteractionLayer = null;
 
     /// Check if layers should be removed.
@@ -1376,14 +1573,22 @@ class ProImageEditorState extends State<ProImageEditor>
     setState(() {});
   }
 
-  /// Handles tap events on a text layer.
+  /// Opens the text editor to modify an existing [TextLayer].
   ///
-  /// This method opens a text editor for the specified text layer and updates
-  /// the layer's properties
-  /// based on the user's input.
+  /// If [MainEditorCallbacks.onEditTextLayer] is set, the custom callback is
+  /// invoked instead of navigating to the built-in [TextEditor]. In both cases
+  /// a deep copy of [layerData] is passed so the original is never mutated
+  /// before the user confirms the edit.
   ///
-  /// [layerData] - The text layer data to be edited.
-  void _onTextLayerTap(TextLayer layerData) async {
+  /// After the editor returns the updated layer, all identity and transform
+  /// properties (`id`, `key`, `offset`, `scale`, `rotation`, etc.) are
+  /// restored from the original [layerData] to prevent unintended drift.
+  ///
+  /// If the returned text is empty, the layer is removed via [removeLayer].
+  /// Otherwise the layer is replaced in place via [replaceLayer].
+  ///
+  /// - [layerData]: The existing [TextLayer] to edit.
+  void editTextLayer(TextLayer layerData) async {
     final customCallback = mainEditorCallbacks?.onEditTextLayer;
     TextLayer? updatedLayer;
 
@@ -1413,30 +1618,61 @@ class ProImageEditorState extends State<ProImageEditor>
 
     if (!mounted || updatedLayer == null) return;
 
+    applyTextLayerChanges(layerData, updatedLayer);
+  }
+
+  /// Applies the result of a text editor session back to the layer stack.
+  ///
+  /// Restores all identity and transform properties (`id`, `key`, `offset`,
+  /// `scale`, `rotation`, etc.) from [original] onto [updatedLayer] so the
+  /// layer keeps its position in the editor.
+  ///
+  /// If [updatedLayer.text] is empty the layer is removed via [removeLayer].
+  /// Otherwise the layer is replaced in place via [replaceLayer].
+  ///
+  /// This method is called internally by [editTextLayer] but is also exposed
+  /// publicly so custom [MainEditorCallbacks.onEditTextLayer] implementations
+  /// can reuse the same commit logic.
+  ///
+  /// - [original]: The original [TextLayer] before editing.
+  /// - [updatedLayer]: The [TextLayer] returned by the editor.
+  void applyTextLayerChanges(TextLayer original, TextLayer updatedLayer) {
     updatedLayer
-      ..id = layerData.id
-      ..key = layerData.key
-      ..keyInternalSize = layerData.keyInternalSize
-      ..flipX = layerData.flipX
-      ..flipY = layerData.flipY
-      ..offset = layerData.offset
-      ..scale = layerData.scale
-      ..rotation = layerData.rotation
-      ..boxConstraints = layerData.boxConstraints
-      ..groupId = layerData.groupId
-      ..interaction = layerData.interaction
-      ..meta = layerData.meta;
+      ..id = original.id
+      ..key = original.key
+      ..keyInternalSize = original.keyInternalSize
+      ..flipX = original.flipX
+      ..flipY = original.flipY
+      ..offset = original.offset
+      ..scale = original.scale
+      ..rotation = original.rotation
+      ..boxConstraints = original.boxConstraints
+      ..groupId = original.groupId
+      ..interaction = original.interaction
+      ..meta = original.meta;
 
     if (updatedLayer.text.isEmpty) {
-      removeLayer(layerData);
+      removeLayer(original);
       return;
     }
 
-    int i = activeLayers.indexWhere((element) => element.id == layerData.id);
+    int i = activeLayers.indexWhere((element) => element.id == original.id);
     replaceLayer(index: i, layer: updatedLayer);
   }
 
-  void _editPaintLayer(PaintLayer layer) async {
+  /// Opens the paint editor to modify an existing [PaintLayer].
+  ///
+  /// Censor-area layers are not editable and return immediately without
+  /// opening the editor.
+  ///
+  /// If [PaintEditorCallbacks.onEditLayer] is set, the custom callback is
+  /// invoked instead of showing the built-in bottom-sheet editor.
+  ///
+  /// If the user dismisses without saving, the result is `null` and no change
+  /// is made. Otherwise the layer is replaced in place via [replaceLayer].
+  ///
+  /// - [layer]: The existing [PaintLayer] to edit.
+  void editPaintLayer(PaintLayer layer) async {
     if (layer.isPaintLayer && layer.item.isCensorArea) return;
 
     PaintLayer? result =
@@ -1513,7 +1749,7 @@ class ProImageEditorState extends State<ProImageEditor>
       editorName = SubEditor.cropRotate;
     } else if (T is TuneAdjustmentMatrix || page is TuneEditor) {
       editorName = SubEditor.tune;
-    } else if (T is FilterMatrix || page is FilterEditor) {
+    } else if (T is FilterMatrix || T is FilterState || page is FilterEditor) {
       editorName = SubEditor.filter;
     } else if (T is double || page is BlurEditor) {
       editorName = SubEditor.blur;
@@ -1655,7 +1891,7 @@ class ProImageEditorState extends State<ProImageEditor>
           mainBodySize: sizesManager.bodySize,
           transformConfigs: stateManager.transformConfigs,
           appliedBlurFactor: stateManager.activeBlur,
-          appliedFilters: stateManager.activeFilters,
+          appliedFilters: stateManager.activeFilters.allMatrices,
           appliedTuneAdjustments: stateManager.activeTuneAdjustments,
           initialZoomMatrix: interactiveViewer.currentState?.transformMatrix4,
         ),
@@ -1665,28 +1901,75 @@ class ProImageEditorState extends State<ProImageEditor>
 
     if (result == null) return;
 
+    // Deep-copy active layers ONCE, then build history entries incrementally.
+    // This avoids the O(N²) cost of copyLayerList on every addLayer call.
+    final runningLayers = _layerCopyManager.copyLayerList(activeLayers);
+    final historyLimit = stateHistoryConfigs.stateHistoryLimit;
+    final enableScreenshotLimit =
+        imageGenerationConfigs.enableBackgroundGeneration;
+    final preservedFilters = stateManager.activeFilters
+        .map((item) => item.copy())
+        .toList(growable: false);
+    final preservedTuneAdjustments = stateManager.activeTuneAdjustments
+        .map((item) => item.copy())
+        .toList(growable: false);
+    final preservedMeta = _deepCopyMeta(stateManager.activeMeta);
+
     String lastLayerId = '';
     for (var i = 0; i < result.layers.length; i++) {
       final layer = result.layers[i];
-      final oldIndex = activeLayers.indexWhere((el) => el.id == layer.id);
+      final oldIndex = runningLayers.indexWhere((el) => el.id == layer.id);
 
       final duplicatedLayer = _layerCopyManager.duplicateLayer(
         layer,
         offset: Offset.zero,
       );
       lastLayerId = duplicatedLayer.id;
-      addLayer(
-        duplicatedLayer,
-        removeLayerIndex: oldIndex,
-        blockSelectLayer: true,
-        blockCaptureScreenshot: true,
-        autoCorrectZoomOffset: false,
-        autoCorrectZoomScale: false,
+
+      if (oldIndex >= 0) {
+        runningLayers.removeAt(oldIndex);
+      }
+      runningLayers.add(duplicatedLayer);
+
+      // Add individual history entry (for per-layer undo) with a shallow
+      // snapshot — the layer objects themselves are already independent copies.
+      stateManager.addHistory(
+        EditorStateHistory(
+          layers: List<Layer>.of(runningLayers),
+          filters: preservedFilters,
+          tuneAdjustments: preservedTuneAdjustments,
+          meta: _deepCopyMeta(preservedMeta),
+        ),
+        historyLimit: historyLimit,
+        enableScreenshotLimit: enableScreenshotLimit,
+        skipUpdateActiveItems: true,
+      );
+      _controllers.screenshot.addEmptyScreenshot(
+        screenshots: stateManager.screenshots,
       );
     }
+
     for (Layer layer in result.removedLayers) {
-      removeLayer(layer, blockCaptureScreenshot: true);
+      final layerPos = runningLayers.indexWhere((el) => el.id == layer.id);
+      if (layerPos < 0) continue;
+      runningLayers.removeAt(layerPos);
+      stateManager.addHistory(
+        EditorStateHistory(
+          layers: List<Layer>.of(runningLayers),
+          filters: preservedFilters,
+          tuneAdjustments: preservedTuneAdjustments,
+          meta: _deepCopyMeta(preservedMeta),
+        ),
+        historyLimit: historyLimit,
+        enableScreenshotLimit: enableScreenshotLimit,
+        skipUpdateActiveItems: true,
+      );
+      _controllers.screenshot.addEmptyScreenshot(
+        screenshots: stateManager.screenshots,
+      );
     }
+
+    stateManager.updateActiveItems();
 
     if (lastLayerId.isNotEmpty) {
       _selectLayerAfterHeroIsDone(lastLayerId);
@@ -1759,7 +2042,7 @@ class ProImageEditorState extends State<ProImageEditor>
           mainBodySize: sizesManager.bodySize,
           enableFakeHero: true,
           appliedBlurFactor: stateManager.activeBlur,
-          appliedFilters: stateManager.activeFilters,
+          appliedFilters: stateManager.activeFilters.allMatrices,
           appliedTuneAdjustments: stateManager.activeTuneAdjustments,
           onDone: (transformConfigs, fitToScreenFactor, imageInfos) async {
             List<Layer> updatedLayers = LayerTransformGenerator(
@@ -1827,7 +2110,7 @@ class ProImageEditorState extends State<ProImageEditor>
             mainBodySize: sizesManager.bodySize,
             convertToUint8List: false,
             appliedBlurFactor: stateManager.activeBlur,
-            appliedFilters: stateManager.activeFilters,
+            appliedFilters: stateManager.activeFilters.allMatrices,
             appliedTuneAdjustments: stateManager.activeTuneAdjustments,
           ),
         ),
@@ -1836,7 +2119,13 @@ class ProImageEditorState extends State<ProImageEditor>
 
     if (tuneAdjustments == null) return;
 
-    addHistory(tuneAdjustments: tuneAdjustments, heroScreenshotRequired: true);
+    addHistory(
+      tuneAdjustments: [
+        ...stateManager.activeTuneAdjustments.map((item) => item.copy()),
+        ...tuneAdjustments,
+      ],
+      heroScreenshotRequired: true,
+    );
 
     setState(() {});
     mainEditorCallbacks?.handleUpdateUI();
@@ -1854,7 +2143,7 @@ class ProImageEditorState extends State<ProImageEditor>
   /// original image is retained.
   void openFilterEditor() async {
     if (!mounted) return;
-    FilterMatrix? filters = await openPage(
+    FilterState? filterState = await openPage(
       FilterEditor.autoSource(
         key: filterEditor,
         editorImage: widget.blankSize == null
@@ -1871,15 +2160,21 @@ class ProImageEditorState extends State<ProImageEditor>
           mainBodySize: sizesManager.bodySize,
           convertToUint8List: false,
           appliedBlurFactor: stateManager.activeBlur,
-          appliedFilters: stateManager.activeFilters,
+          appliedFilters: stateManager.activeFilters.allMatrices,
           appliedTuneAdjustments: stateManager.activeTuneAdjustments,
         ),
       ),
     );
 
-    if (filters == null) return;
+    if (filterState == null) return;
 
-    addHistory(filters: filters, heroScreenshotRequired: true);
+    addHistory(
+      filters: [
+        ...stateManager.activeFilters.map((item) => item.copy()),
+        filterState,
+      ],
+      heroScreenshotRequired: true,
+    );
 
     setState(() {});
     mainEditorCallbacks?.handleUpdateUI();
@@ -1905,7 +2200,7 @@ class ProImageEditorState extends State<ProImageEditor>
           transformConfigs: stateManager.transformConfigs,
           convertToUint8List: false,
           appliedBlurFactor: stateManager.activeBlur,
-          appliedFilters: stateManager.activeFilters,
+          appliedFilters: stateManager.activeFilters.allMatrices,
           appliedTuneAdjustments: stateManager.activeTuneAdjustments,
         ),
       ),
@@ -2301,63 +2596,96 @@ class ProImageEditorState extends State<ProImageEditor>
         message: i18n.doneLoadingMsg,
       );
 
-      if (callbacks.onThumbnailGenerated != null) {
-        if (_imageInfos == null) await decodeImage();
+      try {
+        if (callbacks.onThumbnailGenerated != null) {
+          if (_imageInfos == null) await decodeImage();
 
-        final results = await Future.wait([
-          captureEditorImage(),
-          _controllers.screenshot.getRawRenderedImage(
-            imageInfos: _imageInfos!,
-            useThumbnailSize: false,
-          ),
-        ]);
+          final Uint8List imageBytes = mainEditorConfigs.captureImageOnDone
+              ? await captureEditorImage()
+              : Uint8List.fromList([]);
 
-        await callbacks.onThumbnailGenerated!(
-          results[0] as Uint8List,
-          results[1] as ui.Image,
-        );
-      } else {
-        Uint8List? bytes = await captureEditorImage();
-        await onImageEditingComplete?.call(bytes);
+          final results = await Future.wait([
+            Future.value(imageBytes),
+            _controllers.screenshot.getRawRenderedImage(
+              imageInfos: _imageInfos!,
+              useThumbnailSize: false,
+            ),
+          ]);
 
-        final transform = stateManager.transformConfigs;
-        final isTransformed = transform.isNotEmpty;
+          await callbacks.onThumbnailGenerated!(
+            imageBytes,
+            results[1] as ui.Image,
+          );
+        } else {
+          Uint8List? bytes = mainEditorConfigs.captureImageOnDone
+              ? await captureEditorImage()
+              : null;
+          if (bytes != null) {
+            await onImageEditingComplete?.call(bytes);
+          }
 
-        Size originalImageSize = _imageInfos!.rawSize;
-        Size outputSize = transform.getCropSize(originalImageSize);
-        Offset outputOffset = transform.getCropStartOffset(originalImageSize);
+          final capturedLayers = mainEditorConfigs.captureLayersOnDone
+              ? await captureAllLayersWithMeta(
+                  applyTransforms: true,
+                  basePixelRatio: configs.imageGeneration.customPixelRatio,
+                )
+              : <ExportedLayer>[];
 
-        await onCompleteWithParameters?.call(
-          CompleteParameters(
-            blur: stateManager.activeBlur,
-            matrixFilterList: stateManager.activeFilters,
-            matrixTuneAdjustmentsList: stateManager.activeTuneAdjustments
-                .map((item) => item.matrix)
-                .toList(),
-            startTime: _videoController?.startTime,
-            endTime: _videoController?.endTime,
-            cropWidth: isTransformed ? outputSize.width.round() : null,
-            cropHeight: isTransformed ? outputSize.height.round() : null,
-            cropX: isTransformed ? outputOffset.dx.round() : null,
-            cropY: isTransformed ? outputOffset.dy.round() : null,
-            flipX: transform.is90DegRotated ? transform.flipY : transform.flipX,
-            flipY: transform.is90DegRotated ? transform.flipX : transform.flipY,
-            rotateTurns: transform.angleToTurns(),
-            image: bytes,
-            isTransformed: isTransformed,
-            layers: activeLayers,
-            customAudioTrack: _videoController?.audioTrack,
-            videoClips: _videoController?.clips ?? [],
-          ),
-        );
+          final transform = stateManager.transformConfigs;
+          final isTransformed = transform.isNotEmpty;
+
+          Size originalImageSize = _imageInfos!.rawSize;
+          Size outputSize = transform.getCropSize(originalImageSize);
+          Offset outputOffset = transform.getCropStartOffset(originalImageSize);
+
+          await onCompleteWithParameters?.call(
+            CompleteParameters(
+              blur: stateManager.activeBlur,
+              matrixFilterList: stateManager.activeFilters.allMatrices,
+              filterStates: stateManager.activeFilters,
+              tuneAdjustments: stateManager.activeTuneAdjustments,
+              matrixTuneAdjustmentsList: stateManager.activeTuneAdjustments
+                  .map((item) => item.matrix)
+                  .toList(),
+              startTime: _videoController?.startTime,
+              endTime: _videoController?.endTime,
+              cropWidth: isTransformed ? outputSize.width.round() : null,
+              cropHeight: isTransformed ? outputSize.height.round() : null,
+              cropX: isTransformed ? outputOffset.dx.round() : null,
+              cropY: isTransformed ? outputOffset.dy.round() : null,
+              flipX: transform.is90DegRotated
+                  ? transform.flipY
+                  : transform.flipX,
+              flipY: transform.is90DegRotated
+                  ? transform.flipX
+                  : transform.flipY,
+              rotateTurns: transform.angleToTurns(),
+              image: bytes ?? Uint8List.fromList([]),
+              isTransformed: isTransformed,
+              layers: activeLayers,
+              capturedLayers: capturedLayers,
+              customAudioTrack: _videoController?.audioTrack,
+              audioTracks: _videoController?.audioTrack != null
+                  ? [_videoController!.audioTrack!]
+                  : [],
+              videoClips: _videoController?.clips ?? [],
+              originalImageSize: sizesManager.originalImageSize,
+              temporaryDecodedImageSize: sizesManager.temporaryDecodedImageSize,
+              bodySize: sizesManager.bodySize,
+              editorSize: sizesManager.editorSize,
+              meta: stateManager.activeMeta,
+            ),
+          );
+        }
+
+        onCloseEditor?.call(EditorMode.main);
+      } finally {
+        LoadingDialog.instance.hide();
+
+        /// Allow users to continue editing if they didn't close the editor.
+        _isProcessingFinalImage = false;
+        if (mounted) setState(() {});
       }
-
-      LoadingDialog.instance.hide();
-
-      onCloseEditor?.call(EditorMode.main);
-
-      /// Allow users to continue editing if they didn't close the editor.
-      setState(() => _isProcessingFinalImage = false);
     });
   }
 
@@ -2403,6 +2731,59 @@ class ProImageEditorState extends State<ProImageEditor>
               : null,
         ) ??
         Uint8List.fromList([]);
+  }
+
+  /// Captures all active layers in one batch.
+  ///
+  /// For PNG exports, this method reuses the editor's existing
+  /// [ContentRecorderController] so isolate resources stay warm and can be
+  /// processed efficiently across all layers.
+  Future<List<Uint8List?>> captureAllLayers({
+    double? pixelRatio,
+    double? basePixelRatio,
+    bool applyTransforms = true,
+    ui.ImageByteFormat format = ui.ImageByteFormat.png,
+  }) async {
+    final exported = await captureAllLayersWithMeta(
+      pixelRatio: pixelRatio,
+      basePixelRatio: basePixelRatio,
+      applyTransforms: applyTransforms,
+      format: format,
+    );
+    return exported.map((e) => e.bytes).toList();
+  }
+
+  /// Captures all active layers in one batch and returns metadata per layer.
+  ///
+  /// For PNG exports, this method reuses the editor's existing
+  /// [ContentRecorderController] so isolate resources stay warm and can be
+  /// processed efficiently across all layers.
+  Future<List<ExportedLayer>> captureAllLayersWithMeta({
+    double? pixelRatio,
+    double? basePixelRatio,
+    bool applyTransforms = true,
+    ui.ImageByteFormat format = ui.ImageByteFormat.png,
+  }) async {
+    if (isSubEditorOpen) {
+      Navigator.pop(context);
+      if (!_pageOpenCompleter.isCompleted) await _pageOpenCompleter.future;
+      if (!mounted) return <ExportedLayer>[];
+    }
+
+    // Ensure the current frame with layers is fully rendered before capture.
+    await WidgetsBinding.instance.endOfFrame;
+    if (!mounted) return <ExportedLayer>[];
+
+    return Layer.captureAllLayers(
+      layers: activeLayers,
+      pixelRatio: pixelRatio,
+      basePixelRatio: basePixelRatio,
+      applyTransforms: applyTransforms,
+      format: format,
+      recorder: format == ui.ImageByteFormat.png
+          ? _controllers.screenshot
+          : null,
+    );
   }
 
   /// Closes all active sub-editors within the main editor, including paint,
@@ -3147,11 +3528,12 @@ class ProImageEditorState extends State<ProImageEditor>
       activeLayers: activeLayers,
       isSubEditorOpen: isSubEditorOpen,
       onCheckInteractiveViewer: _checkInteractiveViewer,
-      onTextLayerTap: _onTextLayerTap,
-      onEditPaintLayer: _editPaintLayer,
+      onTextLayerTap: editTextLayer,
+      onEditPaintLayer: editPaintLayer,
       state: this,
       dragSelectionService: _layerDragSelectionService,
       mouseService: _mouseService,
+      playTimeNotifier: _videoController?.playTimeNotifier,
       onContextMenuToggled: (isOpen) {
         _isContextMenuOpen = isOpen;
       },
@@ -3228,6 +3610,7 @@ class ProImageEditorState extends State<ProImageEditor>
       sizesManager: sizesManager,
       stateManager: stateManager,
       videoPlayer: _videoController!.videoPlayer,
+      playTimeNotifier: _videoController?.playTimeNotifier,
     );
   }
 }

@@ -423,9 +423,16 @@ class LayerInteractionManager {
   final _horizontalSnapHelper = _LayerAlignGuideHelper();
   final _verticalSnapHelper = _LayerAlignGuideHelper();
 
+  /// Optional override for helper line configuration at runtime.
+  ///
+  /// When set, this takes precedence over [configs.helperLines], allowing
+  /// helper lines to be toggled without recreating the editor widget.
+  HelperLineConfigs? helperLinesOverride;
+
   /// Configuration settings for displaying and managing helper lines within
   /// the editor.
-  HelperLineConfigs get helperLineConfigs => configs.helperLines;
+  HelperLineConfigs get helperLineConfigs =>
+      helperLinesOverride ?? configs.helperLines;
 
   /// Resets the state of the layer interaction manager by:
   ///

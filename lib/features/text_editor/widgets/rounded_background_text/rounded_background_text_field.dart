@@ -121,26 +121,29 @@ class _RoundedBackgroundTextFieldState
     final fontSize =
         (widget.style.fontSize ?? defaultTextStyle.style.fontSize ?? 16);
 
-    return Stack(
-      clipBehavior: Clip.none,
-      alignment: switch (widget.textAlign) {
-        TextAlign.end => AlignmentDirectional.centerEnd,
-        TextAlign.start => AlignmentDirectional.centerStart,
-        TextAlign.left => Alignment.centerLeft,
-        TextAlign.right => Alignment.centerRight,
-        TextAlign.center || _ => Alignment.topCenter,
-      },
-      children: [
-        if (_textController.text.isNotEmpty) _buildBackgroundText(),
-        _buildEditableText(fontSize: fontSize),
-      ],
+    return MediaQuery(
+      data: MediaQuery.of(context).copyWith(textScaler: TextScaler.noScaling),
+      child: Stack(
+        clipBehavior: Clip.none,
+        alignment: switch (widget.textAlign) {
+          TextAlign.end => AlignmentDirectional.centerEnd,
+          TextAlign.start => AlignmentDirectional.centerStart,
+          TextAlign.left => Alignment.centerLeft,
+          TextAlign.right => Alignment.centerRight,
+          TextAlign.center || _ => Alignment.topCenter,
+        },
+        children: [
+          if (_textController.text.isNotEmpty) _buildBackgroundText(),
+          _buildEditableText(fontSize: fontSize),
+        ],
+      ),
     );
   }
 
   Widget _buildBackgroundText() {
     final style = widget.style.copyWith(
       color: Colors.transparent,
-      leadingDistribution: TextLeadingDistribution.proportional,
+      leadingDistribution: widget.configs.style.leadingDistribution,
     );
 
     return Positioned(
@@ -183,9 +186,10 @@ class _RoundedBackgroundTextFieldState
         scrollPadding: EdgeInsets.zero,
         style: widget.style.copyWith(
           fontSize: fontSize,
-          leadingDistribution: TextLeadingDistribution.proportional,
+          leadingDistribution: widget.configs.style.leadingDistribution,
           height: widget.configs.style.textHeight,
         ),
+        spellCheckConfiguration: widget.configs.spellCheckConfiguration,
         decoration: InputDecoration.collapsed(
           hintText: _textController.text.isEmpty ? widget.hint : '',
           hintStyle:

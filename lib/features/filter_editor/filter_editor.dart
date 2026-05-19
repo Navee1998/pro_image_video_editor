@@ -21,6 +21,7 @@ import 'constants/identity_matrix_constant.dart';
 import 'utils/lerp_color_matrix_utils.dart';
 
 export 'types/filter_matrix.dart';
+export 'types/filter_state.dart';
 export 'utils/filter_generator/filter_addons.dart';
 export 'utils/filter_generator/filter_model.dart';
 export 'utils/filter_generator/filter_presets.dart';
@@ -191,11 +192,6 @@ class FilterEditorState extends State<FilterEditor>
     _uiFilterStream = StreamController.broadcast();
     _uiFilterStream.stream.listen((_) => rebuildController.add(null));
 
-    final isMultiSelectionDisabled = !filterEditorConfigs.enableMultiSelection;
-    if (isMultiSelectionDisabled && appliedFilters.isNotEmpty) {
-      _initializeFilterFromApplied();
-    }
-
     filterEditorCallbacks?.onInit?.call();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       filterEditorCallbacks?.onAfterViewInit?.call();
@@ -219,7 +215,10 @@ class FilterEditorState extends State<FilterEditor>
   void done() async {
     doneEditing(
       editorImage: widget.editorImage,
-      returnValue: _getActiveFilters(),
+      returnValue: FilterState(
+        name: selectedFilter.name,
+        matrices: _getActiveFilters(),
+      ),
       blur: appliedBlurFactor,
       matrixFilterList: _getActiveFilters(),
       matrixTuneAdjustmentsList: appliedTuneAdjustments
@@ -245,25 +244,6 @@ class FilterEditorState extends State<FilterEditor>
         (matrix) => lerpColorMatrix(identityMatrix, matrix, filterOpacity),
       ),
     ];
-  }
-
-  /// Initializes the selected filter from previously applied filters.
-  ///
-  /// Searches through the available filter list to find a filter whose matrix
-  /// matches the first applied filter. If found, sets it as the selected
-  /// filter.
-  void _initializeFilterFromApplied() {
-    final filterList = filterEditorConfigs.filterList ?? presetFiltersList;
-    final firstApplied = appliedFilters.first;
-
-    for (final filter in filterList) {
-      if (filter.filters.isNotEmpty &&
-          listEquals(filter.filters.first, firstApplied)) {
-        setFilter(filter);
-        return;
-      }
-    }
-    setFilter(FilterModel(name: 'Not-Found', filters: [firstApplied]));
   }
 
   /// Set the current filter.
@@ -309,11 +289,15 @@ class FilterEditorState extends State<FilterEditor>
             right: filterEditorConfigs.safeArea.right,
             child: RecordInvisibleWidget(
               controller: screenshotCtrl,
-              child: Scaffold(
-                backgroundColor: filterEditorConfigs.style.background,
-                appBar: _buildAppBar(),
-                body: _buildBody(),
-                bottomNavigationBar: _buildBottomNavBar(),
+              child: MediaQuery.removePadding(
+                context: context,
+                removeBottom: !filterEditorConfigs.safeArea.bottom,
+                child: Scaffold(
+                  backgroundColor: filterEditorConfigs.style.background,
+                  appBar: _buildAppBar(),
+                  body: _buildBody(),
+                  bottomNavigationBar: _buildBottomNavBar(),
+                ),
               ),
             ),
           ),

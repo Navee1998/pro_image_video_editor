@@ -11,6 +11,7 @@ import '/core/models/layers/layer.dart';
 import '/core/platform/io/io_helper.dart';
 import '/features/crop_rotate_editor/models/transform_configs.dart';
 import '/features/filter_editor/constants/identity_matrix_constant.dart';
+import '/features/filter_editor/types/filter_state.dart';
 import '/features/filter_editor/utils/lerp_color_matrix_utils.dart';
 import '/features/tune_editor/models/tune_adjustment_matrix.dart';
 import '../../utils/parser/double_parser.dart';
@@ -64,6 +65,7 @@ class ImportStateHistory {
     final tuneKey = minifier.convertHistoryKey('tune');
     final filtersKey = minifier.convertHistoryKey('filters');
     final transformKey = minifier.convertHistoryKey('transform');
+    final metaKey = minifier.convertHistoryKey('meta');
 
     /// Initialize default values
     final version =
@@ -150,7 +152,7 @@ class ImportStateHistory {
           : null;
 
       /// Filters
-      final filters = parseFilters(historyItem[filtersKey], version);
+      final filters = parseFilterStates(historyItem[filtersKey], version);
 
       /// Tune Adjustments
       final tuneAdjustments = (historyItem[tuneKey] as List<dynamic>? ?? [])
@@ -166,6 +168,11 @@ class ImportStateHistory {
           ? stateHistory.last.transformConfigs
           : TransformConfigs.empty();
 
+      /// Meta
+      final meta = historyItem[metaKey] is Map
+          ? Map<String, dynamic>.from(historyItem[metaKey] as Map)
+          : const <String, dynamic>{};
+
       stateHistory.add(
         EditorStateHistory(
           blur: blur,
@@ -173,6 +180,7 @@ class ImportStateHistory {
           filters: filters,
           tuneAdjustments: tuneAdjustments,
           transformConfigs: transformConfigs,
+          meta: meta,
         ),
       );
     }
@@ -186,6 +194,45 @@ class ImportStateHistory {
       version: version,
       requirePrecacheList: requirePrecacheList,
     );
+  }
+
+  /// Parses filter data into a list of [FilterState].
+  ///
+  /// New format (list of Maps each with `matrices` key + optional timeline
+  /// fields) is parsed via [FilterState.fromMap]. Older formats (plain list
+  /// of matrices) are handled by [parseFilters] and wrapped in a single
+  /// [FilterState].
+  @visibleForTesting
+  static List<FilterState> parseFilterStates(
+    dynamic filtersData,
+    String version,
+  ) {
+    if (filtersData == null) return const [];
+
+    // New format: list of FilterState maps
+    if (filtersData is List &&
+        filtersData.isNotEmpty &&
+        filtersData.first is Map) {
+      final firstMap = filtersData.first as Map;
+      if (firstMap.containsKey('matrices')) {
+        return filtersData
+            .map(
+              (e) => FilterState.fromMap(Map<String, dynamic>.from(e as Map)),
+            )
+            .toList();
+      }
+    }
+
+    // Single FilterState map (backward compat with previous format)
+    if (filtersData is Map<String, dynamic> &&
+        filtersData.containsKey('matrices')) {
+      return [FilterState.fromMap(filtersData)];
+    }
+
+    // Old formats: plain list of matrices
+    final matrices = parseFilters(filtersData, version);
+    if (matrices.isEmpty) return const [];
+    return [FilterState(name: '', matrices: matrices)];
   }
 
   /// Helper to parse filters

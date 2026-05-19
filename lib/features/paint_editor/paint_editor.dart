@@ -664,22 +664,23 @@ class PaintEditorState extends State<PaintEditor>
       },
       onCloseWithValue: () {
         if (!canUndo) return Navigator.pop(context);
-
         final scale = _layerStackTransformHelper.scale;
 
-        final originalLayers = (widget.initConfigs.layers ?? [])
-            .whereType<PaintLayer>()
-            .toList();
+        // Build a map for O(1) lookup instead of O(N) indexWhere
+        final originalErasedMap = <String, List<dynamic>>{};
+        for (final layer
+            in (widget.initConfigs.layers ?? []).whereType<PaintLayer>()) {
+          originalErasedMap[layer.id] = layer.item.erasedOffsets;
+        }
+
         final newLayers = activeHistory.layers.whereType<PaintLayer>().where((
           layer,
         ) {
-          return originalLayers.indexWhere(
-                (el) =>
-                    el.id == layer.id &&
-                    listEquals(el.item.erasedOffsets, layer.item.erasedOffsets),
-              ) <
-              0;
+          final originalErased = originalErasedMap[layer.id];
+          if (originalErased == null) return true;
+          return !listEquals(originalErased, layer.item.erasedOffsets);
         });
+
         final transformedLayers = newLayers.map((layer) {
           return layer
             ..offset *= scale
@@ -880,12 +881,16 @@ class PaintEditorState extends State<PaintEditor>
               controller: screenshotCtrl,
               child: LayoutBuilder(
                 builder: (context, constraints) {
-                  return Scaffold(
-                    resizeToAvoidBottomInset: false,
-                    backgroundColor: paintEditorConfigs.style.background,
-                    appBar: _buildAppBar(constraints),
-                    body: _buildBody(),
-                    bottomNavigationBar: _buildBottomBar(),
+                  return MediaQuery.removePadding(
+                    context: context,
+                    removeBottom: !paintEditorConfigs.safeArea.bottom,
+                    child: Scaffold(
+                      resizeToAvoidBottomInset: false,
+                      backgroundColor: paintEditorConfigs.style.background,
+                      appBar: _buildAppBar(constraints),
+                      body: _buildBody(),
+                      bottomNavigationBar: _buildBottomBar(),
+                    ),
                   );
                 },
               ),

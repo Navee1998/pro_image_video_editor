@@ -41,6 +41,7 @@ class MainEditorCallbacks extends StandaloneEditorCallbacks {
     this.onLayerTapUp,
     this.onImportHistoryStart,
     this.onImportHistoryEnd,
+    this.onLayerInteractionEnd,
     this.onHoverRemoveAreaChange,
     this.onStateHistoryChange,
     this.onImageDecoded,
@@ -78,6 +79,13 @@ class MainEditorCallbacks extends StandaloneEditorCallbacks {
   ///
   /// The [Layer] parameter provides information about the removed layer.
   final Function(Layer layer)? onRemoveLayer;
+
+  /// A callback triggered when a layer interaction (drag/scale/rotate) ends.
+  ///
+  /// The [List<Layer>] parameter provides the layers that were being
+  /// interacted with. This is useful for applying final adjustments like
+  /// snap-to-grid on release.
+  final Function(List<Layer> layers)? onLayerInteractionEnd;
 
   /// A callback function that is triggered when a sub-editor is opened.
   ///
@@ -383,6 +391,15 @@ class MainEditorCallbacks extends StandaloneEditorCallbacks {
     handleUpdateUI();
   }
 
+  /// Handles the end of a layer interaction (drag/scale/rotate).
+  ///
+  /// This method calls the [onLayerInteractionEnd] callback with the
+  /// provided [layers] and then calls [handleUpdateUI].
+  void handleLayerInteractionEnd(List<Layer> layers) {
+    onLayerInteractionEnd?.call(layers);
+    handleUpdateUI();
+  }
+
   /// Handles the opening of a sub-editor.
   ///
   /// This method calls the [onOpenSubEditor] callback with the provided
@@ -480,6 +497,7 @@ class MainEditorCallbacks extends StandaloneEditorCallbacks {
     Function()? onImageDecoded,
     Future<TextLayer?> Function(TextLayer layer)? onEditTextLayer,
     Future<TextLayer?> Function()? onCreateTextLayer,
+    Function(List<Layer> layers)? onLayerInteractionEnd,
     Function(ProImageEditorState state, ImportStateHistory import)?
     onImportHistoryStart,
     Function(ProImageEditorState state, ImportStateHistory import)?
@@ -530,6 +548,8 @@ class MainEditorCallbacks extends StandaloneEditorCallbacks {
       onCreateTextLayer: onCreateTextLayer ?? this.onCreateTextLayer,
       onImportHistoryStart: onImportHistoryStart ?? this.onImportHistoryStart,
       onImportHistoryEnd: onImportHistoryEnd ?? this.onImportHistoryEnd,
+      onLayerInteractionEnd:
+          onLayerInteractionEnd ?? this.onLayerInteractionEnd,
       onHoverRemoveAreaChange:
           onHoverRemoveAreaChange ?? this.onHoverRemoveAreaChange,
       onStateHistoryChange: onStateHistoryChange ?? this.onStateHistoryChange,

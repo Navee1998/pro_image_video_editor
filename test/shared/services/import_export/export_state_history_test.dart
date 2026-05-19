@@ -49,14 +49,18 @@ void main() {
       stateHistory = [
         EditorStateHistory(
           blur: null,
-          filters: [],
           layers: [],
           transformConfigs: null,
           tuneAdjustments: [],
         ),
         EditorStateHistory(
           blur: 2.0,
-          filters: presetFiltersList.first.filters,
+          filters: [
+            FilterState(
+              name: 'filter',
+              matrices: presetFiltersList.first.filters,
+            ),
+          ],
           layers: [DummyLayer('layer1')],
           transformConfigs: null,
         ),

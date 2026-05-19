@@ -1,5 +1,102 @@
 # Changelog
 
+## 12.4.4
+- **FIX**(layers): Improve exported layer resolution for scaled layers to avoid blurry output.
+
+## 12.4.3
+- **FIX**(state-manager): Update activeFilters and activeTuneAdjustments to directly use historyPointer.
+
+## 12.4.2
+- **FEAT**(state-manager): Add `replaceHistory()` to replace an existing history entry in the stack (current pointer by default, or a custom index).
+
+## 12.4.1
+- **FEAT**(main-editor): Add `captureImageOnDone` to `MainEditorConfigs` (default `true`) to make final `captureEditorImage()` on done optional.
+- **FIX**(main-editor): Prevent `_isProcessingFinalImage` from getting stuck by guarding done-flow cleanup with `try/finally`.
+
+## 12.4.0
+- **FEAT**(audio-editor): Add `volume`, `loop`, `audioStartTime`, `audioEndTime`, and `endTime` fields to `AudioTrack`.
+- **FEAT**(complete-parameters): Add `audioTracks` field (`List<AudioTrack>`) to `CompleteParameters` for multiple audio track support.
+- **DEPRECATED**(complete-parameters): `customAudioTrack` — use `audioTracks` instead.
+- **DEPRECATED**(audio-editor): `enableLoop` parameter in `AudioTrack.copyWith` — use `loop` instead.
+
+## 12.3.6
+- **FEAT**(complete-parameters): Export `meta` field in `CompleteParameters` so user-defined metadata is available in the `onCompleteWithParameters` callback.
+
+## 12.3.5
+- **FEAT**(processor): Add `initializationDelay` to `ProcessorConfigs` to optionally defer isolate/thread startup and avoid jank during page transition animations.
+
+## 12.3.4
+- **FIX**(main-editor): Preserve active `filters`, `tuneAdjustments`, and `meta` in `addHistory()` when values are not explicitly provided.
+- **FIX**(main-editor): Store copied `filters`/`tuneAdjustments`/`meta` in history entries to prevent shared-reference mutations across undo/redo states.
+
+## 12.3.3
+- **FEAT**(filter-editor): Add unique `id` to `FilterState`, export/import it, and generate backward-compatible IDs when missing in older history payloads.
+
+## 12.3.2
+- **FEAT**(filter-editor): Add `name` field to `FilterState` to carry the filter name through the editor, history, and import/export.
+- **FEAT**(state-manager): Expose `activeMeta` as a public field, updated on every undo/redo alongside `activeLayers`.
+
+## 12.3.1
+- **FEAT**(state-history): Add `meta` field (`Map<String, dynamic>`) to `EditorStateHistory` for user-defined data that is preserved across undo/redo and import/export.
+- **FEAT**(layers): Add `basePixelRatio` parameter to `captureAsPng`, `captureAllLayers`, and `captureAllLayersWithMeta` for image-relative layer export resolution.
+- **FIX**(timeline): Keep hidden layers painted in the render tree so `captureAsPng` works for timeline-dismissed layers.
+- **FIX**(layers): Use `imageInfos.pixelRatio` instead of device pixel ratio for layer capture in `doneEditing`, ensuring correct export resolution relative to the source image.
+
+## 12.3.0
+- **FEAT**(timeline): Add `meta` field to `FilterState` and `TuneAdjustmentMatrix` for storing arbitrary metadata on filters and tune adjustments.
+- **FEAT**(timeline): Add `copyWith()` to `FilterState` and `TuneAdjustmentMatrix`.
+- **FEAT**(main-editor): Add `setFilterTimeline()` and `setTuneTimeline()` methods for updating timeline properties of filters and tune adjustments.
+- **FEAT**(main-editor): Support `skipUpdateHistory` in `setFilterTimeline()` and `setTuneTimeline()` for live trimming without history overhead.
+- **PERF**(main-editor): `setLayerTimeline` with `skipUpdateHistory` now copies only the affected layer instead of the entire layer list.
+- **PERF**(main-editor): Skip `setLayerTimeline` entirely when no values would change.
+- **REFACTOR**(state-manager): Simplify `activeFilters` and `activeTuneAdjustments` to public fields.
+
+## 12.2.2
+- **FEAT**(main-editor): Expose `editTextLayer`, `editPaintLayer`, `applyTextLayerChanges`, `removeFilter`, and `clearFilters` as public methods.
+- **DOCS**(main-editor): Add doc comments to `editTextLayer`, `editPaintLayer`, `applyTextLayerChanges`, `removeFilter`, and `clearFilters`.
+
+## 12.2.1
+- **FIX**(timeline): Recalculate layer visibility when `startTime`, `endTime`, `enterDuration`, or `exitDuration` change while the video is paused.
+
+## 12.2.0
+- **FEAT**(timeline): Add video timeline visibility to layers, filters, and tune adjustments with configurable `startTime`, `endTime`, enter/exit durations and curves.
+- **FEAT**(complete-parameters): Add `filterStates`, `tuneAdjustments`, and `capturedLayers` to `CompleteParameters`. Add `captureLayersOnDone` config to `MainEditorConfigs`.
+
+## 12.1.0
+- **FEAT**(layers): Add layer export API to capture individual layers as PNG images. Use `Layer.captureAsPng()` for single layers or `Layer.captureAllLayers()` for batch export with shared isolate reuse. The main editor exposes `captureAllLayers()` and `captureAllLayersWithMeta()` convenience methods.
+- **FEAT**(layers): Add `ExportedLayer` model containing the source layer, encoded image bytes, and logical size metadata.
+
+## 12.0.13
+- **FEAT**(text-editor): Add `composingTextDecoration` to `TextEditorConfigs` to control the text decoration of the IME composing region. Defaults to `TextDecoration.none` to remove the underline shown when `enableSuggestions` is active.
+
+## 12.0.12
+- **FEAT**(text-editor): Add `spellCheckConfiguration` to `TextEditorConfigs` for enabling spell checking in the text input field.
+
+## 12.0.11
+- **FEAT**(text-editor): Add `inputLetterSpacing` and `inputShadows` to `TextEditorStyle` for customizing letter spacing and text shadows.
+- **FEAT**(callbacks): Add `onLayerInteractionEnd` callback to `MainEditorCallbacks`, triggered when layer interaction ends.
+- **FEAT**(helper-lines): Allow helper lines to be overridden via custom configurations.
+- **FIX**(sub-editors): Remove hidden `BottomAppBar` `SafeArea` gap in sub-editors.
+
+## 12.0.10
+- **FIX**(iOS, macOS): Restore CocoaPods compatibility for the native Darwin plugin alongside Swift Package Manager support.
+
+## 12.0.9
+- **FIX**(text-editor): Disable system text scale factor in `RoundedBackgroundTextField` to ensure consistent text sizing regardless of user accessibility settings.
+
+## 12.0.8
+- **PERF**(paint-editor): Optimize freestyle path building by reducing redundant `moveTo` calls, eliminating intermediate list allocations, and using `distanceSquared` instead of `distance`.
+- **PERF**(paint-editor): Skip `Opacity` widget wrapping when layer opacity is 1.0.
+- **PERF**(paint-editor): Replace O(N×M) layer filtering in `done()` with Map-based O(1) lookup.
+- **PERF**(main-editor): Replace O(N²) layer copy loop when closing paint editor with single deep-copy and incremental shallow snapshots.
+- **PERF**(main-editor): Batch history entries without redundant `updateActiveItems()` calls via new `skipUpdateActiveItems` parameter on `addHistory()`.
+
+## 12.0.7
+- **FEAT**(text-editor): Add `leadingDistribution` property to `TextEditorStyle` for configuring how extra line height is distributed. Use `TextLeadingDistribution.even` to vertically center text within rounded background rects at non-default line heights. Defaults to `proportional` for backward compatibility.
+
+## 12.0.6
+- **FEAT**(platform): Add shared Darwin (iOS/macOS) native plugin implementation using Swift Package Manager.
+
 ## 12.0.5
 - **FEAT**(editor-audio): Add `safeFilePath` method to `EditorAudio` that returns a file path for the audio source. For file sources, it returns the path directly. For memory, asset, and network sources, it writes the data to a temporary file. File extension is automatically extracted from asset paths and network URLs.
 

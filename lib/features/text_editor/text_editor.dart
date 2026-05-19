@@ -70,7 +70,9 @@ class TextEditorState extends State<TextEditor>
   late final StreamController<void> _rebuildController;
 
   /// Controller for managing text input.
-  final TextEditingController textCtrl = TextEditingController();
+  /// Uses a custom controller that applies the configured composing text
+  /// decoration (default: no underline).
+  late final TextEditingController textCtrl;
 
   /// Node for managing focus on the text input.
   final FocusNode focusNode = FocusNode();
@@ -122,6 +124,9 @@ class TextEditorState extends State<TextEditor>
   @override
   void initState() {
     super.initState();
+    textCtrl = _ComposingStyleTextEditingController(
+      composingTextDecoration: textEditorConfigs.composingTextDecoration,
+    );
     _rebuildController = StreamController.broadcast();
     align = textEditorConfigs.initialTextAlign;
     _fontScale = textEditorConfigs.initFontScale;
@@ -355,14 +360,17 @@ class TextEditorState extends State<TextEditor>
               bottom: textEditorConfigs.safeArea.bottom,
               left: textEditorConfigs.safeArea.left,
               right: textEditorConfigs.safeArea.right,
-              child: Scaffold(
-                resizeToAvoidBottomInset:
-                    textEditorConfigs.resizeToAvoidBottomInset,
-                backgroundColor: textEditorConfigs.style.background,
-                appBar: _buildAppBar(constraints),
-                resizeToAvoidBottomInset: false,
+              child: MediaQuery.removePadding(
+                context: context,
+                removeBottom: !textEditorConfigs.safeArea.bottom,
+                child: Scaffold(
+                  resizeToAvoidBottomInset:
+                      textEditorConfigs.resizeToAvoidBottomInset,
+                  backgroundColor: textEditorConfigs.style.background,
+                  appBar: _buildAppBar(constraints),
+                  resizeToAvoidBottomInset: false,
                 body: _buildBody(),
-                bottomNavigationBar: _buildBottomBar(),
+                bottomNavigationBar: _buildBottomBar(),),
               ),
             ),
           ),
@@ -512,5 +520,54 @@ class TextEditorState extends State<TextEditor>
       ..add(ColorProperty('primaryColor', primaryColor))
       ..add(ColorProperty('secondaryColor', secondaryColor))
       ..add(DiagnosticsProperty<Size>('editorBodySize', editorBodySize));
+  }
+}
+
+/// A [TextEditingController] that applies a custom [TextDecoration] to the
+/// composing region instead of the default underline.
+class _ComposingStyleTextEditingController extends TextEditingController {
+  _ComposingStyleTextEditingController({required this.composingTextDecoration});
+
+  final TextDecoration composingTextDecoration;
+
+  @override
+  TextSpan buildTextSpan({
+    required BuildContext context,
+    TextStyle? style,
+    required bool withComposing,
+  }) {
+    // When there is no composing or decoration is none, skip composing
+    // entirely to avoid the default underline.
+    if (composingTextDecoration == TextDecoration.none) {
+      return super.buildTextSpan(
+        context: context,
+        style: style,
+        withComposing: false,
+      );
+    }
+
+    // Build with composing enabled, then override the decoration.
+    final span = super.buildTextSpan(
+      context: context,
+      style: style,
+      withComposing: withComposing,
+    );
+
+    return _applyDecoration(span);
+  }
+
+  TextSpan _applyDecoration(TextSpan span) {
+    return TextSpan(
+      text: span.text,
+      style:
+          span.style?.copyWith(decoration: composingTextDecoration) ??
+          TextStyle(decoration: composingTextDecoration),
+      children: span.children?.map((child) {
+        if (child is TextSpan) return _applyDecoration(child);
+        return child;
+      }).toList(),
+      recognizer: span.recognizer,
+      semanticsLabel: span.semanticsLabel,
+    );
   }
 }

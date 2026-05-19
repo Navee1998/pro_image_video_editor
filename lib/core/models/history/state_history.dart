@@ -2,7 +2,7 @@
 import 'package:flutter/foundation.dart';
 
 import '/features/crop_rotate_editor/models/transform_configs.dart';
-import '/features/filter_editor/types/filter_matrix.dart';
+import '/features/filter_editor/types/filter_state.dart';
 import '/features/tune_editor/models/tune_adjustment_matrix.dart';
 import '../layers/layer.dart';
 
@@ -20,6 +20,7 @@ class EditorStateHistory {
     this.filters = const [],
     this.tuneAdjustments = const [],
     this.transformConfigs,
+    this.meta = const {},
   });
 
   /// The blur factor.
@@ -29,13 +30,16 @@ class EditorStateHistory {
   final List<Layer> layers;
 
   /// The applied filters.
-  final FilterMatrix filters;
+  final List<FilterState> filters;
 
   /// The applied tune adjustments.
   final List<TuneAdjustmentMatrix> tuneAdjustments;
 
   /// The transformation from the crop/ rotate editor.
   TransformConfigs? transformConfigs;
+
+  /// Optional user-defined metadata that is preserved across undo/redo.
+  final Map<String, dynamic> meta;
 
   /// Creates a copy of the current `EditorStateHistory` instance with the
   /// option to override some of its properties.
@@ -47,9 +51,10 @@ class EditorStateHistory {
   EditorStateHistory copyWith({
     double? blur,
     List<Layer>? layers,
-    FilterMatrix? filters,
+    List<FilterState>? filters,
     List<TuneAdjustmentMatrix>? tuneAdjustments,
     TransformConfigs? transformConfigs,
+    Map<String, dynamic>? meta,
   }) {
     return EditorStateHistory(
       blur: blur ?? this.blur,
@@ -57,6 +62,7 @@ class EditorStateHistory {
       filters: filters ?? this.filters,
       tuneAdjustments: tuneAdjustments ?? this.tuneAdjustments,
       transformConfigs: transformConfigs ?? this.transformConfigs,
+      meta: meta ?? this.meta,
     );
   }
 
@@ -69,7 +75,8 @@ class EditorStateHistory {
         listEquals(other.layers, layers) &&
         listEquals(other.filters, filters) &&
         listEquals(other.tuneAdjustments, tuneAdjustments) &&
-        transformConfigs == other.transformConfigs;
+        transformConfigs == other.transformConfigs &&
+        mapEquals(other.meta, meta);
   }
 
   @override
@@ -78,6 +85,7 @@ class EditorStateHistory {
         layers.hashCode ^
         filters.hashCode ^
         tuneAdjustments.hashCode ^
-        transformConfigs.hashCode;
+        transformConfigs.hashCode ^
+        meta.hashCode;
   }
 }

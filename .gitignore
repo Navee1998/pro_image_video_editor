@@ -8,6 +8,8 @@
 .buildlog/
 .history
 .svn/
+.swiftpm/
+.build/
 migrate_working_dir/
 
 # IntelliJ related

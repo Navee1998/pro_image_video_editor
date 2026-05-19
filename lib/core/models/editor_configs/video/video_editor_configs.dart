@@ -3,10 +3,12 @@ import 'package:flutter/widgets.dart';
 import '/core/models/custom_widgets/video_editor_widgets.dart';
 import '/core/models/icons/video_editor_icons.dart';
 import '/core/models/styles/video_editor_style.dart';
+import 'layer_timeline_configs.dart';
 
 export '/core/models/custom_widgets/video_editor_widgets.dart';
 export '/core/models/icons/video_editor_icons.dart';
 export '/core/models/styles/video_editor_style.dart';
+export 'layer_timeline_configs.dart';
 
 /// Configuration settings for the video editor.
 class VideoEditorConfigs {
@@ -37,6 +39,7 @@ class VideoEditorConfigs {
     this.trimBarMaxScale = 3,
     this.playTimeSmoothingDuration = Duration.zero,
     this.showTrimBar = true,
+    this.layerTimeline = const LayerTimelineConfigs(),
   }) : assert(trimBarMinScale > 0, 'trimBarMinScale must be greater than 0'),
        assert(
          trimBarMaxScale > trimBarMinScale,
@@ -125,6 +128,10 @@ class VideoEditorConfigs {
   /// Curve for the animated indicator switch-out effect.
   final Curve animatedIndicatorSwitchOutCurve;
 
+  /// Configuration for how layers with time ranges are animated in/out
+  /// on the video timeline.
+  final LayerTimelineConfigs layerTimeline;
+
   /// Creates a copy of this instance with the given parameters overridden.
   VideoEditorConfigs copyWith({
     VideoEditorIcons? icons,
@@ -148,6 +155,7 @@ class VideoEditorConfigs {
     Curve? animatedIndicatorSwitchInCurve,
     Curve? animatedIndicatorSwitchOutCurve,
     bool? showTrimBar,
+    LayerTimelineConfigs? layerTimeline,
   }) {
     return VideoEditorConfigs(
       icons: icons ?? this.icons,
@@ -178,6 +186,7 @@ class VideoEditorConfigs {
           animatedIndicatorSwitchOutCurve ??
           this.animatedIndicatorSwitchOutCurve,
       showTrimBar: showTrimBar ?? this.showTrimBar,
+      layerTimeline: layerTimeline ?? this.layerTimeline,
     );
   }
 
@@ -206,7 +215,8 @@ class VideoEditorConfigs {
         other.animatedIndicatorSwitchInCurve ==
             animatedIndicatorSwitchInCurve &&
         other.animatedIndicatorSwitchOutCurve ==
-            animatedIndicatorSwitchOutCurve;
+            animatedIndicatorSwitchOutCurve &&
+        other.layerTimeline == layerTimeline;
   }
 
   @override
@@ -229,7 +239,8 @@ class VideoEditorConfigs {
         controlsPosition.hashCode ^
         animatedIndicatorDuration.hashCode ^
         animatedIndicatorSwitchInCurve.hashCode ^
-        animatedIndicatorSwitchOutCurve.hashCode;
+        animatedIndicatorSwitchOutCurve.hashCode ^
+        layerTimeline.hashCode;
   }
 }
 
