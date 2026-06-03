@@ -76,6 +76,7 @@ class TextEditorAppBar extends StatelessWidget implements PreferredSizeWidget {
 
     return AppBar(
       automaticallyImplyLeading: false,
+      primary: textEditorConfigs.safeArea.top,
       backgroundColor: textEditorConfigs.style.appBarBackground,
       foregroundColor: textEditorConfigs.style.appBarColor,
       actions: [

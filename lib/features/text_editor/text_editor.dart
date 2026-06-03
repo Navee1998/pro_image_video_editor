@@ -347,6 +347,13 @@ class TextEditorState extends State<TextEditor>
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
+        final useDefaultAppBar = textEditorConfigs.widgets.appBar == null;
+        // The default [AppBar] already applies the top system inset when
+        // [primary] is true. Applying [SafeArea] on top as well leaves a
+        // transparent gap that shows the editor underneath.
+        final appBarHandlesTopInset =
+            useDefaultAppBar && textEditorConfigs.safeArea.top;
+
         return ExtendedPopScope(
           canPop: textEditorConfigs.enableGesturePop,
           child: Theme(
@@ -355,22 +362,31 @@ class TextEditorState extends State<TextEditor>
                 preferBelow: true,
               ),
             ),
-            child: SafeArea(
-              top: textEditorConfigs.safeArea.top,
-              bottom: textEditorConfigs.safeArea.bottom,
-              left: textEditorConfigs.safeArea.left,
-              right: textEditorConfigs.safeArea.right,
-              child: MediaQuery.removePadding(
-                context: context,
-                removeBottom: !textEditorConfigs.safeArea.bottom,
-                child: Scaffold(
-                  resizeToAvoidBottomInset:
-                      textEditorConfigs.resizeToAvoidBottomInset,
-                  backgroundColor: textEditorConfigs.style.background,
-                  appBar: _buildAppBar(constraints),
-                body: _buildBody(),
-                bottomNavigationBar: _buildBottomBar(),),
-              ),
+            child: Stack(
+              fit: StackFit.expand,
+              children: [
+                ColoredBox(color: textEditorConfigs.style.background),
+                SafeArea(
+                  top: appBarHandlesTopInset
+                      ? false
+                      : textEditorConfigs.safeArea.top,
+                  bottom: textEditorConfigs.safeArea.bottom,
+                  left: textEditorConfigs.safeArea.left,
+                  right: textEditorConfigs.safeArea.right,
+                  child: MediaQuery.removePadding(
+                    context: context,
+                    removeBottom: !textEditorConfigs.safeArea.bottom,
+                    child: Scaffold(
+                      resizeToAvoidBottomInset:
+                          textEditorConfigs.resizeToAvoidBottomInset,
+                      backgroundColor: Colors.transparent,
+                      appBar: _buildAppBar(constraints),
+                      body: _buildBody(),
+                      bottomNavigationBar: _buildBottomBar(),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
         );
@@ -442,11 +458,18 @@ class TextEditorState extends State<TextEditor>
                   bottom: 0,
                   left: 0,
                   right: 0,
-                  height: kBottomNavigationBarHeight,
-                  child: TextEditorBottomBar(
-                    configs: widget.configs,
-                    selectedStyle: selectedTextStyle,
-                    onFontChange: setTextStyle,
+                  child: SafeArea(
+                    top: false,
+                    left: false,
+                    right: false,
+                    child: SizedBox(
+                      height: kBottomNavigationBarHeight,
+                      child: TextEditorBottomBar(
+                        configs: widget.configs,
+                        selectedStyle: selectedTextStyle,
+                        onFontChange: setTextStyle,
+                      ),
+                    ),
                   ),
                 ),
               if (textEditorConfigs.widgets.bodyItemsOverlay != null)
