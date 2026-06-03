@@ -39,6 +39,7 @@ class VideoEditorConfigs {
     this.trimBarMaxScale = 3,
     this.playTimeSmoothingDuration = Duration.zero,
     this.showTrimBar = true,
+    this.showHeaderCropOption = false,
     this.layerTimeline = const LayerTimelineConfigs(),
   }) : assert(trimBarMinScale > 0, 'trimBarMinScale must be greater than 0'),
        assert(
@@ -75,6 +76,9 @@ class VideoEditorConfigs {
 
   /// Whether to show the trim bar.
   final bool showTrimBar;
+
+  /// Whether to show the header crop option.
+  final bool showHeaderCropOption;
 
   /// Displays an estimated file size based on the trim duration and bitrate.
   ///
@@ -155,6 +159,7 @@ class VideoEditorConfigs {
     Curve? animatedIndicatorSwitchInCurve,
     Curve? animatedIndicatorSwitchOutCurve,
     bool? showTrimBar,
+    bool? showHeaderCropOption,
     LayerTimelineConfigs? layerTimeline,
   }) {
     return VideoEditorConfigs(
@@ -186,6 +191,7 @@ class VideoEditorConfigs {
           animatedIndicatorSwitchOutCurve ??
           this.animatedIndicatorSwitchOutCurve,
       showTrimBar: showTrimBar ?? this.showTrimBar,
+      showHeaderCropOption: showHeaderCropOption ?? this.showHeaderCropOption,
       layerTimeline: layerTimeline ?? this.layerTimeline,
     );
   }

@@ -3304,7 +3304,7 @@ class ProImageEditorState extends State<ProImageEditor>
             stateManager: stateManager,
             cropAndRotate: openCropRotateEditor,
             showCropAndRotate:
-                _isVideoEditor && configs.videoEditor.showTrimBar,
+                _isVideoEditor && configs.videoEditor.showHeaderCropOption,
           );
   }
 
