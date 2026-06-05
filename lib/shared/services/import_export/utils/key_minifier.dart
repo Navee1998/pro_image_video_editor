@@ -12,9 +12,7 @@ class EditorKeyMinifier {
   ///
   /// If [enableMinify] is set to `true`, the minification process will be
   /// enabled.
-  EditorKeyMinifier({
-    required this.enableMinify,
-  });
+  EditorKeyMinifier({required this.enableMinify});
 
   /// Indicates whether minification is enabled.
   final bool enableMinify;
@@ -116,13 +114,17 @@ class EditorKeyMinifier {
           var value = entry.value;
 
           if (entry.key == 'interaction') {
-            value = Map.from(entry.value).map((itemKey, itemValue) =>
-                MapEntry(convertLayerInteractionKey(itemKey), itemValue));
+            value = Map.from(entry.value).map(
+              (itemKey, itemValue) =>
+                  MapEntry(convertLayerInteractionKey(itemKey), itemValue),
+            );
           }
 
           if (entry.key == 'item') {
-            value = Map.from(entry.value).map((itemKey, itemValue) =>
-                MapEntry(convertPaintKey(itemKey), itemValue));
+            value = Map.from(entry.value).map(
+              (itemKey, itemValue) =>
+                  MapEntry(convertPaintKey(itemKey), itemValue),
+            );
           }
 
           return MapEntry(newKey, value);
@@ -138,32 +140,29 @@ class EditorKeyMinifier {
   ///
   /// - [references]: A map containing reference data.
   /// - Returns: A new map with the reference keys converted.
-  Map<String, dynamic> convertReferenceKeys(
-    Map<String, dynamic> references,
-  ) {
+  Map<String, dynamic> convertReferenceKeys(Map<String, dynamic> references) {
     if (!enableMinify) return references;
 
     return references.map((key, value) {
       return MapEntry(
         key,
-        Map.from(value).map(
-          (entryKey, entryValue) {
-            if (entryKey == 'interaction') {
-              entryValue = Map.from(entryValue).map((itemKey, itemValue) =>
-                  MapEntry(convertLayerInteractionKey(itemKey), itemValue));
-            }
-
-            if (entryKey == 'item') {
-              entryValue = Map.from(entryValue).map((itemKey, itemValue) =>
-                  MapEntry(convertPaintKey(itemKey), itemValue));
-            }
-
-            return MapEntry(
-              convertLayerKey(entryKey),
-              entryValue,
+        Map.from(value).map((entryKey, entryValue) {
+          if (entryKey == 'interaction') {
+            entryValue = Map.from(entryValue).map(
+              (itemKey, itemValue) =>
+                  MapEntry(convertLayerInteractionKey(itemKey), itemValue),
             );
-          },
-        ),
+          }
+
+          if (entryKey == 'item') {
+            entryValue = Map.from(entryValue).map(
+              (itemKey, itemValue) =>
+                  MapEntry(convertPaintKey(itemKey), itemValue),
+            );
+          }
+
+          return MapEntry(convertLayerKey(entryKey), entryValue);
+        }),
       );
     });
   }
@@ -240,10 +239,7 @@ class ConvertLayerResponse {
   ///
   /// - [history]: The list of history layers.
   /// - [references]: The updated references map.
-  ConvertLayerResponse({
-    required this.history,
-    required this.references,
-  });
+  ConvertLayerResponse({required this.history, required this.references});
 
   /// The updated history of layers.
   List<Map<String, dynamic>> history;

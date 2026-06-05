@@ -10,18 +10,12 @@ external JSObject? jsGetOwnPropertyDescriptor(
 
 /// A function that converts a Dart object to a JavaScript object.
 @JS('Reflect.get')
-external JSAny? reflectGet(
-  JSAny? target,
-  JSAny? propertyKey,
-);
+external JSAny? reflectGet(JSAny? target, JSAny? propertyKey);
 
 /// A function that converts a Dart object to a JavaScript object.
 JSAny? jsGetProperty(JSObject obj, String propertyName) {
   // get the descriptor object
-  final descriptor = jsGetOwnPropertyDescriptor(
-    obj,
-    propertyName.toJS,
-  );
+  final descriptor = jsGetOwnPropertyDescriptor(obj, propertyName.toJS);
   if (descriptor == null) return null;
 
   // retrieve descriptor.value using Reflect.get(descriptor, "value")

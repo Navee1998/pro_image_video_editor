@@ -22,9 +22,7 @@ EmojiLayer emojiLayerMock = EmojiLayer(
     enableScale: false,
     enableSelection: true,
   ),
-  meta: {
-    'emoji-mock': 'meta',
-  },
+  meta: {'emoji-mock': 'meta'},
   offset: const Offset(150, 300),
   rotation: pi,
   scale: 2.75,

@@ -34,10 +34,7 @@ void main() {
     });
 
     test('Constructor should throw an error if all properties are null', () {
-      expect(
-        EditorImage.new,
-        throwsA(isA<AssertionError>()),
-      );
+      expect(EditorImage.new, throwsA(isA<AssertionError>()));
     });
 
     test('hasBytes should return true when byteArray is not null', () async {
@@ -57,10 +54,7 @@ void main() {
         equals(EditorImageType.memory),
       );
 
-      expect(
-        EditorImage(file: file).type,
-        equals(EditorImageType.file),
-      );
+      expect(EditorImage(file: file).type, equals(EditorImageType.file));
 
       expect(
         EditorImage(networkUrl: networkUrl).type,
@@ -73,8 +67,9 @@ void main() {
       );
     });
 
-    testWidgets('safeByteArray should return the correct data',
-        (WidgetTester tester) async {
+    testWidgets('safeByteArray should return the correct data', (
+      WidgetTester tester,
+    ) async {
       final key = GlobalKey();
       final Uint8List byteArray = Uint8List.fromList(mockMemoryImage);
 
@@ -91,8 +86,9 @@ void main() {
         ),
       );
 
-      final Uint8List memoryData =
-          await memoryImage.safeByteArray(key.currentContext!);
+      final Uint8List memoryData = await memoryImage.safeByteArray(
+        key.currentContext!,
+      );
       expect(memoryData, mockMemoryImage);
     });
   });

@@ -65,9 +65,7 @@ class ImageConverter {
 
     /// Build recorder and perform conversion
     var recorder = _buildRecorder(configs);
-    var resultBytes = await recorder.convertRawImageData(
-      image: convertedImage,
-    );
+    var resultBytes = await recorder.convertRawImageData(image: convertedImage);
 
     /// Clean up
     await recorder.destroy();
@@ -95,9 +93,7 @@ class ImageConverter {
     ImageGenerationConfigs configs = const ImageGenerationConfigs(
       outputFormat: OutputFormat.png,
       maxOutputSize: Size.infinite,
-      processorConfigs: ProcessorConfigs(
-        processorMode: ProcessorMode.minimum,
-      ),
+      processorConfigs: ProcessorConfigs(processorMode: ProcessorMode.minimum),
     ),
   }) async {
     var recorder = ContentRecorderController(

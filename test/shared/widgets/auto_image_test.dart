@@ -22,10 +22,7 @@ void main() {
       when(mockEditorImage.byteArray).thenReturn(mockMemoryImage);
 
       await tester.pumpWidget(
-        AutoImage(
-          mockEditorImage,
-          configs: const ProImageEditorConfigs(),
-        ),
+        AutoImage(mockEditorImage, configs: const ProImageEditorConfigs()),
       );
 
       expect(find.byType(Image), findsOneWidget);
@@ -37,10 +34,7 @@ void main() {
         when(mockEditorImage.networkUrl).thenReturn(mockNetworkImage);
 
         await tester.pumpWidget(
-          AutoImage(
-            mockEditorImage,
-            configs: const ProImageEditorConfigs(),
-          ),
+          AutoImage(mockEditorImage, configs: const ProImageEditorConfigs()),
         );
 
         expect(find.byType(Image), findsOneWidget);

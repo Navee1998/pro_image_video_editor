@@ -1,6 +1,3 @@
-// ignore_for_file: deprecated_member_use_from_same_package
-// TODO: Remove the deprecated values when releasing version 12.0.0.
-
 import 'package:flutter/material.dart';
 
 import '/features/crop_rotate_editor/enums/crop_mode.enum.dart';
@@ -45,19 +42,6 @@ class CropRotateEditorConfigs implements BaseSubEditorConfigs {
     this.desktopCornerDragArea = 7,
     this.mobileCornerDragArea = kMinInteractiveDimension,
     this.enableGesturePop = true,
-    @Deprecated(
-      'Use tools inside MainEditorConfigs instead, e.g. tools: '
-      '[SubEditorMode.cropRotate]',
-    )
-    this.enabled = true,
-    @Deprecated('Use tools instead, e.g. tools: [CropRotateTool.rotate]')
-    this.showRotateButton = true,
-    @Deprecated('Use tools instead, e.g. tools: [CropRotateTool.flip]')
-    this.showFlipButton = true,
-    @Deprecated('Use tools instead, e.g. tools: [CropRotateTool.aspectRatio]')
-    this.showAspectRatioButton = true,
-    @Deprecated('Use tools instead, e.g. tools: [CropRotateTool.reset]')
-    this.showResetButton = true,
     this.tools = const [
       CropRotateTool.rotate,
       CropRotateTool.flip,
@@ -67,6 +51,7 @@ class CropRotateEditorConfigs implements BaseSubEditorConfigs {
     this.invertMouseScroll = false,
     this.invertDragDirection = false,
     this.initialCropMode = CropMode.rectangular,
+    this.exportOvalMask = true,
     this.enableTransformLayers = true,
     this.enableProvideImageInfos = false,
     this.enableDoubleTap = true,
@@ -81,8 +66,9 @@ class CropRotateEditorConfigs implements BaseSubEditorConfigs {
     this.rotateDirection = RotateDirection.left,
     this.opacityOutsideCropAreaDuration = const Duration(milliseconds: 100),
     this.animationDuration = const Duration(milliseconds: 250),
-    this.fadeInOutsideCropAreaAnimationDuration =
-        const Duration(milliseconds: 350),
+    this.fadeInOutsideCropAreaAnimationDuration = const Duration(
+      milliseconds: 350,
+    ),
     this.cropDragAnimationDuration = const Duration(milliseconds: 400),
     this.maxScale = 7,
     this.mouseScaleFactor = 0.1,
@@ -94,51 +80,34 @@ class CropRotateEditorConfigs implements BaseSubEditorConfigs {
       AspectRatioItem(text: '4*3', value: 4.0 / 3.0),
       AspectRatioItem(text: '3*4', value: 3.0 / 4.0),
       AspectRatioItem(text: '16*9', value: 16.0 / 9.0),
-      AspectRatioItem(text: '9*16', value: 9.0 / 16.0)
+      AspectRatioItem(text: '9*16', value: 9.0 / 16.0),
     ],
     this.safeArea = const EditorSafeArea(),
     this.style = const CropRotateEditorStyle(),
     this.icons = const CropRotateEditorIcons(),
     this.widgets = const CropRotateEditorWidgets(),
     this.maxWidthFactor,
-  })  : assert(maxScale >= 1, 'maxScale must be greater than or equal to 1'),
-        assert(desktopCornerDragArea > 0,
-            'desktopCornerDragArea must be positive'),
-        assert(
-            mobileCornerDragArea > 0, 'mobileCornerDragArea must be positive'),
-        assert(
-            maxWidthFactor == null ||
-                (maxWidthFactor > 0 && maxWidthFactor <= 1),
-            'maxWidthFactor must be greater than 0 and less than 1'),
-        assert(doubleTapScaleFactor > 1,
-            'doubleTapScaleFactor must be greater than 1');
+  }) : assert(maxScale >= 1, 'maxScale must be greater than or equal to 1'),
+       assert(
+         desktopCornerDragArea > 0,
+         'desktopCornerDragArea must be positive',
+       ),
+       assert(
+         mobileCornerDragArea > 0,
+         'mobileCornerDragArea must be positive',
+       ),
+       assert(
+         maxWidthFactor == null || (maxWidthFactor > 0 && maxWidthFactor <= 1),
+         'maxWidthFactor must be greater than 0 and less than 1',
+       ),
+       assert(
+         doubleTapScaleFactor > 1,
+         'doubleTapScaleFactor must be greater than 1',
+       );
 
   /// {@macro enableGesturePop}
   @override
   final bool enableGesturePop;
-
-  /// Indicates whether the editor is enabled.
-  @Deprecated(
-    'Use tools inside MainEditorConfigs instead, e.g. tools: '
-    '[SubEditorMode.cropRotate]',
-  )
-  final bool enabled;
-
-  /// Whether to show a button to rotate the image.
-  @Deprecated('Use tools instead, e.g. tools: [CropRotateTool.rotate]')
-  final bool showRotateButton;
-
-  /// Whether to show a button to flip the image.
-  @Deprecated('Use tools instead, e.g. tools: [CropRotateTool.flip]')
-  final bool showFlipButton;
-
-  /// Whether to show a button to change the aspect ratio.
-  @Deprecated('Use tools instead, e.g. tools: [CropRotateTool.aspectRatio]')
-  final bool showAspectRatioButton;
-
-  /// Whether to show a button to reset all transformations.
-  @Deprecated('Use tools instead, e.g. tools: [CropRotateTool.reset]')
-  final bool showResetButton;
 
   /// Show the layers from the main-editor.
   final bool showLayers;
@@ -163,6 +132,14 @@ class CropRotateEditorConfigs implements BaseSubEditorConfigs {
   /// This determines the default cropping behavior or aspect ratio that will be
   /// presented to the user before any manual adjustments are made.
   final CropMode initialCropMode;
+
+  /// Controls whether the oval mask is applied to the exported image when
+  /// [initialCropMode] is set to [CropMode.oval].
+  ///
+  /// When `true` (default), the exported image is clipped to an oval/circle
+  /// shape. When `false`, the raw rectangular crop is exported without any
+  /// oval masking, while the oval UI is still shown inside the crop editor.
+  final bool exportOvalMask;
 
   /// Defines which crop-rotate tools are available in the editor.
   ///
@@ -284,16 +261,6 @@ class CropRotateEditorConfigs implements BaseSubEditorConfigs {
   /// others unchanged.
   CropRotateEditorConfigs copyWith({
     bool? enableGesturePop,
-    bool? enabled,
-    @Deprecated('Use tools instead, e.g. tools: [CropRotateTool.rotate]')
-    bool? showRotateButton,
-    @Deprecated('Use tools instead, e.g. tools: [CropRotateTool.flip]')
-    bool? showFlipButton,
-    @Deprecated('Use tools instead, e.g. tools: [CropRotateTool.aspectRatio]')
-    bool? showAspectRatioButton,
-    @Deprecated('Use tools instead, e.g. tools: [CropRotateTool.reset]')
-    bool? showResetButton,
-    List<CropRotateTool>? tools,
     bool? showLayers,
     bool? enableTransformLayers,
     bool? enableDoubleTap,
@@ -301,6 +268,8 @@ class CropRotateEditorConfigs implements BaseSubEditorConfigs {
     bool? invertMouseScroll,
     bool? invertDragDirection,
     CropMode? initialCropMode,
+    bool? exportOvalMask,
+    List<CropRotateTool>? tools,
     bool? enableProvideImageInfos,
     double? initAspectRatio,
     double? maxScale,
@@ -327,13 +296,6 @@ class CropRotateEditorConfigs implements BaseSubEditorConfigs {
   }) {
     return CropRotateEditorConfigs(
       enableGesturePop: enableGesturePop ?? this.enableGesturePop,
-      enabled: enabled ?? this.enabled,
-      showRotateButton: showRotateButton ?? this.showRotateButton,
-      showFlipButton: showFlipButton ?? this.showFlipButton,
-      showAspectRatioButton:
-          showAspectRatioButton ?? this.showAspectRatioButton,
-      showResetButton: showResetButton ?? this.showResetButton,
-      tools: tools ?? this.tools,
       showLayers: showLayers ?? this.showLayers,
       enableTransformLayers:
           enableTransformLayers ?? this.enableTransformLayers,
@@ -342,6 +304,8 @@ class CropRotateEditorConfigs implements BaseSubEditorConfigs {
       invertMouseScroll: invertMouseScroll ?? this.invertMouseScroll,
       invertDragDirection: invertDragDirection ?? this.invertDragDirection,
       initialCropMode: initialCropMode ?? this.initialCropMode,
+      exportOvalMask: exportOvalMask ?? this.exportOvalMask,
+      tools: tools ?? this.tools,
       enableProvideImageInfos:
           enableProvideImageInfos ?? this.enableProvideImageInfos,
       initAspectRatio: initAspectRatio ?? this.initAspectRatio,
@@ -355,7 +319,7 @@ class CropRotateEditorConfigs implements BaseSubEditorConfigs {
           cropDragAnimationDuration ?? this.cropDragAnimationDuration,
       fadeInOutsideCropAreaAnimationDuration:
           fadeInOutsideCropAreaAnimationDuration ??
-              this.fadeInOutsideCropAreaAnimationDuration,
+          this.fadeInOutsideCropAreaAnimationDuration,
       opacityOutsideCropAreaDuration:
           opacityOutsideCropAreaDuration ?? this.opacityOutsideCropAreaDuration,
       rotateAnimationCurve: rotateAnimationCurve ?? this.rotateAnimationCurve,
@@ -365,7 +329,7 @@ class CropRotateEditorConfigs implements BaseSubEditorConfigs {
           cropDragAnimationCurve ?? this.cropDragAnimationCurve,
       fadeInOutsideCropAreaAnimationCurve:
           fadeInOutsideCropAreaAnimationCurve ??
-              this.fadeInOutsideCropAreaAnimationCurve,
+          this.fadeInOutsideCropAreaAnimationCurve,
       rotateDirection: rotateDirection ?? this.rotateDirection,
       desktopCornerDragArea:
           desktopCornerDragArea ?? this.desktopCornerDragArea,

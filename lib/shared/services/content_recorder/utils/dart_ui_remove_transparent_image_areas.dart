@@ -6,9 +6,7 @@ import 'dart:ui' as ui;
 import 'package:flutter/foundation.dart';
 
 /// Function to remove transparent areas from the image using dart:ui
-Future<ui.Image?> dartUiRemoveTransparentImgAreas(
-  ui.Image image,
-) async {
+Future<ui.Image?> dartUiRemoveTransparentImgAreas(ui.Image image) async {
   // Convert the Image to access pixels
   final byteData = await image.toByteData(format: ui.ImageByteFormat.rawRgba);
 
@@ -113,16 +111,21 @@ Future<ui.Image?> dartUiRemoveTransparentImgAreas(
   final canvas = ui.Canvas(pictureRecorder);
 
   // Define the crop area with validation to ensure it's within the image bounds
-  final srcRect = ui.Rect.fromLTRB(minX.toDouble(), minY.toDouble(),
-      (maxX + 1).toDouble(), (maxY + 1).toDouble());
+  final srcRect = ui.Rect.fromLTRB(
+    minX.toDouble(),
+    minY.toDouble(),
+    (maxX + 1).toDouble(),
+    (maxY + 1).toDouble(),
+  );
   final dstRect = ui.Rect.fromLTWH(0, 0, srcRect.width, srcRect.height);
 
   canvas.drawImageRect(image, srcRect, dstRect, ui.Paint());
 
   // Create the cropped image from the canvas
-  final croppedImage = await pictureRecorder
-      .endRecording()
-      .toImage((maxX - minX + 1).toInt(), (maxY - minY + 1).toInt());
+  final croppedImage = await pictureRecorder.endRecording().toImage(
+    (maxX - minX + 1).toInt(),
+    (maxY - minY + 1).toInt(),
+  );
 
   return croppedImage;
 }

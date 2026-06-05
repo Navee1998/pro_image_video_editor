@@ -38,7 +38,7 @@ class PvrBitUtility {
     230,
     238,
     246,
-    255
+    255,
   ];
 
   static const bitScale4To8 = [
@@ -57,7 +57,7 @@ class PvrBitUtility {
     204,
     221,
     238,
-    255
+    255,
   ];
 
   static const bitScale3To8 = [0, 36, 72, 109, 145, 182, 218, 255];
@@ -318,7 +318,7 @@ class PvrBitUtility {
     30,
     30,
     30,
-    31
+    31,
   ];
 
   static const bitScale8To4Floor = [
@@ -577,7 +577,7 @@ class PvrBitUtility {
     14,
     14,
     14,
-    15
+    15,
   ];
 
   static const bitScale8To3Floor = [
@@ -836,7 +836,7 @@ class PvrBitUtility {
     6,
     6,
     6,
-    7
+    7,
   ];
 
   static const bitScale8To5Ceil = [
@@ -1095,7 +1095,7 @@ class PvrBitUtility {
     31,
     31,
     31,
-    31
+    31,
   ];
 
   static const bitScale8To4Ceil = [
@@ -1354,7 +1354,7 @@ class PvrBitUtility {
     15,
     15,
     15,
-    15
+    15,
   ];
 
   static const bitScale8To3Ceil = [
@@ -1613,7 +1613,7 @@ class PvrBitUtility {
     7,
     7,
     7,
-    7
+    7,
   ];
 
   // DartAnalyzer doesn't like classes with only static members now, so

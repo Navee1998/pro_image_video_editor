@@ -24,10 +24,7 @@ class FrostedGlassBlurAppbar extends StatelessWidget {
   ///   blurEditor: myBlurEditorState,
   /// )
   /// ```
-  const FrostedGlassBlurAppbar({
-    super.key,
-    required this.blurEditor,
-  });
+  const FrostedGlassBlurAppbar({super.key, required this.blurEditor});
 
   /// The configuration for the blur editor.
   ///

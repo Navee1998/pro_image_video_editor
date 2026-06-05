@@ -17,9 +17,8 @@ typedef ImageEditingCompleteCallback = Future<void> Function(Uint8List bytes);
 ///
 /// Typically used to process or export video frames based on complete
 /// transformation and filter parameters.
-typedef CompleteWidthParametersCallback = Future<void> Function(
-  CompleteParameters parameters,
-);
+typedef CompleteWidthParametersCallback =
+    Future<void> Function(CompleteParameters parameters);
 
 /// A callback function type that is invoked when a thumbnail image is
 /// generated.
@@ -32,8 +31,8 @@ typedef CompleteWidthParametersCallback = Future<void> Function(
 /// thumbnail image.
 /// The [rawImage] parameter contains the raw `ui.Image` object of the
 /// original image.
-typedef ThumbnailGeneratedCallback = Future<void> Function(
-    Uint8List thumbnailBytes, ui.Image rawImage);
+typedef ThumbnailGeneratedCallback =
+    Future<void> Function(Uint8List thumbnailBytes, ui.Image rawImage);
 
 /// A typedef representing a callback function invoked when no image editing is
 /// performed.

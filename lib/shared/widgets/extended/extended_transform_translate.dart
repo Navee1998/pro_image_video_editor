@@ -50,10 +50,7 @@ class ExtendedTransformTranslateState
 
   @override
   Widget build(BuildContext context) {
-    return Transform.translate(
-      offset: offset,
-      child: widget.child,
-    );
+    return Transform.translate(offset: offset, child: widget.child);
   }
 
   /// Updates the translation offset and triggers a rebuild of the transform.

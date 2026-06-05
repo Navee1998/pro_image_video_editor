@@ -10,9 +10,7 @@ abstract class BaseSubEditorConfigs {
   /// Creates a base configuration for a sub-editor.
   ///
   /// The [enableGesturePop] property defaults to `true`.
-  const BaseSubEditorConfigs({
-    this.enableGesturePop = true,
-  });
+  const BaseSubEditorConfigs({this.enableGesturePop = true});
 
   /// {@template layerFractionalOffset}
   /// Whether the user can dismiss (pop) this editor using system gestures.

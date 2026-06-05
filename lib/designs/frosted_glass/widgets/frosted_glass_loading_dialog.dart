@@ -76,7 +76,9 @@ class FrostedGlassLoadingDialog extends StatelessWidget {
                         child: Text(
                           message,
                           style: const TextStyle(
-                              fontSize: 16, color: Colors.white),
+                            fontSize: 16,
+                            color: Colors.white,
+                          ),
                           textAlign: TextAlign.start,
                         ),
                       ),

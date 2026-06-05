@@ -4,16 +4,19 @@ import '/core/enums/design_mode.dart';
 import '/core/platform/io/io_helper.dart';
 
 /// Checks if the app is running on a desktop platform.
-final isDesktop = !isWebMobile &&
+final isDesktop =
+    !isWebMobile &&
     (kIsWeb || Platform.isMacOS || Platform.isWindows || Platform.isLinux);
 
 /// Checks if the current platform is a web mobile device.
-final isWebMobile = kIsWeb &&
+final isWebMobile =
+    kIsWeb &&
     (defaultTargetPlatform == TargetPlatform.iOS ||
         defaultTargetPlatform == TargetPlatform.android);
 
 /// Determines if the platform uses Material Design.
-final platformIsMaterialDesign = kIsWeb ||
+final platformIsMaterialDesign =
+    kIsWeb ||
     (defaultTargetPlatform != TargetPlatform.iOS &&
         defaultTargetPlatform != TargetPlatform.macOS);
 

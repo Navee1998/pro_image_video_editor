@@ -30,18 +30,19 @@ enum PngFilterType { none, sub, up, average, paeth }
 /// See <https://www.w3.org/TR/png-3/#11pHYs>.
 class PngPhysicalPixelDimensions {
   /// Constructs a dimension descriptor with the given values.
-  const PngPhysicalPixelDimensions(
-      {required this.xPxPerUnit,
-      required this.yPxPerUnit,
-      required this.unitSpecifier});
+  const PngPhysicalPixelDimensions({
+    required this.xPxPerUnit,
+    required this.yPxPerUnit,
+    required this.unitSpecifier,
+  });
 
   /// Constructs a dimension descriptor specifying x and y resolution in dots
   /// per inch (DPI). If [yDpi] is unspecified, [xDpi] is used for both x and y
   /// axes.
   PngPhysicalPixelDimensions.dpi(int xDpi, [int? yDpi])
-      : xPxPerUnit = (xDpi * _inchesPerM).round(),
-        yPxPerUnit = ((yDpi ?? xDpi) * _inchesPerM).round(),
-        unitSpecifier = unitMeter;
+    : xPxPerUnit = (xDpi * _inchesPerM).round(),
+      yPxPerUnit = ((yDpi ?? xDpi) * _inchesPerM).round(),
+      unitSpecifier = unitMeter;
   static const double _inchesPerM = 39.3701;
 
   /// Unit is unknown.

@@ -1,4 +1,6 @@
 // Flutter imports:
+import 'dart:ui' as ui;
+
 import 'package:flutter/material.dart';
 
 import '../../constants/editor_style_constants.dart';
@@ -52,9 +54,13 @@ class TextEditorStyle {
   /// Creates an instance of the `TextEditorStyle` class with the specified
   /// style properties.
   const TextEditorStyle({
+    this.textHeight = 0.0,
+    this.leadingDistribution = ui.TextLeadingDistribution.proportional,
     this.fontSizeBottomSheetTitle,
-    this.textFieldMargin =
-        const EdgeInsets.only(bottom: kBottomNavigationBarHeight),
+    this.textFieldMargin = const EdgeInsets.only(
+      bottom: kBottomNavigationBarHeight,
+    ),
+    this.textFieldPadding = EdgeInsets.zero,
     this.appBarBackground = kImageEditorAppBarBackground,
     this.appBarColor = kImageEditorAppBarColor,
     this.bottomBarBackground = kImageEditorBottomBarBackground,
@@ -63,6 +69,14 @@ class TextEditorStyle {
     this.inputHintColor = const Color(0xFFBDBDBD),
     this.inputCursorColor = kImageEditorPrimaryColor,
     this.fontScaleBottomSheetBackground = const Color(0xFF252728),
+    this.inputTextFieldBackground = Colors.transparent,
+    this.inputTextFieldBorderColor = Colors.transparent,
+    this.inputTextFieldBorderRadius = const BorderRadius.all(
+      Radius.circular(4),
+    ),
+    this.inputTextFieldPadding = EdgeInsets.zero,
+    this.inputLetterSpacing = 0,
+    this.inputShadows = const [],
   });
 
   /// Background color of the app bar in the text editor.
@@ -89,11 +103,58 @@ class TextEditorStyle {
   /// Margin value around the textField.
   final EdgeInsets textFieldMargin;
 
+  /// Padding value applied outside the scroll area of the text field.
+  ///
+  /// This padding is always visible at the screen edges, even when the text
+  /// field content is wider than the screen and scrollable.
+  final EdgeInsets textFieldPadding;
+
   /// Title of the bottom sheet used to select the font-size.
   final TextStyle? fontSizeBottomSheetTitle;
 
   /// Background color for the font scale bottom sheet.
   final Color fontScaleBottomSheetBackground;
+
+  /// Background color of the input text field.
+  final Color inputTextFieldBackground;
+
+  /// Border color of the input text field.
+  final Color inputTextFieldBorderColor;
+
+  /// Border radius of the input text field.
+  final BorderRadius inputTextFieldBorderRadius;
+
+  /// Padding of the input text field.
+  final EdgeInsets inputTextFieldPadding;
+
+  /// Height value for the text input style. Set to 0.0 for proper centering
+  /// on various platforms. Set to null to use the default line height.
+  final double? textHeight;
+
+  /// Letter spacing applied to the text input field style.
+  ///
+  /// Defaults to `0` to fix alignment issues with some fonts.
+  /// Set to `null` to use the font's default letter spacing.
+  final double? inputLetterSpacing;
+
+  /// Shadows applied to the text input field style.
+  ///
+  /// Defaults to an empty list to prevent unwanted shadow rendering
+  /// with some fonts. Set to `null` to use the font's default shadows.
+  final List<Shadow>? inputShadows;
+
+  /// Controls how extra leading from the [TextStyle.height] multiplier is
+  /// distributed above and below the text glyph.
+  ///
+  /// [TextLeadingDistribution.proportional] distributes leading proportional
+  /// to the font's ascent / descent ratio (~75% above, ~25% below for most
+  /// Latin fonts). This is the default and matches Flutter's standard
+  /// rendering.
+  ///
+  /// [TextLeadingDistribution.even] splits the extra leading 50 / 50, which
+  /// visually centres glyphs inside their rounded background rects when
+  /// [TextStyle.height] is greater than 1.0.
+  final ui.TextLeadingDistribution leadingDistribution;
 
   /// Creates a copy of this `TextEditorStyle` object with the given fields
   /// replaced with new values.
@@ -102,6 +163,8 @@ class TextEditorStyle {
   /// [TextEditorStyle] with some properties updated while keeping the
   /// others unchanged.
   TextEditorStyle copyWith({
+    double? textHeight,
+    ui.TextLeadingDistribution? leadingDistribution,
     Color? appBarBackground,
     Color? appBarColor,
     Color? bottomBarBackground,
@@ -109,11 +172,20 @@ class TextEditorStyle {
     Color? inputHintColor,
     Color? inputCursorColor,
     Color? fontScaleBottomSheetBackground,
+    Color? inputTextFieldBackground,
+    Color? inputTextFieldBorderColor,
+    BorderRadius? inputTextFieldBorderRadius,
+    EdgeInsets? inputTextFieldPadding,
     MainAxisAlignment? bottomBarMainAxisAlignment,
     EdgeInsets? textFieldMargin,
+    EdgeInsets? textFieldPadding,
     TextStyle? fontSizeBottomSheetTitle,
+    double? inputLetterSpacing,
+    List<Shadow>? inputShadows,
   }) {
     return TextEditorStyle(
+      textHeight: textHeight ?? this.textHeight,
+      leadingDistribution: leadingDistribution ?? this.leadingDistribution,
       fontScaleBottomSheetBackground:
           fontScaleBottomSheetBackground ?? this.fontScaleBottomSheetBackground,
       appBarBackground: appBarBackground ?? this.appBarBackground,
@@ -122,11 +194,22 @@ class TextEditorStyle {
       background: background ?? this.background,
       inputHintColor: inputHintColor ?? this.inputHintColor,
       inputCursorColor: inputCursorColor ?? this.inputCursorColor,
+      inputTextFieldBackground:
+          inputTextFieldBackground ?? this.inputTextFieldBackground,
+      inputTextFieldBorderColor:
+          inputTextFieldBorderColor ?? this.inputTextFieldBorderColor,
+      inputTextFieldBorderRadius:
+          inputTextFieldBorderRadius ?? this.inputTextFieldBorderRadius,
+      inputTextFieldPadding:
+          inputTextFieldPadding ?? this.inputTextFieldPadding,
       bottomBarMainAxisAlignment:
           bottomBarMainAxisAlignment ?? this.bottomBarMainAxisAlignment,
       textFieldMargin: textFieldMargin ?? this.textFieldMargin,
+      textFieldPadding: textFieldPadding ?? this.textFieldPadding,
       fontSizeBottomSheetTitle:
           fontSizeBottomSheetTitle ?? this.fontSizeBottomSheetTitle,
+      inputLetterSpacing: inputLetterSpacing ?? this.inputLetterSpacing,
+      inputShadows: inputShadows ?? this.inputShadows,
     );
   }
 }

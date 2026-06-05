@@ -6,15 +6,12 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:network_image_mock/network_image_mock.dart';
 import 'package:pro_image_editor/core/models/init_configs/filter_editor_init_configs.dart';
 import 'package:pro_image_editor/features/filter_editor/filter_editor.dart';
-import 'package:pro_image_editor/features/filter_editor/widgets/filtered_widget.dart';
 
 // Project imports:
 import '../mock/mock_image.dart';
 
 void main() {
-  final initConfigs = FilterEditorInitConfigs(
-    theme: ThemeData(),
-  );
+  final initConfigs = FilterEditorInitConfigs(theme: ThemeData());
   var key = GlobalKey<FilterEditorState>();
   Future<void> pumpEditor(WidgetTester tester) async {
     await tester.pumpWidget(
@@ -31,80 +28,102 @@ void main() {
   }
 
   group('FilterEditor Initialization', () {
-    testWidgets('creates FilterEditor using memory image',
-        (WidgetTester tester) async {
-      await tester.pumpWidget(MaterialApp(
-        home: FilterEditor.memory(mockMemoryImage, initConfigs: initConfigs),
-      ));
+    testWidgets('creates FilterEditor using memory image', (
+      WidgetTester tester,
+    ) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: FilterEditor.memory(mockMemoryImage, initConfigs: initConfigs),
+        ),
+      );
 
       expect(find.byType(FilterEditor), findsOneWidget);
     });
-    testWidgets('creates FilterEditor using network image',
-        (WidgetTester tester) async {
+    testWidgets('creates FilterEditor using network image', (
+      WidgetTester tester,
+    ) async {
       await mockNetworkImagesFor(() async {
-        await tester.pumpWidget(MaterialApp(
-          home:
-              FilterEditor.network(mockNetworkImage, initConfigs: initConfigs),
-        ));
+        await tester.pumpWidget(
+          MaterialApp(
+            home: FilterEditor.network(
+              mockNetworkImage,
+              initConfigs: initConfigs,
+            ),
+          ),
+        );
       });
 
       expect(find.byType(FilterEditor), findsOneWidget);
     });
-    testWidgets('creates FilterEditor using file image',
-        (WidgetTester tester) async {
-      await tester.pumpWidget(MaterialApp(
-        home: FilterEditor.file(mockFileImage, initConfigs: initConfigs),
-      ));
+    testWidgets('creates FilterEditor using file image', (
+      WidgetTester tester,
+    ) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: FilterEditor.file(mockFileImage, initConfigs: initConfigs),
+        ),
+      );
 
       expect(find.byType(FilterEditor), findsOneWidget);
     });
-    testWidgets('creates FilterEditor using file path',
-        (WidgetTester tester) async {
-      await tester.pumpWidget(MaterialApp(
-        home: FilterEditor.file('', initConfigs: initConfigs),
-      ));
+    testWidgets('creates FilterEditor using file path', (
+      WidgetTester tester,
+    ) async {
+      await tester.pumpWidget(
+        MaterialApp(home: FilterEditor.file('', initConfigs: initConfigs)),
+      );
 
       expect(find.byType(FilterEditor), findsOneWidget);
     });
     group('creates FilterEditor using autoSource constructor', () {
-      testWidgets('Auto-detects from memory image',
-          (WidgetTester tester) async {
-        await tester.pumpWidget(MaterialApp(
-          home: FilterEditor.autoSource(
-            byteArray: mockMemoryImage,
-            initConfigs: initConfigs,
+      testWidgets('Auto-detects from memory image', (
+        WidgetTester tester,
+      ) async {
+        await tester.pumpWidget(
+          MaterialApp(
+            home: FilterEditor.autoSource(
+              byteArray: mockMemoryImage,
+              initConfigs: initConfigs,
+            ),
           ),
-        ));
+        );
 
         expect(find.byType(FilterEditor), findsOneWidget);
       });
-      testWidgets('Auto-detects from network image',
-          (WidgetTester tester) async {
+      testWidgets('Auto-detects from network image', (
+        WidgetTester tester,
+      ) async {
         await mockNetworkImagesFor(() async {
-          await tester.pumpWidget(MaterialApp(
-            home: FilterEditor.autoSource(
-              networkUrl: mockNetworkImage,
-              initConfigs: initConfigs,
+          await tester.pumpWidget(
+            MaterialApp(
+              home: FilterEditor.autoSource(
+                networkUrl: mockNetworkImage,
+                initConfigs: initConfigs,
+              ),
             ),
-          ));
+          );
         });
 
         expect(find.byType(FilterEditor), findsOneWidget);
       });
       testWidgets('Auto-detects from file image', (WidgetTester tester) async {
-        await tester.pumpWidget(MaterialApp(
-          home: FilterEditor.autoSource(
-            file: mockFileImage,
-            initConfigs: initConfigs,
+        await tester.pumpWidget(
+          MaterialApp(
+            home: FilterEditor.autoSource(
+              file: mockFileImage,
+              initConfigs: initConfigs,
+            ),
           ),
-        ));
+        );
 
         expect(find.byType(FilterEditor), findsOneWidget);
       });
       testWidgets('Auto-detects from file path', (WidgetTester tester) async {
-        await tester.pumpWidget(MaterialApp(
-          home: FilterEditor.autoSource(file: '', initConfigs: initConfigs),
-        ));
+        await tester.pumpWidget(
+          MaterialApp(
+            home: FilterEditor.autoSource(file: '', initConfigs: initConfigs),
+          ),
+        );
 
         expect(find.byType(FilterEditor), findsOneWidget);
       });
@@ -140,17 +159,20 @@ void main() {
 
       expect(key.currentState!.filterOpacity, isNot(initOpacity));
     });
-    testWidgets('should change filter when selected',
-        (WidgetTester tester) async {
+    testWidgets('should change filter when selected', (
+      WidgetTester tester,
+    ) async {
       await pumpEditor(tester);
 
       FilterModel targetFilter = PresetFilters.amaro;
-      int index =
-          presetFiltersList.indexWhere((el) => el.name == targetFilter.name);
+      int index = presetFiltersList.indexWhere(
+        (el) => el.name == targetFilter.name,
+      );
 
       // Find the filter button
-      final filterButtonFinder =
-          find.byKey(ValueKey('Filter-${targetFilter.name}-$index'));
+      final filterButtonFinder = find.byKey(
+        ValueKey('Filter-${targetFilter.name}-$index'),
+      );
 
       // Ensure the filter button is found
       expect(filterButtonFinder, findsOneWidget);
@@ -161,8 +183,9 @@ void main() {
       expect(key.currentState!.selectedFilter, targetFilter);
     });
 
-    testWidgets('should set filterOpacity via setFilterOpacity()',
-        (tester) async {
+    testWidgets('should set filterOpacity via setFilterOpacity()', (
+      tester,
+    ) async {
       await pumpEditor(tester);
 
       final editor = key.currentState!;

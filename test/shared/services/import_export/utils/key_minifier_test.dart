@@ -86,8 +86,10 @@ void main() {
     });
 
     test('convertLayerInteractionKey returns original key when disabled', () {
-      expect(noMinifier.convertLayerInteractionKey('interactionKey'),
-          'interactionKey');
+      expect(
+        noMinifier.convertLayerInteractionKey('interactionKey'),
+        'interactionKey',
+      );
     });
 
     test('convertListOfLayerKeys returns original when minify disabled', () {
@@ -95,8 +97,8 @@ void main() {
         {
           'id': 'layer1',
           'interaction': {'hover': true},
-          'item': {'color': 'red'}
-        }
+          'item': {'color': 'red'},
+        },
       ];
       final result = noMinifier.convertListOfLayerKeys(layers);
       expect(deepEquals(result, layers), isTrue);
@@ -106,8 +108,8 @@ void main() {
       final references = {
         'ref1': {
           'interaction': {'hover': true},
-          'item': {'color': 'blue'}
-        }
+          'item': {'color': 'blue'},
+        },
       };
       final result = noMinifier.convertReferenceKeys(references);
       expect(deepEquals(result, references), isTrue);
@@ -127,13 +129,13 @@ void main() {
         {
           'l': [
             {'id': 'layer1'},
-            {'id': 'layer2'}
-          ]
-        }
+            {'id': 'layer2'},
+          ],
+        },
       ];
       final references = {
         'layer1': {'data': 1},
-        'layer2': {'data': 2}
+        'layer2': {'data': 2},
       };
       final response = minifier.convertLayerId(history, references);
 
@@ -150,12 +152,12 @@ void main() {
       final history = [
         {
           'l': [
-            {'id': 'layer1'}
-          ]
-        }
+            {'id': 'layer1'},
+          ],
+        },
       ];
       final references = {
-        'layer1': {'data': 1}
+        'layer1': {'data': 1},
       };
       final response = noMinifier.convertLayerId(history, references);
       expect(deepEquals(response.history, history), isTrue);

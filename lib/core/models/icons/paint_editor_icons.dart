@@ -14,6 +14,9 @@ class PaintEditorIcons {
     this.bottomNavBar = Icons.edit_outlined,
     this.lineWeight = Icons.line_weight_rounded,
     this.freeStyle = Icons.edit,
+    this.freeStyleArrowStart = Icons.edit,
+    this.freeStyleArrowEnd = Icons.edit,
+    this.freeStyleArrowStartEnd = Icons.edit,
     this.arrow = Icons.arrow_right_alt_outlined,
     this.line = Icons.horizontal_rule,
     this.fill = Icons.format_color_fill,
@@ -22,8 +25,12 @@ class PaintEditorIcons {
     this.circle = Icons.lens_outlined,
     this.dashLine = Icons.power_input,
     this.dashDotLine = Icons.linear_scale,
+    this.hexagon = Icons.hexagon_outlined,
     this.polygon = Icons.pentagon_outlined,
     this.pixelate = Icons.grid_on,
+    this.custom1 = Icons.bug_report_outlined,
+    this.custom2 = Icons.bug_report_outlined,
+    this.custom3 = Icons.bug_report_outlined,
     this.blur = Icons.blur_on_rounded,
     this.applyChanges = Icons.done,
     this.backButton = Icons.arrow_back,
@@ -59,6 +66,16 @@ class PaintEditorIcons {
   /// The icon for the freehand drawing tool.
   final IconData freeStyle;
 
+  /// The icon for the freehand drawing tool with an arrow at the start point.
+  final IconData freeStyleArrowStart;
+
+  /// The icon for the freehand drawing tool with an arrow at the end point.
+  final IconData freeStyleArrowEnd;
+
+  /// The icon for the freehand drawing tool with arrows at both start and end
+  /// points.
+  final IconData freeStyleArrowStartEnd;
+
   /// The icon for the arrow drawing tool.
   final IconData arrow;
 
@@ -77,6 +94,9 @@ class PaintEditorIcons {
   /// The icon for the dash-dot line drawing tool.
   final IconData dashDotLine;
 
+  /// The icon for the hexagon drawing tool.
+  final IconData hexagon;
+
   /// The icon for the polygon drawing tool.
   final IconData polygon;
 
@@ -85,6 +105,15 @@ class PaintEditorIcons {
 
   /// The icon for the pixelate drawing tool.
   final IconData pixelate;
+
+  /// The icon for the custom1 drawing tool.
+  final IconData custom1;
+
+  /// The icon for the custom2 drawing tool.
+  final IconData custom2;
+
+  /// The icon for the custom3 drawing tool.
+  final IconData custom3;
 
   /// The icon for the eraser tool.
   final IconData eraser;
@@ -103,46 +132,61 @@ class PaintEditorIcons {
 
   /// Creates a copy of this [PaintEditorIcons] with updated values.
   PaintEditorIcons copyWith({
-    IconData? moveAndZoom,
-    IconData? changeOpacity,
-    IconData? eraser,
     IconData? bottomNavBar,
     IconData? lineWeight,
+    IconData? moveAndZoom,
+    IconData? fill,
+    IconData? changeOpacity,
+    IconData? noFill,
     IconData? freeStyle,
+    IconData? freeStyleArrowStart,
+    IconData? freeStyleArrowEnd,
+    IconData? freeStyleArrowStartEnd,
     IconData? arrow,
     IconData? line,
-    IconData? fill,
-    IconData? noFill,
     IconData? rectangle,
     IconData? circle,
     IconData? dashLine,
     IconData? dashDotLine,
+    IconData? hexagon,
     IconData? polygon,
     IconData? blur,
     IconData? pixelate,
+    IconData? custom1,
+    IconData? custom2,
+    IconData? custom3,
+    IconData? eraser,
     IconData? backButton,
+    IconData? applyChanges,
     IconData? undoAction,
     IconData? redoAction,
-    IconData? applyChanges,
   }) {
     return PaintEditorIcons(
-      moveAndZoom: moveAndZoom ?? this.moveAndZoom,
-      changeOpacity: changeOpacity ?? this.changeOpacity,
-      eraser: eraser ?? this.eraser,
       bottomNavBar: bottomNavBar ?? this.bottomNavBar,
       lineWeight: lineWeight ?? this.lineWeight,
+      moveAndZoom: moveAndZoom ?? this.moveAndZoom,
+      fill: fill ?? this.fill,
+      changeOpacity: changeOpacity ?? this.changeOpacity,
+      noFill: noFill ?? this.noFill,
       freeStyle: freeStyle ?? this.freeStyle,
+      freeStyleArrowStart: freeStyleArrowStart ?? this.freeStyleArrowStart,
+      freeStyleArrowEnd: freeStyleArrowEnd ?? this.freeStyleArrowEnd,
+      freeStyleArrowStartEnd:
+          freeStyleArrowStartEnd ?? this.freeStyleArrowStartEnd,
       arrow: arrow ?? this.arrow,
       line: line ?? this.line,
-      fill: fill ?? this.fill,
-      noFill: noFill ?? this.noFill,
       rectangle: rectangle ?? this.rectangle,
       circle: circle ?? this.circle,
       dashLine: dashLine ?? this.dashLine,
       dashDotLine: dashDotLine ?? this.dashDotLine,
+      hexagon: hexagon ?? this.hexagon,
       polygon: polygon ?? this.polygon,
       blur: blur ?? this.blur,
       pixelate: pixelate ?? this.pixelate,
+      custom1: custom1 ?? this.custom1,
+      custom2: custom2 ?? this.custom2,
+      custom3: custom3 ?? this.custom3,
+      eraser: eraser ?? this.eraser,
       backButton: backButton ?? this.backButton,
       applyChanges: applyChanges ?? this.applyChanges,
       undoAction: undoAction ?? this.undoAction,

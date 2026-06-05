@@ -30,12 +30,10 @@ class OpacityOverlayAnimationState extends LoadingDialogOverlayAnimationState {
       duration: const Duration(milliseconds: 150),
       vsync: this,
     );
-    animation = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(
-        parent: controller,
-        curve: Curves.easeInOut,
-      ),
-    );
+    animation = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(CurvedAnimation(parent: controller, curve: Curves.easeInOut));
 
     controller.forward();
   }
@@ -45,10 +43,7 @@ class OpacityOverlayAnimationState extends LoadingDialogOverlayAnimationState {
     return AnimatedBuilder(
       animation: controller,
       builder: (context, child) {
-        return Opacity(
-          opacity: animation.value,
-          child: widget.child,
-        );
+        return Opacity(opacity: animation.value, child: widget.child);
       },
     );
   }

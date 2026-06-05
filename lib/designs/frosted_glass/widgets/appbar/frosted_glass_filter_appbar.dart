@@ -21,10 +21,7 @@ class FrostedGlassFilterAppbar extends StatelessWidget {
   ///   filterEditor: myFilterEditorState,
   /// )
   /// ```
-  const FrostedGlassFilterAppbar({
-    super.key,
-    required this.filterEditor,
-  });
+  const FrostedGlassFilterAppbar({super.key, required this.filterEditor});
 
   /// The state of the filter editor associated with this app bar.
   ///

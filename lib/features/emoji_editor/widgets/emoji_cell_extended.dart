@@ -71,9 +71,7 @@ class EmojiCellExtended extends StatelessWidget {
             categoryEmoji,
           );
         },
-        child: Center(
-          child: _buildEmoji(),
-        ),
+        child: Center(child: _buildEmoji()),
       ),
     );
   }
@@ -88,7 +86,8 @@ class EmojiCellExtended extends StatelessWidget {
       style: emojiStyle,
     );
 
-    bool hasMultipleOptions = emoji.hasSkinTone &&
+    bool hasMultipleOptions =
+        emoji.hasSkinTone &&
         enableSkinTones &&
         onSkinToneDialogRequested != null;
 

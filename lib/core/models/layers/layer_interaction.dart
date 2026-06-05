@@ -39,16 +39,26 @@ class LayerInteraction {
     keyConverter ??= (String key) => key;
 
     return LayerInteraction(
-      enableMove:
-          safeParseBool(map[keyConverter('enableMove')], fallback: true),
-      enableScale:
-          safeParseBool(map[keyConverter('enableScale')], fallback: true),
-      enableRotate:
-          safeParseBool(map[keyConverter('enableRotate')], fallback: true),
-      enableSelection:
-          safeParseBool(map[keyConverter('enableSelection')], fallback: true),
-      enableEdit:
-          safeParseBool(map[keyConverter('enableEdit')], fallback: true),
+      enableMove: safeParseBool(
+        map[keyConverter('enableMove')],
+        fallback: true,
+      ),
+      enableScale: safeParseBool(
+        map[keyConverter('enableScale')],
+        fallback: true,
+      ),
+      enableRotate: safeParseBool(
+        map[keyConverter('enableRotate')],
+        fallback: true,
+      ),
+      enableSelection: safeParseBool(
+        map[keyConverter('enableSelection')],
+        fallback: true,
+      ),
+      enableEdit: safeParseBool(
+        map[keyConverter('enableEdit')],
+        fallback: true,
+      ),
     );
   }
 
@@ -142,9 +152,7 @@ class LayerInteraction {
   ///
   /// Returns a map representation of the interaction settings with keys
   /// corresponding to the property names.
-  Map<String, dynamic> toMap({
-    bool enableMinify = false,
-  }) {
+  Map<String, dynamic> toMap({bool enableMinify = false}) {
     return {
       'enableMove': enableMove.minify(enableMinify),
       'enableScale': enableScale.minify(enableMinify),

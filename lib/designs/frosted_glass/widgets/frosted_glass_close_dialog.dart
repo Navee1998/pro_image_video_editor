@@ -21,10 +21,7 @@ class FrostedGlassCloseDialog extends StatelessWidget {
   ///   editor: myEditorState,
   /// )
   /// ```
-  const FrostedGlassCloseDialog({
-    super.key,
-    required this.editor,
-  });
+  const FrostedGlassCloseDialog({super.key, required this.editor});
 
   /// The configuration for the image editor.
   ///
@@ -91,7 +88,7 @@ class FrostedGlassCloseDialog extends StatelessWidget {
                         ),
                       ),
                     ],
-                  )
+                  ),
                 ],
               ),
             ),

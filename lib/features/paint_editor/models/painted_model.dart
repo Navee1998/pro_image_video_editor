@@ -50,20 +50,22 @@ class PaintedModel {
         .toList();
 
     final erasedOffsets = List<Map<String, dynamic>>.from(
-            map[keyConverter('erasedOffsets')] ?? [])
-        .map(ErasedOffset.fromMap)
-        .toList();
+      map[keyConverter('erasedOffsets')] ?? [],
+    ).map(ErasedOffset.fromMap).toList();
 
     /// Constructs and returns a PaintedModel instance with properties
     /// derived from the map.
     return PaintedModel(
-      mode: PaintMode.values
-          .firstWhere((element) => element.name == map[keyConverter!('mode')]),
+      mode: PaintMode.values.firstWhere(
+        (element) => element.name == map[keyConverter!('mode')],
+      ),
       offsets: offsets,
       erasedOffsets: erasedOffsets,
       color: Color(map[keyConverter('color')]),
-      strokeWidth:
-          safeParseDouble(map[keyConverter('strokeWidth')], fallback: 1),
+      strokeWidth: safeParseDouble(
+        map[keyConverter('strokeWidth')],
+        fallback: 1,
+      ),
       fill: safeParseBool(map[keyConverter('fill')]),
       opacity: safeParseDouble(map[keyConverter('opacity')], fallback: 1),
     );
@@ -145,7 +147,8 @@ class PaintedModel {
   bool get canBeFilled {
     return mode == PaintMode.circle ||
         mode == PaintMode.rect ||
-        mode == PaintMode.polygon;
+        mode == PaintMode.polygon ||
+        mode == PaintMode.hexagon;
   }
 
   /// Creates a copy of this PaintedModel instance.
@@ -169,10 +172,12 @@ class PaintedModel {
   }) {
     final offsetMaps = offsets
         .whereType<Offset>() // filters out nulls if offsets is List<Offset?>
-        .map((o) => {
-              'x': o.dx.roundSmart(maxDecimalPlaces),
-              'y': o.dy.roundSmart(maxDecimalPlaces),
-            })
+        .map(
+          (o) => {
+            'x': o.dx.roundSmart(maxDecimalPlaces),
+            'y': o.dy.roundSmart(maxDecimalPlaces),
+          },
+        )
         .toList();
     final erasedOffsetsMaps = erasedOffsets.map((el) => el.toMap()).toList();
 
@@ -190,16 +195,16 @@ class PaintedModel {
 
   @override
   int get hashCode => Object.hash(
-        mode,
-        color,
-        strokeWidth,
-        opacity,
-        fill,
-        hit,
-        id,
-        Object.hashAll(offsets),
-        Object.hashAll(erasedOffsets),
-      );
+    mode,
+    color,
+    strokeWidth,
+    opacity,
+    fill,
+    hit,
+    id,
+    Object.hashAll(offsets),
+    Object.hashAll(erasedOffsets),
+  );
 
   @override
   bool operator ==(Object other) {
@@ -261,18 +266,15 @@ class PaintedModel {
     properties
       ..add(StringProperty('id', id))
       ..add(EnumProperty<PaintMode>('mode', mode))
-
       // Paint attributes
       ..add(ColorProperty('color', color))
       ..add(DoubleProperty('strokeWidth', strokeWidth))
       ..add(DoubleProperty('opacity', opacity))
-
       // Flags
       ..add(DiagnosticsProperty<bool>('fill', fill))
       ..add(DiagnosticsProperty<bool>('hit', hit))
       ..add(DiagnosticsProperty<bool>('isCensorArea', isCensorArea))
       ..add(DiagnosticsProperty<bool>('canBeFilled', canBeFilled))
-
       // Collections (show sizes instead of dumping all Offsets)
       ..add(IntProperty('offsetsCount', offsets.length))
       ..add(IntProperty('erasedOffsetsCount', erasedOffsets.length));

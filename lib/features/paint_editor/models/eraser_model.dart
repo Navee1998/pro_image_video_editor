@@ -11,10 +11,7 @@ import '/shared/utils/parser/double_parser.dart';
 /// operations in a drawing or editing context.
 class ErasedOffset {
   /// Creates an [ErasedOffset] with the given [offset] and [radius].
-  const ErasedOffset({
-    required this.offset,
-    required this.radius,
-  });
+  const ErasedOffset({required this.offset, required this.radius});
 
   /// Creates an [ErasedOffset] from a [map].
   ///
@@ -31,10 +28,7 @@ class ErasedOffset {
             safeParseDouble(map['offset']['x']),
             safeParseDouble(map['offset']['y']),
           )
-        : Offset(
-            safeParseDouble(map['x']),
-            safeParseDouble(map['y']),
-          );
+        : Offset(safeParseDouble(map['x']), safeParseDouble(map['y']));
 
     return ErasedOffset(offset: offset, radius: radius);
   }

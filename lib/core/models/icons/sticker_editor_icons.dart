@@ -20,9 +20,7 @@ class StickerEditorIcons {
   ///   bottomNavBar: Icons.layers_outlined,
   /// )
   /// ```
-  const StickerEditorIcons({
-    this.bottomNavBar = ProImageEditorIcons.stickers,
-  });
+  const StickerEditorIcons({this.bottomNavBar = ProImageEditorIcons.stickers});
 
   /// The icon to be displayed in the bottom navigation bar.
   final IconData bottomNavBar;
@@ -33,11 +31,7 @@ class StickerEditorIcons {
   /// The [copyWith] method allows you to create a new instance of
   /// [StickerEditorIcons] with some properties updated while keeping the
   /// others unchanged.
-  StickerEditorIcons copyWith({
-    IconData? bottomNavBar,
-  }) {
-    return StickerEditorIcons(
-      bottomNavBar: bottomNavBar ?? this.bottomNavBar,
-    );
+  StickerEditorIcons copyWith({IconData? bottomNavBar}) {
+    return StickerEditorIcons(bottomNavBar: bottomNavBar ?? this.bottomNavBar);
   }
 }

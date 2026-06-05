@@ -13,11 +13,7 @@ class ProgressIndicatorConfigs {
   final ProgressIndicatorWidgets widgets;
 
   /// Creates a copy of this configuration with the specified overrides.
-  ProgressIndicatorConfigs copyWith({
-    ProgressIndicatorWidgets? widgets,
-  }) {
-    return ProgressIndicatorConfigs(
-      widgets: widgets ?? this.widgets,
-    );
+  ProgressIndicatorConfigs copyWith({ProgressIndicatorWidgets? widgets}) {
+    return ProgressIndicatorConfigs(widgets: widgets ?? this.widgets);
   }
 }

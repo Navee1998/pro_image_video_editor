@@ -5,27 +5,21 @@ import 'package:pro_image_editor/plugins/emoji_picker_flutter/emoji_picker_flutt
 
 void main() {
   group('EmojiEditor Tests', () {
-    testWidgets('EmojiEditor should build without error',
-        (WidgetTester tester) async {
+    testWidgets('EmojiEditor should build without error', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(
-        const MaterialApp(
-          home: Scaffold(
-            body: EmojiEditor(),
-          ),
-        ),
+        const MaterialApp(home: Scaffold(body: EmojiEditor())),
       );
 
       expect(find.byType(EmojiEditor), findsOneWidget);
     });
 
-    testWidgets('EmojiEditor should have EmojiPicker',
-        (WidgetTester tester) async {
+    testWidgets('EmojiEditor should have EmojiPicker', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(
-        const MaterialApp(
-          home: Scaffold(
-            body: EmojiEditor(),
-          ),
-        ),
+        const MaterialApp(home: Scaffold(body: EmojiEditor())),
       );
       expect(find.byType(EmojiPicker), findsOneWidget);
     });

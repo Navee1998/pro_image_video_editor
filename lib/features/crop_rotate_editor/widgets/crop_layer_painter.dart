@@ -76,25 +76,17 @@ class CropLayerPainter extends CustomPainter {
     _drawDarkenOutside(canvas: canvas, rawSize: size);
   }
 
-  void _drawDarkenOutside({
-    required Canvas canvas,
-    required Size rawSize,
-  }) {
+  void _drawDarkenOutside({required Canvas canvas, required Size rawSize}) {
     Size size = rawSize * interactiveViewerScale;
-    var center = Offset(
-          size.width / 2,
-          size.height / 2,
-        ) +
-        interactiveViewerOffset;
+    var center =
+        Offset(size.width / 2, size.height / 2) + interactiveViewerOffset;
 
     Path path = Path()
       // FillType "evenOdd" is important for the canvas web renderer
       ..fillType = PathFillType.evenOdd
-      ..addRect(Rect.fromCenter(
-        center: center,
-        width: size.width,
-        height: size.height,
-      ));
+      ..addRect(
+        Rect.fromCenter(center: center, width: size.width, height: size.height),
+      );
 
     double ratio = is90DegRotated ? 1 / imgRatio : imgRatio;
 
@@ -113,26 +105,14 @@ class CropLayerPainter extends CustomPainter {
 
     if (isRoundCropper) {
       Path rectPath = Path()
-        ..addOval(
-          Rect.fromCenter(
-            center: center,
-            width: w,
-            height: h,
-          ),
-        );
+        ..addOval(Rect.fromCenter(center: center, width: w, height: h));
 
       /// Subtract the area of the current rectangle from the path for the
       /// entire canvas
       path = Path.combine(PathOperation.difference, path, rectPath);
     } else {
       Path rectPath = Path()
-        ..addRect(
-          Rect.fromCenter(
-            center: center,
-            width: w,
-            height: h,
-          ),
-        );
+        ..addRect(Rect.fromCenter(center: center, width: w, height: h));
 
       /// Subtract the area of the current rectangle from the path for the
       /// entire canvas

@@ -14,10 +14,7 @@ void main() {
     await tester.pumpWidget(
       MaterialApp(
         home: Scaffold(
-          body: TextEditor(
-            key: key,
-            theme: ThemeData.dark(),
-          ),
+          body: TextEditor(key: key, theme: ThemeData.dark()),
         ),
       ),
     );
@@ -53,8 +50,9 @@ void main() {
 
       expect(editor.align, isNot(initAlign));
     });
-    testWidgets('should toggle backgroundMode via toggleBackgroundMode',
-        (tester) async {
+    testWidgets('should toggle backgroundMode via toggleBackgroundMode', (
+      tester,
+    ) async {
       await pumpEditor(tester);
 
       final editor = key.currentState!;
@@ -63,15 +61,17 @@ void main() {
 
       expect(editor.backgroundColorMode, isNot(backgroundColorMode));
     });
-    testWidgets('should open fontScaleBottomSheet via openFontScaleBottomSheet',
-        (tester) async {
-      await pumpEditor(tester);
+    testWidgets(
+      'should open fontScaleBottomSheet via openFontScaleBottomSheet',
+      (tester) async {
+        await pumpEditor(tester);
 
-      key.currentState!.openFontScaleBottomSheet();
-      await tester.pump();
+        key.currentState!.openFontScaleBottomSheet();
+        await tester.pump();
 
-      expect(find.byType(SliderBottomSheet<TextEditorState>), findsOneWidget);
-    });
+        expect(find.byType(SliderBottomSheet<TextEditorState>), findsOneWidget);
+      },
+    );
     testWidgets('should set textStyle via setTextStyle', (tester) async {
       await pumpEditor(tester);
 

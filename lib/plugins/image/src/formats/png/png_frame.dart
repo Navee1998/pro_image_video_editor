@@ -8,16 +8,17 @@ enum PngBlendMode { source, over }
 
 // Decodes a frame from a PNG animation.
 class PngFrame {
-  PngFrame(
-      {this.sequenceNumber = 0,
-      this.width = 0,
-      this.height = 0,
-      this.xOffset = 0,
-      this.yOffset = 0,
-      this.delayNum = 0,
-      this.delayDen = 0,
-      this.dispose = PngDisposeMode.none,
-      this.blend = PngBlendMode.source});
+  PngFrame({
+    this.sequenceNumber = 0,
+    this.width = 0,
+    this.height = 0,
+    this.xOffset = 0,
+    this.yOffset = 0,
+    this.delayNum = 0,
+    this.delayDen = 0,
+    this.dispose = PngDisposeMode.none,
+    this.blend = PngBlendMode.source,
+  });
   int sequenceNumber;
   int width;
   int height;
@@ -33,16 +34,17 @@ class PngFrame {
 
 @internal
 class InternalPngFrame extends PngFrame {
-  InternalPngFrame(
-      {super.sequenceNumber,
-      super.width,
-      super.height,
-      super.xOffset,
-      super.yOffset,
-      super.delayNum,
-      super.delayDen,
-      super.dispose,
-      super.blend});
+  InternalPngFrame({
+    super.sequenceNumber,
+    super.width,
+    super.height,
+    super.xOffset,
+    super.yOffset,
+    super.delayNum,
+    super.delayDen,
+    super.dispose,
+    super.blend,
+  });
 
   final fdat = <int>[];
 }

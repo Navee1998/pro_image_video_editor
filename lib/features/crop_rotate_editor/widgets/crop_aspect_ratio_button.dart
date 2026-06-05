@@ -4,8 +4,11 @@ import 'package:flutter/material.dart';
 /// A custom widget representing a button with a specific aspect ratio.
 class AspectRatioButton extends StatelessWidget {
   /// Creates an [AspectRatioButton] with the specified aspect ratio.
-  const AspectRatioButton(
-      {super.key, this.aspectRatio, this.isSelected = false});
+  const AspectRatioButton({
+    super.key,
+    this.aspectRatio,
+    this.isSelected = false,
+  });
 
   /// The numeric value of the aspect ratio (width / height).
   final double? aspectRatio;
@@ -28,10 +31,7 @@ class AspectRatioButton extends StatelessWidget {
 /// A custom painter for rendering an aspect ratio button.
 class AspectRatioPainter extends CustomPainter {
   /// Creates an [AspectRatioPainter] with the specified properties.
-  AspectRatioPainter({
-    this.aspectRatio,
-    this.isSelected = false,
-  });
+  AspectRatioPainter({this.aspectRatio, this.isSelected = false});
 
   /// The numeric value of the aspect ratio (width / height).
   final double? aspectRatio;
@@ -48,17 +48,20 @@ class AspectRatioPainter extends CustomPainter {
 
     // Paint object for filling the rectangle with color and opacity
     final Paint fillPaint = Paint()
-      ..color = color.withValues(alpha: 0.5) // Set fill color opacity
+      ..color = color
+          .withValues(alpha: 0.5) // Set fill color opacity
       ..style = PaintingStyle.fill;
 
     // Paint object for the border
     final Paint borderPaint = Paint()
-      ..color = color // Set the color for the border
+      ..color =
+          color // Set the color for the border
       ..style = PaintingStyle.stroke
       ..strokeWidth = 3.0; // Define border thickness
 
-    final double aspectRatioResult =
-        (aspectRatio != null && aspectRatio! > 0.0) ? aspectRatio! : 1.0;
+    final double aspectRatioResult = (aspectRatio != null && aspectRatio! > 0.0)
+        ? aspectRatio!
+        : 1.0;
 
     // Draw the filled rectangle with opacity
     canvas.drawRect(
@@ -102,27 +105,52 @@ class AspectRatioPainter extends CustomPainter {
     final Path path = Path();
 
     // Top border
-    _addDashedLine(path, Offset(rect.left, rect.top),
-        Offset(rect.right, rect.top), dashWidth, dashSpace);
+    _addDashedLine(
+      path,
+      Offset(rect.left, rect.top),
+      Offset(rect.right, rect.top),
+      dashWidth,
+      dashSpace,
+    );
 
     // Right border
-    _addDashedLine(path, Offset(rect.right, rect.top),
-        Offset(rect.right, rect.bottom), dashWidth, dashSpace);
+    _addDashedLine(
+      path,
+      Offset(rect.right, rect.top),
+      Offset(rect.right, rect.bottom),
+      dashWidth,
+      dashSpace,
+    );
 
     // Bottom border
-    _addDashedLine(path, Offset(rect.right, rect.bottom),
-        Offset(rect.left, rect.bottom), dashWidth, dashSpace);
+    _addDashedLine(
+      path,
+      Offset(rect.right, rect.bottom),
+      Offset(rect.left, rect.bottom),
+      dashWidth,
+      dashSpace,
+    );
 
     // Left border
-    _addDashedLine(path, Offset(rect.left, rect.bottom),
-        Offset(rect.left, rect.top), dashWidth, dashSpace);
+    _addDashedLine(
+      path,
+      Offset(rect.left, rect.bottom),
+      Offset(rect.left, rect.top),
+      dashWidth,
+      dashSpace,
+    );
 
     canvas.drawPath(path, paint);
   }
 
-// Helper method to add a dashed line to the path
+  // Helper method to add a dashed line to the path
   void _addDashedLine(
-      Path path, Offset start, Offset end, double dashWidth, double dashSpace) {
+    Path path,
+    Offset start,
+    Offset end,
+    double dashWidth,
+    double dashSpace,
+  ) {
     final double totalDistance = (end - start).distance;
     double currentDistance = 0.0;
 
@@ -140,8 +168,10 @@ class AspectRatioPainter extends CustomPainter {
       );
 
       // Draw the dash line
-      path.moveTo(start.dx + direction.dx * currentDistance,
-          start.dy + direction.dy * currentDistance);
+      path.moveTo(
+        start.dx + direction.dx * currentDistance,
+        start.dy + direction.dy * currentDistance,
+      );
       if (dashEndDistance > totalDistance) {
         path.lineTo(end.dx, end.dy);
         break;
@@ -154,10 +184,7 @@ class AspectRatioPainter extends CustomPainter {
 
   /// Calculate the painting rectangle within the given [rect] based on the
   /// [inputSize] and BoxFit.contain.
-  Rect _getPaintRect({
-    required Rect rect,
-    required Size inputSize,
-  }) {
+  Rect _getPaintRect({required Rect rect, required Size inputSize}) {
     Size size = rect.size;
 
     final FittedSizes boxFitSize = applyBoxFit(BoxFit.contain, inputSize, size);

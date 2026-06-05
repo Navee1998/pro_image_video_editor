@@ -17,10 +17,7 @@ class PaintEditorResponse {
   /// Parameters:
   /// - `newLayers`: A list of layers that have been added or updated.
   /// - `deletedLayers`: A list of layers that have been removed.
-  PaintEditorResponse({
-    required this.layers,
-    required this.removedLayers,
-  });
+  PaintEditorResponse({required this.layers, required this.removedLayers});
 
   /// A list of new layers that have been added or modified in the paint editor.
   /// Each layer represents a drawable element in the editor.

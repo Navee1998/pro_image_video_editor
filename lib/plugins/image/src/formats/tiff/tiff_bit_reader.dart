@@ -34,7 +34,8 @@ class TiffBitReader {
         _bitBuffer = input.readByte();
       }
 
-      value = (value << numBits) +
+      value =
+          (value << numBits) +
           (_bitBuffer >> (_bitPos - numBits) & _bitMask[numBits]);
 
       _bitPos -= numBits;

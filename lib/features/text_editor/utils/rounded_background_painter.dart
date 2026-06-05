@@ -62,9 +62,11 @@ class RoundedBackgroundTextPainter extends CustomPainter {
     final path = Path();
     final cornerPath = Path();
 
-    final bool isLeftAlign = textAlign == TextAlign.left ||
+    final bool isLeftAlign =
+        textAlign == TextAlign.left ||
         (textAlign == TextAlign.start && textDirection == TextDirection.ltr);
-    final bool isRightAlign = textAlign == TextAlign.right ||
+    final bool isRightAlign =
+        textAlign == TextAlign.right ||
         (textAlign == TextAlign.end && textDirection == TextDirection.rtl);
     final bool isCenterAlign =
         textAlign == TextAlign.center || textAlign == TextAlign.justify;
@@ -261,8 +263,12 @@ class RoundedBackgroundTextPainter extends CustomPainter {
       ..arcToPoint(arcEnd, radius: radiusC, clockwise: clockwise)
       ..moveTo(from.dx, from.dy)
       ..lineTo(lineToX, from.dy)
-      ..arcToPoint(arcEnd,
-          radius: radiusC, clockwise: clockwise, largeArc: true)
+      ..arcToPoint(
+        arcEnd,
+        radius: radiusC,
+        clockwise: clockwise,
+        largeArc: true,
+      )
       ..close();
   }
 
@@ -368,7 +374,6 @@ class RoundedBackgroundTextPainter extends CustomPainter {
   }) {
     path
       ..moveTo(startX + (roundTopLeft ? radius : 0), startY)
-
       /// Top-Right edge
       ..lineTo(endX - radius, startY);
     if (roundTopRight) {
@@ -442,7 +447,8 @@ class RoundedBackgroundTextPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant RoundedBackgroundTextPainter oldDelegate) {
-    final changed = oldDelegate.backgroundColor != backgroundColor ||
+    final changed =
+        oldDelegate.backgroundColor != backgroundColor ||
         oldDelegate.painter.width != painter.width ||
         oldDelegate.painter.height != painter.height ||
         oldDelegate.painter.ellipsis != painter.ellipsis ||

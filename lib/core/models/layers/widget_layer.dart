@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 import '/core/constants/int_constants.dart';
 import '/core/platform/io/io_helper.dart';
 import '/shared/services/import_export/types/widget_loader.dart';
+import '/shared/utils/parser/double_parser.dart';
 import '/shared/utils/parser/int_parser.dart';
 import '../editor_image.dart';
 import 'layer.dart';
@@ -31,6 +32,7 @@ class WidgetLayer extends Layer {
   /// The [widget] parameter is required, and other properties are optional.
   WidgetLayer({
     required this.widget,
+    this.width,
     super.offset,
     super.rotation,
     super.scale,
@@ -43,6 +45,13 @@ class WidgetLayer extends Layer {
     super.boxConstraints,
     super.key,
     super.groupId,
+    super.startTime,
+    super.endTime,
+    super.enterDuration,
+    super.exitDuration,
+    super.enterCurve,
+    super.exitCurve,
+    super.transitionBuilder,
   });
 
   /// Factory constructor for creating a WidgetLayer instance from a
@@ -59,11 +68,14 @@ class WidgetLayer extends Layer {
 
     /// Determines the position of the widget in the list.
     int widgetPosition = safeParseInt(
-        map[keyConverter('recordPosition')] ?? map['listPosition'],
-        fallback: -1);
+      map[keyConverter('recordPosition')] ?? map['listPosition'],
+      fallback: -1,
+    );
 
-    var exportConfigs =
-        WidgetLayerExportConfigs.fromMap(map[keyConverter('exportConfigs')]);
+    final layerWidth = map[keyConverter('width')];
+    var exportConfigs = WidgetLayerExportConfigs.fromMap(
+      map[keyConverter('exportConfigs')],
+    );
 
     /// Widget to display a widget or a placeholder if not found.
     Widget widget = kDebugMode
@@ -123,7 +135,12 @@ class WidgetLayer extends Layer {
       scale: layer.scale,
       meta: layer.meta,
       groupId: layer.groupId,
+      startTime: layer.startTime,
+      endTime: layer.endTime,
+      enterDuration: layer.enterDuration,
+      exitDuration: layer.exitDuration,
       widget: widget,
+      width: layerWidth != null ? safeParseDouble(layerWidth) : null,
       exportConfigs: exportConfigs,
       boxConstraints: layer.boxConstraints,
     );
@@ -131,6 +148,10 @@ class WidgetLayer extends Layer {
 
   /// The widget to display on the layer.
   Widget widget;
+
+  /// Optional layer width. If no value is set, it will fallback to the
+  /// `initWidth` inside of the `StickerEditorConfigs`.
+  double? width;
 
   /// Configuration settings for exporting a widget layer.
   ///
@@ -160,7 +181,8 @@ class WidgetLayer extends Layer {
         maxDecimalPlaces: maxDecimalPlaces,
         enableMinify: enableMinify,
       ),
-      if (recordPosition != null) 'recordPosition': recordPosition,
+      'recordPosition': ?recordPosition,
+      if (width != null) 'width': width,
       if (exportConfigMap.isNotEmpty) 'exportConfigs': exportConfigMap,
       'type': 'widget',
     };
@@ -178,6 +200,7 @@ class WidgetLayer extends Layer {
         maxDecimalPlaces: maxDecimalPlaces,
         enableMinify: enableMinify,
       ),
+      if (layer is WidgetLayer && width != layer.width) 'width': width,
     };
   }
 
@@ -189,6 +212,7 @@ class WidgetLayer extends Layer {
   @override
   WidgetLayer copyWith({
     Widget? widget,
+    double? width,
     Offset? offset,
     double? rotation,
     double? scale,
@@ -200,11 +224,19 @@ class WidgetLayer extends Layer {
     BoxConstraints? boxConstraints,
     WidgetLayerExportConfigs? exportConfigs,
     String? groupId,
+    Duration? startTime,
+    Duration? endTime,
+    Duration? enterDuration,
+    Duration? exitDuration,
+    Curve? enterCurve,
+    Curve? exitCurve,
+    LayerTimelineTransitionBuilder? transitionBuilder,
   }) {
     return WidgetLayer(
       widget: widget ?? this.widget,
       offset: offset ?? this.offset,
       rotation: rotation ?? this.rotation,
+      width: width ?? this.width,
       scale: scale ?? this.scale,
       id: id ?? this.id,
       flipX: flipX ?? this.flipX,
@@ -214,15 +246,26 @@ class WidgetLayer extends Layer {
       groupId: groupId ?? this.groupId,
       meta: meta ?? this.meta,
       boxConstraints: boxConstraints ?? this.boxConstraints,
+      startTime: startTime ?? this.startTime,
+      endTime: endTime ?? this.endTime,
+      enterDuration: enterDuration ?? this.enterDuration,
+      exitDuration: exitDuration ?? this.exitDuration,
+      enterCurve: enterCurve ?? this.enterCurve,
+      exitCurve: exitCurve ?? this.exitCurve,
+      transitionBuilder: transitionBuilder ?? this.transitionBuilder,
     );
   }
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
-    properties.add(DiagnosticsProperty<WidgetLayerExportConfigs>(
-      'exportConfigs',
-      exportConfigs,
-    ));
+    properties
+      ..add(
+        DiagnosticsProperty<WidgetLayerExportConfigs>(
+          'exportConfigs',
+          exportConfigs,
+        ),
+      )
+      ..add(DoubleProperty('width', width));
   }
 }

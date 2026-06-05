@@ -37,6 +37,7 @@ class MainEditorLayers extends StatefulWidget {
     required this.onDuplicateLayer,
     required this.mouseService,
     required this.dragSelectionService,
+    this.playTimeNotifier,
   });
 
   /// Represents the current state of the editor.
@@ -87,6 +88,12 @@ class MainEditorLayers extends StatefulWidget {
   /// Callback triggered when the context menu is toggled.
   final Function(bool isOpen)? onContextMenuToggled;
 
+  /// Notifier providing the current video playback position.
+  ///
+  /// When non-null, layers with [Layer.startTime] / [Layer.endTime] are
+  /// animated in/out based on the current time.
+  final ValueNotifier<Duration>? playTimeNotifier;
+
   @override
   State<MainEditorLayers> createState() => _MainEditorLayersState();
 }
@@ -123,13 +130,15 @@ class _MainEditorLayersState extends State<MainEditorLayers> {
         // Render an empty container when resetting layers
         if (resetLayerSnapshot.data!) return const SizedBox.shrink();
 
-        return LayoutBuilder(builder: (context, constraints) {
-          _editorBodySize = getValidSizeOrDefault(
-            widget.sizesManager.bodySize,
-            constraints.biggest,
-          );
-          return _buildLayerRepaintBoundary();
-        });
+        return LayoutBuilder(
+          builder: (context, constraints) {
+            _editorBodySize = getValidSizeOrDefault(
+              widget.sizesManager.bodySize,
+              constraints.biggest,
+            );
+            return _buildLayerRepaintBoundary();
+          },
+        );
       },
     );
   }
@@ -140,32 +149,34 @@ class _MainEditorLayersState extends State<MainEditorLayers> {
       key: _layersService.mouseCursorsKey,
       onHover: isDesktop ? _layersService.handleMouseHover : null,
       child: ValueListenableBuilder(
-          valueListenable: _layersService.deferId,
-          builder: (_, deferId, __) {
-            return DeferredPointerHandler(
-              id: deferId,
-              selectedLayerId: _layerInteractionManager.selectedLayerId,
-              child: StreamBuilder(
-                stream: widget.controllers.uiLayerCtrl.stream,
-                builder: (context, snapshot) {
-                  return GestureDetector(
-                    behavior: HitTestBehavior.translucent,
-                    onTap: () {
-                      _layerInteractionManager.clearSelectedLayers();
-                      widget.onCheckInteractiveViewer();
-                      setState(() {});
-                    },
-                    child: Stack(
-                      children: [
-                        for (Layer layer in widget.activeLayers)
-                          _buildLayerWidget(layer)
-                      ],
-                    ),
-                  );
-                },
-              ),
-            );
-          }),
+        valueListenable: _layersService.deferId,
+        builder: (_, deferId, _) {
+          return DeferredPointerHandler(
+            id: deferId,
+            selectedLayerId: _layerInteractionManager.selectedLayerId,
+            child: StreamBuilder(
+              stream: widget.controllers.uiLayerCtrl.stream,
+              builder: (context, snapshot) {
+                return GestureDetector(
+                  behavior: HitTestBehavior.translucent,
+                  onTap: () {
+                    _layerInteractionManager.clearSelectedLayers();
+                    widget.onCheckInteractiveViewer();
+                    setState(() {});
+                  },
+                  child: Stack(
+                    clipBehavior: Clip.none,
+                    children: [
+                      for (Layer layer in widget.activeLayers)
+                        _buildLayerWidget(layer),
+                    ],
+                  ),
+                );
+              },
+            ),
+          );
+        },
+      ),
     );
   }
 
@@ -183,6 +194,7 @@ class _MainEditorLayersState extends State<MainEditorLayers> {
       enableMouseCursor: !widget.dragSelectionService.isActive,
       onDuplicate: () => widget.onDuplicateLayer(layer),
       onContextMenuToggled: widget.onContextMenuToggled,
+      playTimeNotifier: widget.playTimeNotifier,
     );
   }
 }

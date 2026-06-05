@@ -89,8 +89,8 @@ class LayerStack extends StatelessWidget {
 
   TransformConfigs? get _transformConfigs =>
       transformHelper.transformConfigs?.isNotEmpty == true
-          ? transformHelper.transformConfigs
-          : null;
+      ? transformHelper.transformConfigs
+      : null;
   @override
   Widget build(BuildContext context) {
     return IgnorePointer(
@@ -99,25 +99,27 @@ class LayerStack extends StatelessWidget {
           Transform.scale(
             scale: transformHelper.scale,
             child: Stack(
-                fit: StackFit.expand,
-                alignment: Alignment.center,
-                clipBehavior: clipBehavior,
-                children: layers.map((layerItem) {
-                  return LayerWidget(
-                    key: enableLayerKey ? layerItem.key : null,
-                    layer: layerItem,
-                    configs: configs,
-                    editorBodySize: transformHelper.editorBodySize,
-                  );
-                }).toList()),
+              fit: StackFit.expand,
+              alignment: Alignment.center,
+              clipBehavior: clipBehavior,
+              children: layers.map((layerItem) {
+                return LayerWidget(
+                  key: enableLayerKey ? layerItem.key : null,
+                  layer: layerItem,
+                  configs: configs,
+                  editorBodySize: transformHelper.editorBodySize,
+                );
+              }).toList(),
+            ),
           ),
           if (configs.imageGeneration.cropToImageBounds)
             RepaintBoundary(
               child: Hero(
                 tag: 'crop_layer_painter_hero',
                 child: CustomPaint(
-                  foregroundPainter:
-                      _cutOutsideImageArea ? _buildCropPainter() : null,
+                  foregroundPainter: _cutOutsideImageArea
+                      ? _buildCropPainter()
+                      : null,
                   child: const SizedBox.expand(),
                 ),
               ),
@@ -128,9 +130,11 @@ class LayerStack extends StatelessWidget {
   }
 
   CustomPainter _buildCropPainter() {
-    final imgRatio = _transformConfigs?.cropRect.size.aspectRatio ??
+    final imgRatio =
+        _transformConfigs?.cropRect.size.aspectRatio ??
         transformHelper.mainImageSize.aspectRatio;
-    final isRoundCropper = _transformConfigs?.isOvalCropper ??
+    final isRoundCropper =
+        _transformConfigs?.isOvalCropper ??
         configs.cropRotateEditor.initialCropMode == CropMode.oval;
 
     return CropLayerPainter(

@@ -17,10 +17,7 @@ class MouseService {
   ///
   /// - [configs]: The configuration object that defines mouse behavior and
   /// settings.
-  MouseService({
-    required this.configs,
-    required this.interactionManager,
-  });
+  MouseService({required this.configs, required this.interactionManager});
 
   /// Configuration options for the Image Editor.
   final ProImageEditorConfigs configs;

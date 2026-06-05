@@ -66,11 +66,7 @@ class TuneAdjustmentItem {
   /// Returns:
   ///   A `TuneAdjustmentMatrix` object with the specified properties.
   TuneAdjustmentMatrix toMatrixItem() {
-    return TuneAdjustmentMatrix(
-      id: id,
-      value: 0,
-      matrix: toMatrix(0),
-    );
+    return TuneAdjustmentMatrix(id: id, value: 0, matrix: toMatrix(0));
   }
 
   /// Creates a copy of this [TuneAdjustmentItem] object with the given fields

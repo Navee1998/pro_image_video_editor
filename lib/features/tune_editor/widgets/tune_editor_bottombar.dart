@@ -104,10 +104,7 @@ class _TuneEditorBottombarState extends State<TuneEditorBottombar> {
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
           spacing: 4,
-          children: [
-            _buildSlider(),
-            _buildItems(),
-          ],
+          children: [_buildSlider(), _buildItems()],
         ),
       ),
     );
@@ -121,34 +118,35 @@ class _TuneEditorBottombarState extends State<TuneEditorBottombar> {
         child: SizedBox(
           height: 40,
           child: ValueListenableBuilder(
-              valueListenable: _sliderValue,
-              builder: (_, value, __) {
-                return widget.tuneEditorConfigs.widgets.slider?.call(
-                      widget.state,
-                      widget.rebuildController.stream,
-                      value,
-                      widget.onChanged,
-                      widget.onChangedEnd,
-                    ) ??
-                    Slider(
-                      min: activeOption.min,
-                      max: activeOption.max,
-                      divisions: activeOption.divisions,
-                      label: (value * activeOption.labelMultiplier)
-                          .round()
-                          .toString(),
-                      value: value,
-                      onChangeStart: (val) {
-                        _sliderValue.value = val;
-                        widget.onChangedStart(val);
-                      },
-                      onChanged: (val) {
-                        _sliderValue.value = val;
-                        widget.onChanged(val);
-                      },
-                      onChangeEnd: widget.onChangedEnd,
-                    );
-              }),
+            valueListenable: _sliderValue,
+            builder: (_, value, _) {
+              return widget.tuneEditorConfigs.widgets.slider?.call(
+                    widget.state,
+                    widget.rebuildController.stream,
+                    value,
+                    widget.onChanged,
+                    widget.onChangedEnd,
+                  ) ??
+                  Slider(
+                    min: activeOption.min,
+                    max: activeOption.max,
+                    divisions: activeOption.divisions,
+                    label: (value * activeOption.labelMultiplier)
+                        .round()
+                        .toString(),
+                    value: value,
+                    onChangeStart: (val) {
+                      _sliderValue.value = val;
+                      widget.onChangedStart(val);
+                    },
+                    onChanged: (val) {
+                      _sliderValue.value = val;
+                      widget.onChanged(val);
+                    },
+                    onChangeEnd: widget.onChangedEnd,
+                  );
+            },
+          ),
         ),
       ),
     );
@@ -167,8 +165,9 @@ class _TuneEditorBottombarState extends State<TuneEditorBottombar> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               mainAxisSize: MainAxisSize.min,
-              children:
-                  List.generate(widget.tuneAdjustmentList.length, (index) {
+              children: List.generate(widget.tuneAdjustmentList.length, (
+                index,
+              ) {
                 var item = widget.tuneAdjustmentList[index];
                 var color = widget.selectedIndex == index
                     ? widget.tuneEditorConfigs.style.bottomBarActiveItemColor
@@ -178,11 +177,7 @@ class _TuneEditorBottombarState extends State<TuneEditorBottombar> {
                     item.label,
                     style: _textStyle.copyWith(color: color),
                   ),
-                  icon: Icon(
-                    item.icon,
-                    size: _iconSize,
-                    color: color,
-                  ),
+                  icon: Icon(item.icon, size: _iconSize, color: color),
                   onPressed: () => widget.onSelect(index),
                 );
               }),

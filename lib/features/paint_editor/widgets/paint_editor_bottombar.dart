@@ -90,30 +90,31 @@ class PaintEditorBottombar extends StatelessWidget {
                       : double.infinity,
                 ),
                 child: Wrap(
-                    direction: Axis.horizontal,
-                    alignment: WrapAlignment.spaceAround,
-                    runAlignment: WrapAlignment.spaceAround,
-                    crossAxisAlignment: WrapCrossAlignment.center,
-                    children: tools.map((item) {
-                      Color color = _getColor(item.mode);
-                      return FlatIconTextButton(
-                        label: Text(
-                          item.label,
-                          style: TextStyle(
+                  direction: Axis.horizontal,
+                  alignment: WrapAlignment.spaceAround,
+                  runAlignment: WrapAlignment.spaceAround,
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  children: tools.map((item) {
+                    Color color = _getColor(item.mode);
+                    return FlatIconTextButton(
+                      label: Text(
+                        item.label,
+                        style: TextStyle(
                             fontSize: configs.style.bottomBarTextSize,
                             color: color,
                           ),
-                        ),
-                        icon: Icon(
+                      ),
+                      icon: Icon(
                           item.icon,
                           color: color,
                           size: configs.style.bottomBarIconSize,
                         ),
-                        onPressed: () {
-                          setMode(item.mode);
-                        },
-                      );
-                    }).toList()),
+                      onPressed: () {
+                        setMode(item.mode);
+                      },
+                    );
+                  }).toList(),
+                ),
               ),
             ),
           ),

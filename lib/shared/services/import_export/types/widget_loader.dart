@@ -62,7 +62,4 @@ import 'package:flutter/widgets.dart';
 /// ```
 ///
 /// {@endtemplate}
-typedef WidgetLoader = Widget Function(
-  String id, {
-  Map<String, dynamic>? meta,
-});
+typedef WidgetLoader = Widget Function(String id, {Map<String, dynamic>? meta});

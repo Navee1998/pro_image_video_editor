@@ -1,7 +1,3 @@
-// ignore_for_file: deprecated_member_use_from_same_package
-// TODO: Remove the deprecated values when releasing version 12.0.0.
-
-// Dart imports:
 import 'dart:math';
 import 'dart:ui';
 
@@ -21,6 +17,7 @@ import '/features/crop_rotate_editor/widgets/outside_gestures/crop_rotate_gestur
 import '/features/crop_rotate_editor/widgets/outside_gestures/outside_gesture_listener.dart';
 import '/plugins/defer_pointer/defer_pointer.dart';
 import '/pro_image_editor.dart';
+import '/shared/extensions/double_extension.dart';
 import '/shared/mixins/extended_loop.dart';
 import '/shared/services/content_recorder/widgets/record_invisible_widget.dart';
 import '/shared/services/layer_transform_generator.dart';
@@ -33,8 +30,6 @@ import '/shared/widgets/extended/mouse_region/extended_rebuild_mouse_region.dart
 import '/shared/widgets/layer/layer_stack.dart';
 import '/shared/widgets/screen_resize_detector.dart';
 import '/shared/widgets/transform/transformed_content_generator.dart';
-import '../../shared/extensions/double_extension.dart';
-import '../filter_editor/widgets/filtered_widget.dart';
 import 'enums/crop_area_part.dart';
 import 'enums/crop_rotate_angle_side.dart';
 import 'mixins/crop_area_history.dart';
@@ -71,8 +66,10 @@ class CropRotateEditor extends StatefulWidget
     required this.initConfigs,
     this.editorImage,
     this.videoController,
-  }) : assert(editorImage != null || videoController != null,
-            'Either editorImage or videoController must be provided.');
+  }) : assert(
+         editorImage != null || videoController != null,
+         'Either editorImage or videoController must be provided.',
+       );
 
   /// Constructs a `CropRotateEditor` widget with image data loaded from memory.
   factory CropRotateEditor.memory(
@@ -146,12 +143,12 @@ class CropRotateEditor extends StatefulWidget
       editorImage: videoController != null
           ? null
           : editorImage ??
-              EditorImage(
-                byteArray: byteArray,
-                file: file,
-                networkUrl: networkUrl,
-                assetPath: assetPath,
-              ),
+                EditorImage(
+                  byteArray: byteArray,
+                  file: file,
+                  networkUrl: networkUrl,
+                  assetPath: assetPath,
+                ),
       videoController: videoController,
       initConfigs: initConfigs,
     );
@@ -305,13 +302,13 @@ class CropRotateEditorState extends State<CropRotateEditor>
   /// Gets the size of the rendered image based on the constraints and rotation
   /// state.
   Size get _renderedImgSize => Size(
-        _rotated90deg
-            ? _renderedImgConstraints.maxHeight
-            : _renderedImgConstraints.maxWidth,
-        _rotated90deg
-            ? _renderedImgConstraints.maxWidth
-            : _renderedImgConstraints.maxHeight,
-      );
+    _rotated90deg
+        ? _renderedImgConstraints.maxHeight
+        : _renderedImgConstraints.maxWidth,
+    _rotated90deg
+        ? _renderedImgConstraints.maxWidth
+        : _renderedImgConstraints.maxHeight,
+  );
 
   /// Gets the size of the main image, using decoded dimensions if not provided.
   Size get _mainImageSize =>
@@ -365,10 +362,7 @@ class CropRotateEditorState extends State<CropRotateEditor>
             scaleFactor: userScaleFactor,
             rotationScaleFactor: _rotationScaleFactor,
             interactionOpacity: _interactionOpacityProgress,
-            screenSize: Size(
-              editorBodySize.width,
-              editorBodySize.height,
-            ),
+            screenSize: Size(editorBodySize.width, editorBodySize.height),
             fadeInOpacity: _painterOpacity,
             style: cropRotateEditorConfigs.style,
             drawCircle: cropMode == CropMode.oval,
@@ -401,8 +395,9 @@ class CropRotateEditorState extends State<CropRotateEditor>
     _interactiveCornerArea = isDesktop
         ? cropRotateEditorConfigs.desktopCornerDragArea
         : cropRotateEditorConfigs.mobileCornerDragArea;
-    _desktopInteractionManager =
-        CropDesktopInteractionManager(context: context);
+    _desktopInteractionManager = CropDesktopInteractionManager(
+      context: context,
+    );
     ServicesBinding.instance.keyboard.addHandler(_onKeyEvent);
 
     // Initialize image and layers
@@ -414,7 +409,9 @@ class CropRotateEditorState extends State<CropRotateEditor>
     // Initialize rotate animation
     double initAngle = initialTransformConfigs?.angle ?? 0.0;
     rotateCtrl = AnimationController(
-        duration: cropRotateEditorConfigs.animationDuration, vsync: this);
+      duration: cropRotateEditorConfigs.animationDuration,
+      vsync: this,
+    );
     rotateCtrl.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
         if (_blockInteraction) {
@@ -424,15 +421,21 @@ class CropRotateEditorState extends State<CropRotateEditor>
         cropRotateEditorCallbacks?.handleRotateEnd(rotateAnimation.value);
       }
     });
-    rotateAnimation =
-        Tween<double>(begin: initAngle, end: initAngle).animate(rotateCtrl);
+    rotateAnimation = Tween<double>(
+      begin: initAngle,
+      end: initAngle,
+    ).animate(rotateCtrl);
 
     // Initialize scale animation
     double initScale = (initialTransformConfigs?.scaleRotation ?? 1);
     scaleCtrl = AnimationController(
-        duration: cropRotateEditorConfigs.animationDuration, vsync: this);
-    scaleAnimation =
-        Tween<double>(begin: initScale, end: initScale).animate(scaleCtrl);
+      duration: cropRotateEditorConfigs.animationDuration,
+      vsync: this,
+    );
+    scaleAnimation = Tween<double>(
+      begin: initScale,
+      end: initScale,
+    ).animate(scaleCtrl);
 
     // Initialize aspect ratio
     aspectRatio =
@@ -466,20 +469,6 @@ class CropRotateEditorState extends State<CropRotateEditor>
 
     // Perform post-frame initialization
     cropRotateEditorCallbacks?.onInit?.call();
-
-    // TODO: Remove when releasing version 12.0.0.
-    tools.removeWhere((el) {
-      switch (el) {
-        case CropRotateTool.rotate:
-          return !cropRotateEditorConfigs.showRotateButton;
-        case CropRotateTool.flip:
-          return !cropRotateEditorConfigs.showFlipButton;
-        case CropRotateTool.aspectRatio:
-          return !cropRotateEditorConfigs.showAspectRatioButton;
-        case CropRotateTool.reset:
-          return !cropRotateEditorConfigs.showResetButton;
-      }
-    });
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       cropRotateEditorCallbacks?.onAfterViewInit?.call();
@@ -573,6 +562,8 @@ class CropRotateEditorState extends State<CropRotateEditor>
 
     widget.videoController!.initialize(
       configsFunction: () => configs.videoEditor,
+      callbacksAudioFunction: () =>
+          callbacks.audioEditorCallbacks ?? const AudioEditorCallbacks(),
       callbacksFunction: () =>
           callbacks.videoEditorCallbacks ?? VideoEditorCallbacks(),
     );
@@ -595,8 +586,9 @@ class CropRotateEditorState extends State<CropRotateEditor>
     _imageSizeIsDecoded = false;
     _imageNeedDecode = false;
 
-    var decodedImage =
-        await decodeImageFromList(await editorImage!.safeByteArray(context));
+    var decodedImage = await decodeImageFromList(
+      await editorImage!.safeByteArray(context),
+    );
 
     if (!mounted) return;
     var w = decodedImage.width;
@@ -701,8 +693,10 @@ class CropRotateEditorState extends State<CropRotateEditor>
       },
       onScale: (scale) async {
         double startZoom = userScaleFactor;
-        double targetZoom = (userScaleFactor + scale)
-            .clamp(1, cropRotateEditorConfigs.maxScale);
+        double targetZoom = (userScaleFactor + scale).clamp(
+          1,
+          cropRotateEditorConfigs.maxScale,
+        );
 
         await loopWithTransitionTiming(
           (double curveT) {
@@ -747,8 +741,8 @@ class CropRotateEditorState extends State<CropRotateEditor>
 
     TransformConfigs transformC =
         !canRedo && !canUndo && initialTransformConfigs != null
-            ? initialTransformConfigs!
-            : activeHistory;
+        ? initialTransformConfigs!
+        : activeHistory;
 
     _showFakeHero = enableFakeHero;
     _fakeHeroTransformConfigs = transformC;
@@ -773,8 +767,11 @@ class CropRotateEditorState extends State<CropRotateEditor>
         await setImageInfos(activeHistory: activeHistory);
       }
 
-      await initConfigs.onDone
-          ?.call(transformC, _transformHelperScale, imageInfos);
+      await initConfigs.onDone?.call(
+        transformC,
+        _transformHelperScale,
+        imageInfos,
+      );
       if (mounted && initConfigs.enablePopWhenDone) {
         Navigator.pop(context, transformC);
       }
@@ -813,8 +810,8 @@ class CropRotateEditorState extends State<CropRotateEditor>
               : imageInfos!.renderedSize,
           backgroundScreenshot:
               screenshotHistoryPosition >= screenshotHistory.length
-                  ? null
-                  : screenshotHistory[screenshotHistoryPosition],
+              ? null
+              : screenshotHistory[screenshotHistoryPosition],
         );
         retry++;
       } while (bytes == null && retry < 7 && mounted);
@@ -833,8 +830,9 @@ class CropRotateEditorState extends State<CropRotateEditor>
 
       /// Return complete parameters if requested
       if (initConfigs.callbacks.onCompleteWithParameters != null) {
-        final completeParams =
-            await getCompleteParameters(imageBytes: imageBytes);
+        final completeParams = await getCompleteParameters(
+          imageBytes: imageBytes,
+        );
         await callbacks.onCompleteWithParameters?.call(completeParams);
       }
 
@@ -877,8 +875,8 @@ class CropRotateEditorState extends State<CropRotateEditor>
 
       TransformConfigs transformC =
           !canRedo && !canUndo && initialTransformConfigs != null
-              ? initialTransformConfigs!
-              : activeHistory;
+          ? initialTransformConfigs!
+          : activeHistory;
 
       await screenshotCtrl.capture(
         imageInfos: imageInfos!,
@@ -908,18 +906,20 @@ class CropRotateEditorState extends State<CropRotateEditor>
     _blockInteraction = true;
     var piHelper =
         cropRotateEditorConfigs.rotateDirection == RotateDirection.left
-            ? -pi
-            : pi;
+        ? -pi
+        : pi;
 
     rotationCount++;
-    rotateAnimation = Tween<double>(
-            begin: rotateAnimation.value, end: rotationCount * piHelper / 2)
-        .animate(
-      CurvedAnimation(
-        parent: rotateCtrl,
-        curve: cropRotateEditorConfigs.rotateAnimationCurve,
-      ),
-    );
+    rotateAnimation =
+        Tween<double>(
+          begin: rotateAnimation.value,
+          end: rotationCount * piHelper / 2,
+        ).animate(
+          CurvedAnimation(
+            parent: rotateCtrl,
+            curve: cropRotateEditorConfigs.rotateAnimationCurve,
+          ),
+        );
     rotateCtrl
       ..reset()
       ..forward();
@@ -929,21 +929,19 @@ class CropRotateEditorState extends State<CropRotateEditor>
   }
 
   @override
-  calcFitToScreen({
-    Curve? curve,
-    Size? imageSize,
-    bool animated = true,
-  }) {
+  calcFitToScreen({Curve? curve, Size? imageSize, bool animated = true}) {
     if (!animated) scaleCtrl.duration = Duration.zero;
     Size contentSize = Size(
       editorBodySize.width - _screenPadding * 2,
       editorBodySize.height - _screenPadding * 2,
     );
 
-    double cropSpaceHorizontal =
-        _rotated90deg ? _cropSpaceVertical : _cropSpaceHorizontal;
-    double cropSpaceVertical =
-        _rotated90deg ? _cropSpaceHorizontal : _cropSpaceVertical;
+    double cropSpaceHorizontal = _rotated90deg
+        ? _cropSpaceVertical
+        : _cropSpaceHorizontal;
+    double cropSpaceVertical = _rotated90deg
+        ? _cropSpaceHorizontal
+        : _cropSpaceVertical;
 
     Size renderedSize = imageSize ?? _renderedImgSize;
 
@@ -977,8 +975,11 @@ class CropRotateEditorState extends State<CropRotateEditor>
         !targetRotateFactor.isNaN) {
       loopWithTransitionTiming(
         (double curveT) {
-          _rotationScaleFactor =
-              lerpDouble(startRotateFactor, targetRotateFactor, curveT)!;
+          _rotationScaleFactor = lerpDouble(
+            startRotateFactor,
+            targetRotateFactor,
+            curveT,
+          )!;
           cropPainterKey.currentState?.setForegroundPainter(cropPainter);
         },
         mounted: mounted,
@@ -995,9 +996,7 @@ class CropRotateEditorState extends State<CropRotateEditor>
     }
   }
 
-  void _setCropRectBounding({
-    double? oldScaleAnimationValue,
-  }) {
+  void _setCropRectBounding({double? oldScaleAnimationValue}) {
     if (cropRect.isEmpty) {
       return;
     }
@@ -1055,23 +1054,25 @@ class CropRotateEditorState extends State<CropRotateEditor>
   /// Opens a dialog to select from predefined aspect ratios.
   void openAspectRatioOptions() {
     showModalBottomSheet<double>(
-        context: context,
-        backgroundColor:
-            cropRotateEditorConfigs.style.aspectRatioSheetBackgroundColor,
-        isScrollControlled: true,
-        builder: (BuildContext context) => SafeArea(
-              child: cropRotateEditorConfigs.widgets.aspectRatioOptions?.call(
-                    this,
-                    rebuildController.stream,
-                    aspectRatio,
-                    _mainImageSize.aspectRatio,
-                  ) ??
-                  CropAspectRatioOptions(
-                    aspectRatio: aspectRatio,
-                    configs: configs,
-                    originalAspectRatio: _mainImageSize.aspectRatio,
-                  ),
-            )).then((value) {
+      context: context,
+      backgroundColor:
+          cropRotateEditorConfigs.style.aspectRatioSheetBackgroundColor,
+      isScrollControlled: true,
+      builder: (BuildContext context) => SafeArea(
+        child:
+            cropRotateEditorConfigs.widgets.aspectRatioOptions?.call(
+              this,
+              rebuildController.stream,
+              aspectRatio,
+              _mainImageSize.aspectRatio,
+            ) ??
+            CropAspectRatioOptions(
+              aspectRatio: aspectRatio,
+              configs: configs,
+              originalAspectRatio: _mainImageSize.aspectRatio,
+            ),
+      ),
+    ).then((value) {
       if (value != null) {
         updateAspectRatio(value);
       }
@@ -1100,7 +1101,8 @@ class CropRotateEditorState extends State<CropRotateEditor>
     _updateAllStates();
   }
 
-  late CropMode _cropMode = widget.initConfigs.transformConfigs?.cropMode ??
+  late CropMode _cropMode =
+      widget.initConfigs.transformConfigs?.cropMode ??
       cropRotateEditorConfigs.initialCropMode;
 
   /// Gets the current crop mode.
@@ -1174,7 +1176,7 @@ class CropRotateEditorState extends State<CropRotateEditor>
   CropAreaPart _determineCropAreaPart(Offset localPosition) {
     Offset offset =
         _getRealHitPoint(zoom: userScaleFactor, position: localPosition) +
-            translate * userScaleFactor;
+        translate * userScaleFactor;
     double dx = offset.dx;
     double dy = offset.dy;
     if (cropMode == CropMode.oval) {
@@ -1302,8 +1304,10 @@ class CropRotateEditorState extends State<CropRotateEditor>
   /// 3. Updates the translation and user scale factor
   /// 4. Applies offset limits and triggers scale callbacks
   void setScale(double value) {
-    double newZoom = (_startingPinchScale * value)
-        .clamp(1.0, cropRotateEditorConfigs.maxScale);
+    double newZoom = (_startingPinchScale * value).clamp(
+      1.0,
+      cropRotateEditorConfigs.maxScale,
+    );
 
     // Calculate the center offset point from the new zoomed view
     Offset centerZoomOffset =
@@ -1384,9 +1388,12 @@ class CropRotateEditorState extends State<CropRotateEditor>
     _startingPinchScale = userScaleFactor;
     _startingTranslate = translate;
     // Calculate the center offset point from the old zoomed view
-    _startingCenterOffset = _startingTranslate +
+    _startingCenterOffset =
+        _startingTranslate +
         _getRealHitPoint(
-                position: details.localFocalPoint, zoom: userScaleFactor) /
+              position: details.localFocalPoint,
+              zoom: userScaleFactor,
+            ) /
             userScaleFactor;
 
     if (!_scaleStarted) {
@@ -1446,7 +1453,8 @@ class CropRotateEditorState extends State<CropRotateEditor>
     } else {
       if (_currentCropAreaPart != CropAreaPart.none &&
           _currentCropAreaPart != CropAreaPart.inside) {
-        Offset offset = _getRealHitPoint(
+        Offset offset =
+            _getRealHitPoint(
               zoom: _startingPinchScale,
               position: details.localFocalPoint,
             ) +
@@ -1470,11 +1478,17 @@ class CropRotateEditorState extends State<CropRotateEditor>
         double circleGapY = 0;
 
         if (cropMode == CropMode.oval) {
-          circleGapX = sqrt(pow(halfViewRectW, 2) -
-                  pow(min(offset.dy.abs(), halfViewRectW), 2)) -
+          circleGapX =
+              sqrt(
+                pow(halfViewRectW, 2) -
+                    pow(min(offset.dy.abs(), halfViewRectW), 2),
+              ) -
               halfViewRectW;
-          circleGapY = sqrt(pow(halfViewRectH, 2) -
-                  pow(min(offset.dx.abs(), halfViewRectH), 2)) -
+          circleGapY =
+              sqrt(
+                pow(halfViewRectH, 2) -
+                    pow(min(offset.dx.abs(), halfViewRectH), 2),
+              ) -
               halfViewRectH;
 
           circleGapX *= -offset.dx.sign;
@@ -1495,20 +1509,24 @@ class CropRotateEditorState extends State<CropRotateEditor>
 
         bool isFreeAspectRatio = _ratio < 0;
         if (isFreeAspectRatio) {
-          minLeft = -(imgW * userScaleFactor / 2 -
-              _viewRect.width / 2 -
-              halfSpaceHorizontal -
-              translate.dx * userScaleFactor);
-          minRight = imgW +
+          minLeft =
+              -(imgW * userScaleFactor / 2 -
+                  _viewRect.width / 2 -
+                  halfSpaceHorizontal -
+                  translate.dx * userScaleFactor);
+          minRight =
+              imgW +
               (imgW * userScaleFactor / 2 -
                   _viewRect.width / 2 -
                   halfSpaceHorizontal +
                   translate.dx * userScaleFactor);
-          minTop = -(imgH * userScaleFactor / 2 -
-              _viewRect.height / 2 -
-              halfSpaceVertical -
-              translate.dy * userScaleFactor);
-          minBottom = imgH +
+          minTop =
+              -(imgH * userScaleFactor / 2 -
+                  _viewRect.height / 2 -
+                  halfSpaceVertical -
+                  translate.dy * userScaleFactor);
+          minBottom =
+              imgH +
               (imgH * userScaleFactor / 2 -
                   _viewRect.height / 2 -
                   halfSpaceVertical +
@@ -1517,33 +1535,38 @@ class CropRotateEditorState extends State<CropRotateEditor>
 
         Size realViewRectSize = _viewRect.size * scaleAnimation.value;
         if (_rotated90deg) {
-          realViewRectSize =
-              Size(realViewRectSize.height, realViewRectSize.width);
+          realViewRectSize = Size(
+            realViewRectSize.height,
+            realViewRectSize.width,
+          );
         }
 
         double doubleInteractiveArea = _interactiveCornerArea * 2;
         double halfScreenPadding = _screenPadding / 2;
 
         double zoomOutHitAreaX = max(
-            halfScreenPadding,
-            (editorBodySize.width - realViewRectSize.width) / 2 -
-                doubleInteractiveArea);
+          halfScreenPadding,
+          (editorBodySize.width - realViewRectSize.width) / 2 -
+              doubleInteractiveArea,
+        );
         double zoomOutHitAreaY = max(
-            halfScreenPadding,
-            (editorBodySize.height - realViewRectSize.height) / 2 -
-                doubleInteractiveArea);
+          halfScreenPadding,
+          (editorBodySize.height - realViewRectSize.height) / 2 -
+              doubleInteractiveArea,
+        );
 
-        double outsideHitPosY = details.focalPoint.dy -
+        double outsideHitPosY =
+            details.focalPoint.dy -
             _editorScreenOffsetHelper.dy -
             (_hasToolbar ? kToolbarHeight : 0) -
             MediaQuery.paddingOf(context).top;
 
         bool outsideLeft =
             details.focalPoint.dx - _editorScreenOffsetHelper.dx <
-                zoomOutHitAreaX;
+            zoomOutHitAreaX;
         bool outsideRight =
             details.focalPoint.dx - _editorScreenOffsetHelper.dx >
-                editorBodySize.width - zoomOutHitAreaX;
+            editorBodySize.width - zoomOutHitAreaX;
         bool outsideTop = outsideHitPosY < zoomOutHitAreaY;
         bool outsideBottom =
             outsideHitPosY > editorBodySize.height - zoomOutHitAreaY;
@@ -1671,8 +1694,8 @@ class CropRotateEditorState extends State<CropRotateEditor>
         double scaleFactor = userScaleFactor / _scaleStartZoomHelper;
         translate +=
             Offset(details.focalPointDelta.dx, details.focalPointDelta.dy) /
-                scaleFactor *
-                (cropRotateEditorConfigs.invertDragDirection ? -1 : 1);
+            scaleFactor *
+            (cropRotateEditorConfigs.invertDragDirection ? -1 : 1);
         _setOffsetLimits();
         cropRotateEditorCallbacks?.handleMove();
 
@@ -1716,9 +1739,10 @@ class CropRotateEditorState extends State<CropRotateEditor>
       if (cropRect.isEmpty) return;
 
       Rect initRect = Rect.fromCenter(
-          center: _viewRect.center,
-          width: _viewRect.width,
-          height: _viewRect.height);
+        center: _viewRect.center,
+        width: _viewRect.width,
+        height: _viewRect.height,
+      );
       Duration animationDuration =
           cropRotateEditorConfigs.cropDragAnimationDuration;
       Curve animationCurve = cropRotateEditorConfigs.cropDragAnimationCurve;
@@ -1746,7 +1770,8 @@ class CropRotateEditorState extends State<CropRotateEditor>
       );
 
       Offset startOffset = translate;
-      Offset targetOffset = startOffset -
+      Offset targetOffset =
+          startOffset -
           Offset(
                 (startCropRect.left -
                     (targetCropRect.right - startCropRect.right) -
@@ -1821,28 +1846,29 @@ class CropRotateEditorState extends State<CropRotateEditor>
 
     bool zoomInside = userScaleFactor <= 1;
     double startZoom = userScaleFactor;
-    double targetZoom =
-        zoomInside ? cropRotateEditorConfigs.doubleTapScaleFactor : 1;
+    double targetZoom = zoomInside
+        ? cropRotateEditorConfigs.doubleTapScaleFactor
+        : 1;
     Offset startOffset = translate;
 
     Offset targetOffset = zoomInside
         ? (translate -
-            Offset(
-              _doubleTapDetails.localPosition.dx -
-                  _renderedImgConstraints.maxWidth / 2,
-              _doubleTapDetails.localPosition.dy -
-                  _renderedImgConstraints.maxHeight / 2,
-            ))
+              Offset(
+                _doubleTapDetails.localPosition.dx -
+                    _renderedImgConstraints.maxWidth / 2,
+                _doubleTapDetails.localPosition.dy -
+                    _renderedImgConstraints.maxHeight / 2,
+              ))
         : Offset.zero;
 
     double maxOffsetX =
         (_renderedImgConstraints.maxWidth * targetZoom - _viewRect.width) /
-            2 /
-            targetZoom;
+        2 /
+        targetZoom;
     double maxOffsetY =
         (_renderedImgConstraints.maxHeight * targetZoom - _viewRect.height) /
-            2 /
-            targetZoom;
+        2 /
+        targetZoom;
 
     /// direct double clamp trigger an error on android samsung s10 so better
     /// use own solution to clamp
@@ -1854,7 +1880,8 @@ class CropRotateEditorState extends State<CropRotateEditor>
     await loopWithTransitionTiming(
       (double curveT) {
         userScaleFactor = startZoom + (targetZoom - startZoom) * curveT;
-        translate = startOffset +
+        translate =
+            startOffset +
             (targetOffset - startOffset) *
                 targetZoom /
                 userScaleFactor *
@@ -1880,12 +1907,12 @@ class CropRotateEditorState extends State<CropRotateEditor>
 
     double minX =
         (_renderedImgConstraints.maxWidth * userScaleFactor - cropWidth) /
-            2 /
-            userScaleFactor;
+        2 /
+        userScaleFactor;
     double minY =
         (_renderedImgConstraints.maxHeight * userScaleFactor - cropHeight) /
-            2 /
-            userScaleFactor;
+        2 /
+        userScaleFactor;
 
     Offset offset = translate;
 
@@ -1909,10 +1936,12 @@ class CropRotateEditorState extends State<CropRotateEditor>
 
     if (event is PointerScrollEvent) {
       // Define zoom factor and extract vertical scroll delta
-      double factor = cropRotateEditorConfigs.mouseScaleFactor *
+      double factor =
+          cropRotateEditorConfigs.mouseScaleFactor *
           (event.scrollDelta.dy / 50).abs().clamp(0.5, 2);
 
-      double deltaY = event.scrollDelta.dy *
+      double deltaY =
+          event.scrollDelta.dy *
           (cropRotateEditorConfigs.invertMouseScroll ? -1 : 1);
 
       double startZoom = userScaleFactor;
@@ -1927,7 +1956,8 @@ class CropRotateEditorState extends State<CropRotateEditor>
       }
 
       // Calculate the center offset point from the old zoomed view
-      Offset centerOffset = translate +
+      Offset centerOffset =
+          translate +
           _getRealHitPoint(zoom: startZoom, position: event.localPosition) /
               startZoom;
       // Calculate the center offset point from the new zoomed view
@@ -2074,10 +2104,7 @@ class CropRotateEditorState extends State<CropRotateEditor>
         : getSideCursor(cursorNumber - 4);
   }
 
-  Offset _getRealHitPoint({
-    required double zoom,
-    required Offset position,
-  }) {
+  Offset _getRealHitPoint({required double zoom, required Offset position}) {
     double imgW = _renderedImgConstraints.maxWidth;
     double imgH = _renderedImgConstraints.maxHeight;
 
@@ -2109,30 +2136,39 @@ class CropRotateEditorState extends State<CropRotateEditor>
             _showFakeHero = true;
             _updateAllStates();
           },
-          child: LayoutBuilder(builder: (context, constraints) {
-            return AnnotatedRegion<SystemUiOverlayStyle>(
-              value: cropRotateEditorConfigs.style.uiOverlayStyle,
-              child: Theme(
-                data: theme.copyWith(
-                    tooltipTheme:
-                        theme.tooltipTheme.copyWith(preferBelow: true)),
-                child: Scaffold(
-                  resizeToAvoidBottomInset: false,
-                  backgroundColor: cropRotateEditorConfigs.style.background,
-                  appBar: _buildAppBar(constraints),
-                  body: Center(
-                    child: SizedBox(
-                      width: constraints.maxWidth *
-                          (cropRotateEditorConfigs.maxWidthFactor ??
-                              (!kIsWeb && Platform.isAndroid ? 0.9 : 1)),
-                      child: _buildBody(),
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              return AnnotatedRegion<SystemUiOverlayStyle>(
+                value: cropRotateEditorConfigs.style.uiOverlayStyle,
+                child: Theme(
+                  data: theme.copyWith(
+                    tooltipTheme: theme.tooltipTheme.copyWith(
+                      preferBelow: true,
                     ),
                   ),
-                  bottomNavigationBar: _buildBottomAppBar(),
+                  child: MediaQuery.removePadding(
+                    context: context,
+                    removeBottom: !cropRotateEditorConfigs.safeArea.bottom,
+                    child: Scaffold(
+                      resizeToAvoidBottomInset: false,
+                      backgroundColor: cropRotateEditorConfigs.style.background,
+                      appBar: _buildAppBar(constraints),
+                      body: Center(
+                        child: SizedBox(
+                          width:
+                              constraints.maxWidth *
+                              (cropRotateEditorConfigs.maxWidthFactor ??
+                                  (!kIsWeb && Platform.isAndroid ? 0.9 : 1)),
+                          child: _buildBody(),
+                        ),
+                      ),
+                      bottomNavigationBar: _buildBottomAppBar(),
+                    ),
+                  ),
                 ),
-              ),
-            );
-          }),
+              );
+            },
+          ),
         ),
       ),
     );
@@ -2142,8 +2178,10 @@ class CropRotateEditorState extends State<CropRotateEditor>
   /// back, rotate, aspect ratio, and done.
   PreferredSizeWidget? _buildAppBar(BoxConstraints constraints) {
     if (cropRotateEditorConfigs.widgets.appBar != null) {
-      var customToolbar = cropRotateEditorConfigs.widgets.appBar!
-          .call(this, rebuildController.stream);
+      var customToolbar = cropRotateEditorConfigs.widgets.appBar!.call(
+        this,
+        rebuildController.stream,
+      );
       _hasToolbar = customToolbar != null;
       return customToolbar;
     }
@@ -2163,8 +2201,10 @@ class CropRotateEditorState extends State<CropRotateEditor>
 
   Widget? _buildBottomAppBar() {
     if (cropRotateEditorConfigs.widgets.bottomBar != null) {
-      return cropRotateEditorConfigs.widgets.bottomBar!
-          .call(this, rebuildController.stream);
+      return cropRotateEditorConfigs.widgets.bottomBar!.call(
+        this,
+        rebuildController.stream,
+      );
     }
 
     return tools.isNotEmpty
@@ -2259,7 +2299,9 @@ class CropRotateEditorState extends State<CropRotateEditor>
             ),
             if (cropRotateEditorConfigs.widgets.bodyItems != null)
               ...cropRotateEditorConfigs.widgets.bodyItems!(
-                  this, rebuildController.stream),
+                this,
+                rebuildController.stream,
+              ),
           ],
         ),
       ),
@@ -2331,11 +2373,7 @@ class CropRotateEditorState extends State<CropRotateEditor>
 
   Widget _buildFlipTransform({required Widget child}) {
     if (!cropRotateEditorConfigs.enableFlipAnimation) {
-      return Transform.flip(
-        flipX: flipX,
-        flipY: flipY,
-        child: child,
-      );
+      return Transform.flip(flipX: flipX, flipY: flipY, child: child);
     }
 
     return TweenAnimationBuilder<double>(
@@ -2403,10 +2441,7 @@ class CropRotateEditorState extends State<CropRotateEditor>
   Widget _buildPaintContainer({required Widget child}) {
     return Align(
       alignment: Alignment.center,
-      child: Padding(
-        padding: EdgeInsets.all(_screenPadding),
-        child: child,
-      ),
+      child: Padding(padding: EdgeInsets.all(_screenPadding), child: child),
     );
   }
 
@@ -2469,54 +2504,57 @@ class CropRotateEditorState extends State<CropRotateEditor>
   Widget _buildFakeHero() {
     return Padding(
       padding: EdgeInsets.all(_screenPadding),
-      child: LayoutBuilder(builder: (context, constraints) {
-        return Stack(
-          alignment: Alignment.center,
-          fit: StackFit.expand,
-          children: [
-            Hero(
-              tag: heroTag,
-              createRectTween: (begin, end) =>
-                  RectTween(begin: begin, end: end),
-              child: TransformedContentGenerator(
-                isVideoPlayer: videoController != null,
-                transformConfigs: _fakeHeroTransformConfigs,
-                configs: configs,
-                child: FilteredWidget(
-                  width: _mainImageSize.width,
-                  height: _mainImageSize.height,
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          return Stack(
+            alignment: Alignment.center,
+            fit: StackFit.expand,
+            children: [
+              Hero(
+                tag: heroTag,
+                createRectTween: (begin, end) =>
+                    RectTween(begin: begin, end: end),
+                child: TransformedContentGenerator(
+                  isVideoPlayer: videoController != null,
+                  transformConfigs: _fakeHeroTransformConfigs,
                   configs: configs,
-                  image: editorImage,
-                  videoPlayer: videoController?.videoPlayer,
-                  blankSize: initConfigs.mainImageSize,
-                  filters: appliedFilters,
-                  tuneAdjustments: appliedTuneAdjustments,
-                  blurFactor: appliedBlurFactor,
+                  child: FilteredWidget(
+                    width: _mainImageSize.width,
+                    height: _mainImageSize.height,
+                    configs: configs,
+                    image: editorImage,
+                    videoPlayer: videoController?.videoPlayer,
+                    blankSize: initConfigs.mainImageSize,
+                    filters: appliedFilters,
+                    tuneAdjustments: appliedTuneAdjustments,
+                    blurFactor: appliedBlurFactor,
+                  ),
                 ),
               ),
-            ),
-            if (cropRotateEditorConfigs.showLayers && layers != null)
-              LayerStack(
-                transformHelper: TransformHelper(
-                  mainBodySize: (mainBodySize ?? editorBodySize),
-                  mainImageSize: _mainImageSize,
-                  editorBodySize: constraints.biggest,
-                  transformConfigs: initialTransformConfigs,
+              if (cropRotateEditorConfigs.showLayers && layers != null)
+                LayerStack(
+                  transformHelper: TransformHelper(
+                    mainBodySize: (mainBodySize ?? editorBodySize),
+                    mainImageSize: _mainImageSize,
+                    editorBodySize: constraints.biggest,
+                    transformConfigs: initialTransformConfigs,
+                  ),
+                  configs: configs,
+                  layers: _layers,
+                  clipBehavior: Clip.none,
+                  overlayColor: cropRotateEditorConfigs.style.background,
                 ),
-                configs: configs,
-                layers: _layers,
-                clipBehavior: Clip.none,
-                overlayColor: cropRotateEditorConfigs.style.background,
-              ),
-          ],
-        );
-      }),
+            ],
+          );
+        },
+      ),
     );
   }
 
   Widget _screenshotWidget(TransformConfigs transformC) {
-    Size size =
-        _rotated90deg ? imageInfos!.rawSize.flipped : imageInfos!.rawSize;
+    Size size = _rotated90deg
+        ? imageInfos!.rawSize.flipped
+        : imageInfos!.rawSize;
 
     double w = size.width;
     double h = size.height;
@@ -2550,16 +2588,25 @@ class CropRotateEditorState extends State<CropRotateEditor>
 
     properties
       // General configuration
-      ..add(DiagnosticsProperty<CropRotateEditorInitConfigs>(
-          'initConfigs', widget.initConfigs))
       ..add(
-          DiagnosticsProperty<EditorImage?>('editorImage', widget.editorImage))
-      ..add(DiagnosticsProperty<ProVideoController?>(
-          'videoController', widget.videoController))
-
+        DiagnosticsProperty<CropRotateEditorInitConfigs>(
+          'initConfigs',
+          widget.initConfigs,
+        ),
+      )
+      ..add(
+        DiagnosticsProperty<EditorImage?>('editorImage', widget.editorImage),
+      )
+      ..add(
+        DiagnosticsProperty<ProVideoController?>(
+          'videoController',
+          widget.videoController,
+        ),
+      )
       // Crop/Transform state
       ..add(
-          DiagnosticsProperty<TransformConfigs>('activeHistory', activeHistory))
+        DiagnosticsProperty<TransformConfigs>('activeHistory', activeHistory),
+      )
       ..add(IntProperty('rotationCount', rotationCount))
       ..add(FlagProperty('flipX', value: flipX, ifTrue: 'flipped X'))
       ..add(FlagProperty('flipY', value: flipY, ifTrue: 'flipped Y'))
@@ -2571,28 +2618,59 @@ class CropRotateEditorState extends State<CropRotateEditor>
       ..add(DiagnosticsProperty<Offset>('translate', translate))
       ..add(DiagnosticsProperty<Rect>('cropRect', cropRect))
       ..add(DiagnosticsProperty<Rect>('viewRect', _viewRect))
-
       // Status flags
-      ..add(FlagProperty('showFakeHero',
-          value: _showFakeHero, ifTrue: 'showing fake hero'))
-      ..add(FlagProperty('enableFakeHero',
-          value: enableFakeHero, ifTrue: 'fake hero enabled'))
-      ..add(FlagProperty('imageNeedDecode',
-          value: _imageNeedDecode, ifTrue: 'image needs decode'))
-      ..add(FlagProperty('imageSizeIsDecoded',
-          value: _imageSizeIsDecoded, ifTrue: 'image size decoded'))
-      ..add(FlagProperty('interactionActive',
-          value: _interactionActive, ifTrue: 'interaction active'))
-      ..add(FlagProperty('scaleStarted',
-          value: _scaleStarted, ifTrue: 'scale started'))
-
+      ..add(
+        FlagProperty(
+          'showFakeHero',
+          value: _showFakeHero,
+          ifTrue: 'showing fake hero',
+        ),
+      )
+      ..add(
+        FlagProperty(
+          'enableFakeHero',
+          value: enableFakeHero,
+          ifTrue: 'fake hero enabled',
+        ),
+      )
+      ..add(
+        FlagProperty(
+          'imageNeedDecode',
+          value: _imageNeedDecode,
+          ifTrue: 'image needs decode',
+        ),
+      )
+      ..add(
+        FlagProperty(
+          'imageSizeIsDecoded',
+          value: _imageSizeIsDecoded,
+          ifTrue: 'image size decoded',
+        ),
+      )
+      ..add(
+        FlagProperty(
+          'interactionActive',
+          value: _interactionActive,
+          ifTrue: 'interaction active',
+        ),
+      )
+      ..add(
+        FlagProperty(
+          'scaleStarted',
+          value: _scaleStarted,
+          ifTrue: 'scale started',
+        ),
+      )
       // Sizes
       ..add(DiagnosticsProperty<Size>('editorBodySize', editorBodySize))
       ..add(DiagnosticsProperty<Size>('mainImageSize', _mainImageSize))
       ..add(DiagnosticsProperty<Size>('renderedImgSize', _renderedImgSize))
-      ..add(DiagnosticsProperty<BoxConstraints>(
-          'renderedImgConstraints', _renderedImgConstraints))
-
+      ..add(
+        DiagnosticsProperty<BoxConstraints>(
+          'renderedImgConstraints',
+          _renderedImgConstraints,
+        ),
+      )
       // Input
       ..add(DiagnosticsProperty<MouseCursor>('mouseCursor', _mouseCursor))
       ..add(IntProperty('activePointers', _activePointers));

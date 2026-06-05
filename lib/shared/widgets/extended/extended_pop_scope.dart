@@ -60,20 +60,21 @@ class ExtendedPopScope<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListenableBuilder(
-        listenable: LoadingDialog.instance,
-        builder: (_, __) {
-          return PopScope<T>(
-            canPop: canPop && !LoadingDialog.instance.hasActiveOverlay,
-            onPopInvokedWithResult: (didPop, result) {
-              if (!didPop &&
-                  LoadingDialog.instance.hasActiveOverlay &&
-                  LoadingDialog.instance.isDismissible) {
-                LoadingDialog.instance.hide();
-              }
-              onPopInvokedWithResult?.call(didPop, result);
-            },
-            child: child,
-          );
-        });
+      listenable: LoadingDialog.instance,
+      builder: (_, _) {
+        return PopScope<T>(
+          canPop: canPop && !LoadingDialog.instance.hasActiveOverlay,
+          onPopInvokedWithResult: (didPop, result) {
+            if (!didPop &&
+                LoadingDialog.instance.hasActiveOverlay &&
+                LoadingDialog.instance.isDismissible) {
+              LoadingDialog.instance.hide();
+            }
+            onPopInvokedWithResult?.call(didPop, result);
+          },
+          child: child,
+        );
+      },
+    );
   }
 }

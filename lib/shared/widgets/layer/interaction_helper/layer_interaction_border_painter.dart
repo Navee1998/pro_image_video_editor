@@ -25,9 +25,7 @@ class LayerInteractionBorderPainter extends CustomPainter {
   ///   borderStyle: LayerInteractionBorderStyle.solid,
   /// )
   /// ```
-  LayerInteractionBorderPainter({
-    required this.style,
-  });
+  LayerInteractionBorderPainter({required this.style});
 
   /// The theme settings for the layer interaction.
   ///
@@ -104,7 +102,7 @@ class LayerInteractionBorderPainter extends CustomPainter {
     }
   }
 
-// Method to draw a solid border
+  // Method to draw a solid border
   void _drawSolidBorder(Canvas canvas, Size size) {
     final paint = Paint()
       ..color = style.borderColor
@@ -113,35 +111,16 @@ class LayerInteractionBorderPainter extends CustomPainter {
 
     // Draw top border
     canvas
-      ..drawLine(
-        const Offset(0, 0),
-        Offset(size.width, 0),
-        paint,
-      )
-
+      ..drawLine(const Offset(0, 0), Offset(size.width, 0), paint)
       // Draw right border
-      ..drawLine(
-        Offset(size.width, 0),
-        Offset(size.width, size.height),
-        paint,
-      )
-
+      ..drawLine(Offset(size.width, 0), Offset(size.width, size.height), paint)
       // Draw bottom border
-      ..drawLine(
-        Offset(0, size.height),
-        Offset(size.width, size.height),
-        paint,
-      )
-
+      ..drawLine(Offset(0, size.height), Offset(size.width, size.height), paint)
       // Draw left border
-      ..drawLine(
-        const Offset(0, 0),
-        Offset(0, size.height),
-        paint,
-      );
+      ..drawLine(const Offset(0, 0), Offset(0, size.height), paint);
   }
 
-// Method to draw a rounded dotted border
+  // Method to draw a rounded dotted border
   void _drawDottedBorder(Canvas canvas, Size size) {
     final paint = Paint()
       ..color = style.borderColor
@@ -155,44 +134,28 @@ class LayerInteractionBorderPainter extends CustomPainter {
     // Draw top border
     var currentX = startVal;
     while (currentX < size.width) {
-      canvas.drawCircle(
-        Offset(currentX, 0),
-        width,
-        paint,
-      );
+      canvas.drawCircle(Offset(currentX, 0), width, paint);
       currentX += width + space;
     }
 
     // Draw right border
     var currentY = startVal;
     while (currentY < size.height) {
-      canvas.drawCircle(
-        Offset(size.width, currentY),
-        width,
-        paint,
-      );
+      canvas.drawCircle(Offset(size.width, currentY), width, paint);
       currentY += width + space;
     }
 
     // Draw bottom border
     currentX = startVal;
     while (currentX < size.width) {
-      canvas.drawCircle(
-        Offset(currentX, size.height),
-        width,
-        paint,
-      );
+      canvas.drawCircle(Offset(currentX, size.height), width, paint);
       currentX += width + space;
     }
 
     // Draw left border
     currentY = startVal;
     while (currentY < size.height) {
-      canvas.drawCircle(
-        Offset(0, currentY),
-        width,
-        paint,
-      );
+      canvas.drawCircle(Offset(0, currentY), width, paint);
       currentY += width + space;
     }
   }

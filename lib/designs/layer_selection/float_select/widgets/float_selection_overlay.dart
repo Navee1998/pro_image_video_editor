@@ -107,14 +107,18 @@ class _FloatSelectionOverlayState extends State<FloatSelectionOverlay> {
     final parentSize = parentBox.size;
 
     // Convert corners of the layer to local coordinates
-    final topLeft =
-        parentBox.globalToLocal(renderBox.localToGlobal(Offset.zero));
-    final topRight = parentBox
-        .globalToLocal(renderBox.localToGlobal(Offset(layerSize.width, 0)));
-    final bottomLeft = parentBox
-        .globalToLocal(renderBox.localToGlobal(Offset(0, layerSize.height)));
+    final topLeft = parentBox.globalToLocal(
+      renderBox.localToGlobal(Offset.zero),
+    );
+    final topRight = parentBox.globalToLocal(
+      renderBox.localToGlobal(Offset(layerSize.width, 0)),
+    );
+    final bottomLeft = parentBox.globalToLocal(
+      renderBox.localToGlobal(Offset(0, layerSize.height)),
+    );
     final bottomRight = parentBox.globalToLocal(
-        renderBox.localToGlobal(Offset(layerSize.width, layerSize.height)));
+      renderBox.localToGlobal(Offset(layerSize.width, layerSize.height)),
+    );
 
     // Get bounds and center
     final allX = [topLeft.dx, topRight.dx, bottomLeft.dx, bottomRight.dx];
@@ -170,7 +174,8 @@ class _FloatSelectionOverlayState extends State<FloatSelectionOverlay> {
             translation: const Offset(-0.5, -1),
             child: SizedBox(
               key: _toolbarKey,
-              child: _widgets.toolbar ??
+              child:
+                  _widgets.toolbar ??
                   FloatSelectToolbar(
                     layer: widget.layer,
                     interactions: widget.interactions,

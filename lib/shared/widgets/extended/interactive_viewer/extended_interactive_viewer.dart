@@ -202,19 +202,15 @@ class ExtendedInteractiveViewerState extends State<ExtendedInteractiveViewer>
       ..translateByDouble(effectiveOffset.dx, effectiveOffset.dy, 0.0, 1.0)
       ..scaleByDouble(effectiveScale, effectiveScale, effectiveScale, 1.0);
 
-    final tween = Matrix4Tween(
-      begin: _transformCtrl.value,
-      end: targetMatrix,
-    );
+    final tween = Matrix4Tween(begin: _transformCtrl.value, end: targetMatrix);
 
     _animationCtrl
       ..duration = duration
       ..reset();
 
-    final animation = tween.animate(CurvedAnimation(
-      parent: _animationCtrl,
-      curve: curve,
-    ));
+    final animation = tween.animate(
+      CurvedAnimation(parent: _animationCtrl, curve: curve),
+    );
 
     void listener() {
       _transformCtrl.value = animation.value;

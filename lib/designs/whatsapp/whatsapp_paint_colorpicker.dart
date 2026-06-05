@@ -25,10 +25,7 @@ class WhatsappPaintColorpicker extends StatelessWidget {
   ///   paintEditor: myPaintEditorState,
   /// )
   /// ```
-  const WhatsappPaintColorpicker({
-    super.key,
-    required this.paintEditor,
-  });
+  const WhatsappPaintColorpicker({super.key, required this.paintEditor});
 
   /// The state of the paint editor associated with this color picker.
   ///
@@ -45,8 +42,8 @@ class WhatsappPaintColorpicker extends StatelessWidget {
         configs: paintEditor.configs,
         borderWidth:
             paintEditor.configs.designMode == ImageEditorDesignMode.material
-                ? 0
-                : 2,
+            ? 0
+            : 2,
         showThumb:
             paintEditor.configs.designMode == ImageEditorDesignMode.material,
         length: min(

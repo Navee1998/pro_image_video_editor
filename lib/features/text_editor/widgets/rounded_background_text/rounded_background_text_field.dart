@@ -121,26 +121,29 @@ class _RoundedBackgroundTextFieldState
     final fontSize =
         (widget.style.fontSize ?? defaultTextStyle.style.fontSize ?? 16);
 
-    return Stack(
-      clipBehavior: Clip.none,
-      alignment: switch (widget.textAlign) {
-        TextAlign.end => AlignmentDirectional.centerEnd,
-        TextAlign.start => AlignmentDirectional.centerStart,
-        TextAlign.left => Alignment.centerLeft,
-        TextAlign.right => Alignment.centerRight,
-        TextAlign.center || _ => Alignment.topCenter,
-      },
-      children: [
-        if (_textController.text.isNotEmpty) _buildBackgroundText(),
-        _buildEditableText(fontSize: fontSize),
-      ],
+    return MediaQuery(
+      data: MediaQuery.of(context).copyWith(textScaler: TextScaler.noScaling),
+      child: Stack(
+        clipBehavior: Clip.none,
+        alignment: switch (widget.textAlign) {
+          TextAlign.end => AlignmentDirectional.centerEnd,
+          TextAlign.start => AlignmentDirectional.centerStart,
+          TextAlign.left => Alignment.centerLeft,
+          TextAlign.right => Alignment.centerRight,
+          TextAlign.center || _ => Alignment.topCenter,
+        },
+        children: [
+          if (_textController.text.isNotEmpty) _buildBackgroundText(),
+          _buildEditableText(fontSize: fontSize),
+        ],
+      ),
     );
   }
 
   Widget _buildBackgroundText() {
     final style = widget.style.copyWith(
       color: Colors.transparent,
-      leadingDistribution: TextLeadingDistribution.proportional,
+      leadingDistribution: widget.configs.style.leadingDistribution,
     );
 
     return Positioned(
@@ -167,7 +170,8 @@ class _RoundedBackgroundTextFieldState
     return Material(
       type: MaterialType.transparency,
       child: TextField(
-        onTap: _textController.text.isEmpty &&
+        onTap:
+            _textController.text.isEmpty &&
                 View.of(context).viewInsets.bottom <= 0
             ? () {
                 FocusManager.instance.primaryFocus?.unfocus();
@@ -182,14 +186,16 @@ class _RoundedBackgroundTextFieldState
         scrollPadding: EdgeInsets.zero,
         style: widget.style.copyWith(
           fontSize: fontSize,
-          leadingDistribution: TextLeadingDistribution.proportional,
-          height: 0.0,
+          leadingDistribution: widget.configs.style.leadingDistribution,
+          height: widget.configs.style.textHeight,
         ),
+        spellCheckConfiguration: widget.configs.spellCheckConfiguration,
         decoration: InputDecoration.collapsed(
           hintText: _textController.text.isEmpty ? widget.hint : '',
-          hintStyle: (widget.hintStyle ??
-                  TextStyle(color: Theme.of(context).hintColor))
-              .copyWith(fontSize: fontSize),
+          hintStyle:
+              (widget.hintStyle ??
+                      TextStyle(color: Theme.of(context).hintColor))
+                  .copyWith(fontSize: fontSize),
           maintainHintSize: false,
         ),
         textAlign: widget.textAlign,
@@ -226,21 +232,51 @@ class _RoundedBackgroundTextFieldState
       ..add(ColorProperty('backgroundColor', widget.backgroundColor))
       ..add(DoubleProperty('maxTextWidth', widget.maxTextWidth))
       ..add(DoubleProperty('cursorWidth', widget.cursorWidth))
-      ..add(DoubleProperty('cursorHeight', widget.cursorHeight,
-          defaultValue: null))
-      ..add(DiagnosticsProperty<Radius>('cursorRadius', widget.cursorRadius,
-          defaultValue: null))
+      ..add(
+        DoubleProperty('cursorHeight', widget.cursorHeight, defaultValue: null),
+      )
+      ..add(
+        DiagnosticsProperty<Radius>(
+          'cursorRadius',
+          widget.cursorRadius,
+          defaultValue: null,
+        ),
+      )
       ..add(StringProperty('hint', widget.hint))
-      ..add(DiagnosticsProperty<TextStyle>('hintStyle', widget.hintStyle,
-          defaultValue: null))
-      ..add(FlagProperty('autofocus',
-          value: widget.autofocus, ifTrue: 'autofocus enabled'))
-      ..add(FlagProperty('hasOnChanged',
-          value: widget.onChanged != null, ifTrue: 'onChanged set'))
-      ..add(FlagProperty('hasOnEditingComplete',
+      ..add(
+        DiagnosticsProperty<TextStyle>(
+          'hintStyle',
+          widget.hintStyle,
+          defaultValue: null,
+        ),
+      )
+      ..add(
+        FlagProperty(
+          'autofocus',
+          value: widget.autofocus,
+          ifTrue: 'autofocus enabled',
+        ),
+      )
+      ..add(
+        FlagProperty(
+          'hasOnChanged',
+          value: widget.onChanged != null,
+          ifTrue: 'onChanged set',
+        ),
+      )
+      ..add(
+        FlagProperty(
+          'hasOnEditingComplete',
           value: widget.onEditingComplete != null,
-          ifTrue: 'onEditingComplete set'))
-      ..add(FlagProperty('hasOnSubmitted',
-          value: widget.onSubmitted != null, ifTrue: 'onSubmitted set'));
+          ifTrue: 'onEditingComplete set',
+        ),
+      )
+      ..add(
+        FlagProperty(
+          'hasOnSubmitted',
+          value: widget.onSubmitted != null,
+          ifTrue: 'onSubmitted set',
+        ),
+      );
   }
 }

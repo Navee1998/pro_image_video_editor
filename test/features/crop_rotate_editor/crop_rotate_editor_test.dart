@@ -43,81 +43,108 @@ void main() {
   }
 
   group('CropRotateEditor Initialization', () {
-    testWidgets('creates CropRotateEditor using memory image',
-        (WidgetTester tester) async {
-      await tester.pumpWidget(MaterialApp(
-        home:
-            CropRotateEditor.memory(mockMemoryImage, initConfigs: initConfigs),
-      ));
+    testWidgets('creates CropRotateEditor using memory image', (
+      WidgetTester tester,
+    ) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: CropRotateEditor.memory(
+            mockMemoryImage,
+            initConfigs: initConfigs,
+          ),
+        ),
+      );
 
       expect(find.byType(CropRotateEditor), findsOneWidget);
     });
-    testWidgets('creates CropRotateEditor using network image',
-        (WidgetTester tester) async {
+    testWidgets('creates CropRotateEditor using network image', (
+      WidgetTester tester,
+    ) async {
       await mockNetworkImagesFor(() async {
-        await tester.pumpWidget(MaterialApp(
-          home: CropRotateEditor.network(mockNetworkImage,
-              initConfigs: initConfigs),
-        ));
+        await tester.pumpWidget(
+          MaterialApp(
+            home: CropRotateEditor.network(
+              mockNetworkImage,
+              initConfigs: initConfigs,
+            ),
+          ),
+        );
       });
 
       expect(find.byType(CropRotateEditor), findsOneWidget);
     });
-    testWidgets('creates CropRotateEditor using file image',
-        (WidgetTester tester) async {
-      await tester.pumpWidget(MaterialApp(
-        home: CropRotateEditor.file(mockFileImage, initConfigs: initConfigs),
-      ));
+    testWidgets('creates CropRotateEditor using file image', (
+      WidgetTester tester,
+    ) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: CropRotateEditor.file(mockFileImage, initConfigs: initConfigs),
+        ),
+      );
 
       expect(find.byType(CropRotateEditor), findsOneWidget);
     });
-    testWidgets('creates CropRotateEditor using file path',
-        (WidgetTester tester) async {
-      await tester.pumpWidget(MaterialApp(
-        home: CropRotateEditor.file('', initConfigs: initConfigs),
-      ));
+    testWidgets('creates CropRotateEditor using file path', (
+      WidgetTester tester,
+    ) async {
+      await tester.pumpWidget(
+        MaterialApp(home: CropRotateEditor.file('', initConfigs: initConfigs)),
+      );
 
       expect(find.byType(CropRotateEditor), findsOneWidget);
     });
     group('creates CropRotateEditor using autoSource constructor', () {
-      testWidgets('Auto-detects from memory image',
-          (WidgetTester tester) async {
-        await tester.pumpWidget(MaterialApp(
-          home: CropRotateEditor.autoSource(
-            byteArray: mockMemoryImage,
-            initConfigs: initConfigs,
+      testWidgets('Auto-detects from memory image', (
+        WidgetTester tester,
+      ) async {
+        await tester.pumpWidget(
+          MaterialApp(
+            home: CropRotateEditor.autoSource(
+              byteArray: mockMemoryImage,
+              initConfigs: initConfigs,
+            ),
           ),
-        ));
+        );
 
         expect(find.byType(CropRotateEditor), findsOneWidget);
       });
-      testWidgets('Auto-detects from network image',
-          (WidgetTester tester) async {
+      testWidgets('Auto-detects from network image', (
+        WidgetTester tester,
+      ) async {
         await mockNetworkImagesFor(() async {
-          await tester.pumpWidget(MaterialApp(
-            home: CropRotateEditor.autoSource(
-              networkUrl: mockNetworkImage,
-              initConfigs: initConfigs,
+          await tester.pumpWidget(
+            MaterialApp(
+              home: CropRotateEditor.autoSource(
+                networkUrl: mockNetworkImage,
+                initConfigs: initConfigs,
+              ),
             ),
-          ));
+          );
         });
 
         expect(find.byType(CropRotateEditor), findsOneWidget);
       });
       testWidgets('Auto-detects from file image', (WidgetTester tester) async {
-        await tester.pumpWidget(MaterialApp(
-          home: CropRotateEditor.autoSource(
-            file: mockFileImage,
-            initConfigs: initConfigs,
+        await tester.pumpWidget(
+          MaterialApp(
+            home: CropRotateEditor.autoSource(
+              file: mockFileImage,
+              initConfigs: initConfigs,
+            ),
           ),
-        ));
+        );
 
         expect(find.byType(CropRotateEditor), findsOneWidget);
       });
       testWidgets('Auto-detects from file path', (WidgetTester tester) async {
-        await tester.pumpWidget(MaterialApp(
-          home: CropRotateEditor.autoSource(file: '', initConfigs: initConfigs),
-        ));
+        await tester.pumpWidget(
+          MaterialApp(
+            home: CropRotateEditor.autoSource(
+              file: '',
+              initConfigs: initConfigs,
+            ),
+          ),
+        );
 
         expect(find.byType(CropRotateEditor), findsOneWidget);
       });
@@ -126,14 +153,18 @@ void main() {
 
   group('CropRotateEditor Tests', () {
     Future<void> zoom(
-        WidgetTester tester, GlobalKey<CropRotateEditorState> editorKey) async {
-      final Offset centerPoint =
-          tester.getCenter(find.byType(CropRotateEditor));
+      WidgetTester tester,
+      GlobalKey<CropRotateEditorState> editorKey,
+    ) async {
+      final Offset centerPoint = tester.getCenter(
+        find.byType(CropRotateEditor),
+      );
 
       // Start pinch gesture with two fingers
       final TestGesture gesture1 = await tester.startGesture(centerPoint);
-      final TestGesture gesture2 =
-          await tester.startGesture(centerPoint.translate(-50.0, -50.0));
+      final TestGesture gesture2 = await tester.startGesture(
+        centerPoint.translate(-50.0, -50.0),
+      );
 
       // Move fingers apart to simulate pinch zoom
       await gesture1.moveBy(const Offset(30.0, 30.0));
@@ -157,8 +188,9 @@ void main() {
 
     testWidgets('handles rotation correctly', (WidgetTester tester) async {
       await pumpEditor(tester);
-      await tester
-          .tap(find.byKey(const ValueKey('crop-rotate-editor-rotate-btn')));
+      await tester.tap(
+        find.byKey(const ValueKey('crop-rotate-editor-rotate-btn')),
+      );
       await tester.pumpAndSettle();
 
       expect(key.currentState!.rotationCount == 1, isTrue);
@@ -166,8 +198,9 @@ void main() {
 
     testWidgets('handles flip correctly', (WidgetTester tester) async {
       await pumpEditor(tester);
-      await tester
-          .tap(find.byKey(const ValueKey('crop-rotate-editor-flip-btn')));
+      await tester.tap(
+        find.byKey(const ValueKey('crop-rotate-editor-flip-btn')),
+      );
       await tester.pumpAndSettle();
       expect(key.currentState!.flipX, isTrue);
     });
@@ -178,26 +211,30 @@ void main() {
       await zoom(tester, key);
 
       /// Fake tap that widget will stay alive until loop finish
-      await tester
-          .tap(find.byKey(const ValueKey('crop-rotate-editor-reset-btn')));
+      await tester.tap(
+        find.byKey(const ValueKey('crop-rotate-editor-reset-btn')),
+      );
     });
 
     testWidgets('handles reset correctly', (WidgetTester tester) async {
       await pumpEditor(tester);
       await zoom(tester, key);
 
-      await tester
-          .tap(find.byKey(const ValueKey('crop-rotate-editor-flip-btn')));
+      await tester.tap(
+        find.byKey(const ValueKey('crop-rotate-editor-flip-btn')),
+      );
       await tester.pumpAndSettle();
       expect(key.currentState!.flipX, isTrue);
 
-      await tester
-          .tap(find.byKey(const ValueKey('crop-rotate-editor-rotate-btn')));
+      await tester.tap(
+        find.byKey(const ValueKey('crop-rotate-editor-rotate-btn')),
+      );
       await tester.pumpAndSettle();
       expect(key.currentState!.rotationCount == 1, isTrue);
 
-      await tester
-          .tap(find.byKey(const ValueKey('crop-rotate-editor-reset-btn')));
+      await tester.tap(
+        find.byKey(const ValueKey('crop-rotate-editor-reset-btn')),
+      );
       await tester.pumpAndSettle();
 
       expect(key.currentState!.rotationCount == 0, isTrue);
@@ -209,8 +246,9 @@ void main() {
   });
 
   group('CropRotateEditor Aspect Ratio Dialog Tests', () {
-    testWidgets('Opens and selects an aspect ratio',
-        (WidgetTester tester) async {
+    testWidgets('Opens and selects an aspect ratio', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(
         MaterialApp(
           home: CropRotateEditor.memory(
@@ -223,8 +261,9 @@ void main() {
       // Wait for the widget to be built
       await tester.pumpAndSettle(const Duration(milliseconds: 200));
 
-      var openDialogButtonFinder =
-          find.byKey(const ValueKey('crop-rotate-editor-ratio-btn'));
+      var openDialogButtonFinder = find.byKey(
+        const ValueKey('crop-rotate-editor-ratio-btn'),
+      );
       await tester.tap(openDialogButtonFinder);
 
       // Rebuild the widget and open the dialog

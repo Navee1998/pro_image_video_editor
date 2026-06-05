@@ -10,5 +10,5 @@ enum Interpolation {
   cubic,
 
   /// Average the colors of the neighboring pixels.
-  average
+  average,
 }

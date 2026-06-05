@@ -20,7 +20,16 @@ abstract class ThreadManager<T extends Thread> {
   /// initializes the threading environment.
   ThreadManager(this.configs) {
     /// Only initialize multithreading if it's enabled.
-    if (configs.enableIsolateGeneration) initialize();
+    if (configs.enableIsolateGeneration) {
+      final delay = configs.processorConfigs.initializationDelay;
+      if (delay != null) {
+        Future.delayed(delay, () {
+          if (!isDestroyed) initialize();
+        });
+      } else {
+        initialize();
+      }
+    }
   }
 
   /// List of threads.
@@ -112,11 +121,13 @@ abstract class ThreadManager<T extends Thread> {
       List<ThreadTaskModel> activeTasks = tasks
           .where((el) => el.threadId == thread.id && el.taskId != taskId)
           .toList();
-      await Future.wait(activeTasks.map((el) async {
-        if (!el.bytes$.isCompleted) {
-          await el.bytes$.future;
-        }
-      }));
+      await Future.wait(
+        activeTasks.map((el) async {
+          if (!el.bytes$.isCompleted) {
+            await el.bytes$.future;
+          }
+        }),
+      );
     }
 
     thread.send(data);
@@ -144,12 +155,14 @@ abstract class ThreadManager<T extends Thread> {
 
     /// Filter the models to include only those with the minimum number of
     /// active tasks
-    List<Thread> leastActiveTaskModels =
-        models.where((model) => model.activeTasks == minActiveTasks).toList();
+    List<Thread> leastActiveTaskModels = models
+        .where((model) => model.activeTasks == minActiveTasks)
+        .toList();
 
     /// Randomly select one model from the list of models with the minimum
     /// number of active tasks
-    return leastActiveTaskModels[
-        Random().nextInt(leastActiveTaskModels.length)];
+    return leastActiveTaskModels[Random().nextInt(
+      leastActiveTaskModels.length,
+    )];
   }
 }

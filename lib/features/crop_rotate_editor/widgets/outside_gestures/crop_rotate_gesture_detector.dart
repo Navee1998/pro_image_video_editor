@@ -118,15 +118,15 @@ class CropRotateGestureDetectorState extends State<CropRotateGestureDetector> {
         widget.onDoubleTapCancel != null) {
       gestures[DoubleTapGestureRecognizer] =
           GestureRecognizerFactoryWithHandlers<DoubleTapGestureRecognizer>(
-        () => DoubleTapGestureRecognizer(debugOwner: this),
-        (DoubleTapGestureRecognizer instance) {
-          instance
-            ..onDoubleTapDown = widget.onDoubleTapDown
-            ..onDoubleTap = widget.onDoubleTap
-            ..onDoubleTapCancel = widget.onDoubleTapCancel
-            ..gestureSettings = gestureSettings;
-        },
-      );
+            () => DoubleTapGestureRecognizer(debugOwner: this),
+            (DoubleTapGestureRecognizer instance) {
+              instance
+                ..onDoubleTapDown = widget.onDoubleTapDown
+                ..onDoubleTap = widget.onDoubleTap
+                ..onDoubleTapCancel = widget.onDoubleTapCancel
+                ..gestureSettings = gestureSettings;
+            },
+          );
     }
 
     if (widget.onScaleStart != null ||
@@ -134,15 +134,15 @@ class CropRotateGestureDetectorState extends State<CropRotateGestureDetector> {
         widget.onScaleEnd != null) {
       gestures[ScaleGestureRecognizer] =
           GestureRecognizerFactoryWithHandlers<ScaleGestureRecognizer>(
-        () => ScaleGestureRecognizer(debugOwner: this),
-        (ScaleGestureRecognizer instance) {
-          instance
-            ..onStart = widget.onScaleStart
-            ..onUpdate = widget.onScaleUpdate
-            ..onEnd = widget.onScaleEnd
-            ..gestureSettings = gestureSettings;
-        },
-      );
+            () => ScaleGestureRecognizer(debugOwner: this),
+            (ScaleGestureRecognizer instance) {
+              instance
+                ..onStart = widget.onScaleStart
+                ..onUpdate = widget.onScaleUpdate
+                ..onEnd = widget.onScaleEnd
+                ..gestureSettings = gestureSettings;
+            },
+          );
     }
 
     return OutsideRawGestureDetector(

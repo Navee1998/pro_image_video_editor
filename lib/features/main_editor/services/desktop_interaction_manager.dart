@@ -87,12 +87,17 @@ class DesktopInteractionManager {
     required Function onEscape,
     required Function(bool) onUndoRedo,
   }) {
-    if (!context.mounted || event is! KeyDownEvent) return false;
+    if (!context.mounted ||
+        !configs.mainEditor.enableKeyboardShortcuts ||
+        event is! KeyDownEvent) {
+      return false;
+    }
 
     final key = event.logicalKey.keyLabel;
 
-    bool? stopPropagate =
-        callbacks.mainEditorCallbacks?.onKeyboardEvent?.call(event);
+    bool? stopPropagate = callbacks.mainEditorCallbacks?.onKeyboardEvent?.call(
+      event,
+    );
 
     if (stopPropagate == true) return true;
 
@@ -124,7 +129,9 @@ class DesktopInteractionManager {
         _keyboardRotate(isLeftRotation: false, selectedLayers: selectedLayers);
         break;
       case 'Z':
-        if (_keyboard.isCtrlPressed) onUndoRedo(!_keyboard.isShiftPressed);
+        if (_keyboard.isCtrlPressed && !_keyboard.isAltPressed) {
+          onUndoRedo(!_keyboard.isShiftPressed);
+        }
         break;
     }
 

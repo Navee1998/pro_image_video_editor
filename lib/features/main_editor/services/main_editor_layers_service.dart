@@ -109,15 +109,18 @@ class MainEditorLayersService {
     } else if (layer.isPaintLayer) {
       onEditPaintLayer(layer as PaintLayer);
     } else if (layer.isWidgetLayer) {
-      callbacks.stickerEditorCallbacks?.onTapEditSticker
-          ?.call(state, layer as WidgetLayer);
+      callbacks.stickerEditorCallbacks?.onTapEditSticker?.call(
+        state,
+        layer as WidgetLayer,
+      );
     }
   }
 
   /// Handles tap events on a layer to manage selection or editing.
   void handleLayerTap(Layer layer, PointerEvent event) {
-    final bool layersAreSelectable =
-        layerInteraction.layersAreSelectable(configs);
+    final bool layersAreSelectable = layerInteraction.layersAreSelectable(
+      configs,
+    );
 
     if (mouseService.validatePanAction(event: event) && layersAreSelectable) {
       return;
@@ -201,8 +204,9 @@ class MainEditorLayersService {
     final selectedIds = layerInteraction.selectedLayerIds;
     _temporarySelectedIds = {...selectedIds};
     _helperIsPointerDownSelected = false;
-    _helperMouseDownMultiSelect =
-        mouseService.validateMultiSelectAction(event: event);
+    _helperMouseDownMultiSelect = mouseService.validateMultiSelectAction(
+      event: event,
+    );
 
     /// If a user directly drags a layer, we first need to ensure the layer is
     /// selected when the pointer goes down.
@@ -231,7 +235,8 @@ class MainEditorLayersService {
     // If layer is part of a group, handle group selection
     Set<String> groupIds = _activeLayers
         .where(
-            (l) => l.groupId == layer.groupId && l.interaction.enableSelection)
+          (l) => l.groupId == layer.groupId && l.interaction.enableSelection,
+        )
         .map((l) => l.id)
         .toSet();
 
@@ -295,12 +300,11 @@ class MainEditorLayersService {
 
   /// Handles grouping of currently selected layers.
   void handleGroupLayers() {
-    final groupId = layerInteraction.groupSelectedLayers(
-      _activeLayers,
-      (updatedLayers) {
-        state.addHistory(layers: updatedLayers);
-      },
-    );
+    final groupId = layerInteraction.groupSelectedLayers(_activeLayers, (
+      updatedLayers,
+    ) {
+      state.addHistory(layers: updatedLayers);
+    });
 
     if (groupId != null) {
       // Trigger UI update
@@ -311,13 +315,11 @@ class MainEditorLayersService {
 
   /// Handles ungrouping of the specified layer.
   void handleUngroupLayers(Layer layer) {
-    final wasUngrouped = layerInteraction.ungroupLayer(
-      layer,
-      _activeLayers,
-      (updatedLayers) {
-        state.addHistory(layers: updatedLayers);
-      },
-    );
+    final wasUngrouped = layerInteraction.ungroupLayer(layer, _activeLayers, (
+      updatedLayers,
+    ) {
+      state.addHistory(layers: updatedLayers);
+    });
 
     if (wasUngrouped) {
       // Trigger UI update
@@ -328,8 +330,9 @@ class MainEditorLayersService {
 
   /// Handles mouse hover events to change the cursor style
   void handleMouseHover(PointerHoverEvent event) {
-    final bool hasHit = _activeLayers
-        .any((element) => element is PaintLayer && element.item.hit);
+    final bool hasHit = _activeLayers.any(
+      (element) => element is PaintLayer && element.item.hit,
+    );
 
     final activeCursor = mouseCursorsKey.currentState!.currentCursor;
     final moveCursor = _layerInteractionConfigs.style.hoverCursor;

@@ -6,9 +6,9 @@ Map<String, dynamic> kMockHistoryMinified_6_0_0 = {
   'h': [
     {
       'l': [
-        {'id': 'A'}
+        {'id': 'A'},
       ],
-      'b': 2.0
+      'b': 2.0,
     },
     {
       'l': [
@@ -17,15 +17,15 @@ Map<String, dynamic> kMockHistoryMinified_6_0_0 = {
           'x': -84.25000000000004,
           'y': -106.37150837988824,
           'r': -0.523596,
-          's': 3.010189295690343
-        }
-      ]
+          's': 3.010189295690343,
+        },
+      ],
     },
     {
       'l': [
         {'id': 'A'},
-        {'id': 'B'}
-      ]
+        {'id': 'B'},
+      ],
     },
     {
       'l': [
@@ -35,22 +35,22 @@ Map<String, dynamic> kMockHistoryMinified_6_0_0 = {
           'x': 68.24720670391063,
           'y': -203.80027932960894,
           'r': 0.43633,
-          's': 1.0001745810055866
-        }
-      ]
+          's': 1.0001745810055866,
+        },
+      ],
     },
     {
       'l': [
         {'id': 'A'},
         {'id': 'B'},
-        {'id': 'C'}
-      ]
+        {'id': 'C'},
+      ],
     },
     {
       'l': [
         {'id': 'A'},
         {'id': 'B'},
-        {'id': 'C'}
+        {'id': 'C'},
       ],
       'f': [
         [
@@ -73,7 +73,7 @@ Map<String, dynamic> kMockHistoryMinified_6_0_0 = {
           0.0,
           0.0,
           1.0,
-          0.0
+          0.0,
         ],
         [
           1.0,
@@ -95,15 +95,15 @@ Map<String, dynamic> kMockHistoryMinified_6_0_0 = {
           0.0,
           0.0,
           0.29,
-          0.0
-        ]
-      ]
+          0.0,
+        ],
+      ],
     },
     {
       'l': [
         {'id': 'A'},
         {'id': 'B'},
-        {'id': 'C'}
+        {'id': 'C'},
       ],
       'a': [
         {
@@ -129,8 +129,8 @@ Map<String, dynamic> kMockHistoryMinified_6_0_0 = {
             0.0,
             0.0,
             1.0,
-            0.0
-          ]
+            0.0,
+          ],
         },
         {
           'id': 'exposure',
@@ -155,10 +155,10 @@ Map<String, dynamic> kMockHistoryMinified_6_0_0 = {
             0.0,
             0.0,
             1.0,
-            0.0
-          ]
-        }
-      ]
+            0.0,
+          ],
+        },
+      ],
     },
     {
       'l': [
@@ -166,9 +166,9 @@ Map<String, dynamic> kMockHistoryMinified_6_0_0 = {
         {'id': 'B'},
         {'id': 'C'},
         {'id': 'D'},
-        {'id': 'E'}
-      ]
-    }
+        {'id': 'E'},
+      ],
+    },
   ],
   'r': {
     'A': {
@@ -180,7 +180,7 @@ Map<String, dynamic> kMockHistoryMinified_6_0_0 = {
       'fy': false,
       'in': {'m': true, 's': true, 'r': true, 't': true, 'e': true},
       't': 'emoji',
-      'e': '😛'
+      'e': '😛',
     },
     'B': {
       'x': 0.0,
@@ -197,7 +197,7 @@ Map<String, dynamic> kMockHistoryMinified_6_0_0 = {
       'b': 4278190080,
       'cp': 0.4788571428571428,
       'a': 'center',
-      'f': 1.0
+      'f': 1.0,
     },
     'C': {
       'x': 10.707751396648074,
@@ -212,15 +212,15 @@ Map<String, dynamic> kMockHistoryMinified_6_0_0 = {
         'm': 'arrow',
         'o': [
           {'x': 5.0, 'y': 68.59999999999997},
-          {'x': 70.60000000000002, 'y': 5.0}
+          {'x': 70.60000000000002, 'y': 5.0},
         ],
         'c': 4294901760,
         's': 10.0,
         't': 1.0,
-        'f': false
+        'f': false,
       },
       'rs': {'w': 75.60000000000002, 'h': 73.59999999999997},
-      'o': 1.0
+      'o': 1.0,
     },
     'D': {
       'x': -119.07960893854742,
@@ -231,7 +231,7 @@ Map<String, dynamic> kMockHistoryMinified_6_0_0 = {
       'fy': false,
       'in': {'m': true, 's': true, 'r': true, 't': true, 'e': true},
       't': 'widget',
-      'ec': {'networkUrl': 'https://picsum.photos/id/18/400'}
+      'ec': {'networkUrl': 'https://picsum.photos/id/18/400'},
     },
     'E': {
       'x': 119.07960893854742,
@@ -242,9 +242,9 @@ Map<String, dynamic> kMockHistoryMinified_6_0_0 = {
       'fy': false,
       'in': {'m': true, 's': true, 'r': true, 't': true, 'e': true},
       't': 'widget',
-      'ec': {'networkUrl': 'https://picsum.photos/id/17/400'}
-    }
+      'ec': {'networkUrl': 'https://picsum.photos/id/17/400'},
+    },
   },
   'i': {'w': 1024.0, 'h': 1792.0},
-  'l': {'w': 385.0, 'h': 674.0}
+  'l': {'w': 385.0, 'h': 674.0},
 };

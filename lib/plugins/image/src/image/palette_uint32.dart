@@ -7,11 +7,11 @@ import 'palette.dart';
 
 class PaletteUint32 extends Palette {
   PaletteUint32(super.numColors, super.numChannels)
-      : data = Uint32List(numColors * numChannels);
+    : data = Uint32List(numColors * numChannels);
 
   PaletteUint32.from(PaletteUint32 other)
-      : data = Uint32List.fromList(other.data),
-        super(other.numColors, other.numChannels);
+    : data = Uint32List.fromList(other.data),
+      super(other.numColors, other.numChannels);
   final Uint32List data;
 
   @override

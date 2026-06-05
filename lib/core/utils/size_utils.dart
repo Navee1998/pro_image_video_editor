@@ -11,7 +11,7 @@ import 'dart:ui';
 Size getValidSizeOrDefault(Size? a, Size b) {
   return a == null || a.isEmpty
       ? b.isEmpty
-          ? const Size(1, 1)
-          : b
+            ? const Size(1, 1)
+            : b
       : a;
 }

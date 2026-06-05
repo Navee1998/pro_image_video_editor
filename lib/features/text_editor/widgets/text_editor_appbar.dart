@@ -76,6 +76,7 @@ class TextEditorAppBar extends StatelessWidget implements PreferredSizeWidget {
 
     return AppBar(
       automaticallyImplyLeading: false,
+      primary: textEditorConfigs.safeArea.top,
       backgroundColor: textEditorConfigs.style.appBarBackground,
       foregroundColor: textEditorConfigs.style.appBarColor,
       actions: [
@@ -99,11 +100,13 @@ class TextEditorAppBar extends StatelessWidget implements PreferredSizeWidget {
               if (textEditorConfigs.showTextAlignButton)
                 PopupMenuOption(
                   label: i18n.textAlign,
-                  icon: Icon(align == TextAlign.left
-                      ? textEditorConfigs.icons.alignLeft
-                      : align == TextAlign.right
-                          ? textEditorConfigs.icons.alignRight
-                          : textEditorConfigs.icons.alignCenter),
+                  icon: Icon(
+                    align == TextAlign.left
+                        ? textEditorConfigs.icons.alignLeft
+                        : align == TextAlign.right
+                        ? textEditorConfigs.icons.alignRight
+                        : textEditorConfigs.icons.alignCenter,
+                  ),
                   onTap: () {
                     onToggleTextAlign();
                     if (designMode == ImageEditorDesignMode.cupertino) {
@@ -153,32 +156,34 @@ class TextEditorAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   List<IconButton> _getConfigButtons() => [
-        if (textEditorConfigs.showTextAlignButton)
-          IconButton(
-            key: const ValueKey('TextAlignIconButton'),
-            tooltip: i18n.textAlign,
-            onPressed: onToggleTextAlign,
-            icon: Icon(align == TextAlign.left
-                ? textEditorConfigs.icons.alignLeft
-                : align == TextAlign.right
-                    ? textEditorConfigs.icons.alignRight
-                    : textEditorConfigs.icons.alignCenter),
-          ),
-        if (textEditorConfigs.showFontScaleButton)
-          IconButton(
-            key: const ValueKey('BackgroundModeFontScaleButton'),
-            tooltip: i18n.fontScale,
-            onPressed: onOpenFontScaleBottomSheet,
-            icon: Icon(textEditorConfigs.icons.fontScale),
-          ),
-        if (textEditorConfigs.showBackgroundModeButton)
-          IconButton(
-            key: const ValueKey('BackgroundModeColorIconButton'),
-            tooltip: i18n.backgroundMode,
-            onPressed: onToggleBackgroundMode,
-            icon: Icon(textEditorConfigs.icons.backgroundMode),
-          ),
-      ];
+    if (textEditorConfigs.showTextAlignButton)
+      IconButton(
+        key: const ValueKey('TextAlignIconButton'),
+        tooltip: i18n.textAlign,
+        onPressed: onToggleTextAlign,
+        icon: Icon(
+          align == TextAlign.left
+              ? textEditorConfigs.icons.alignLeft
+              : align == TextAlign.right
+              ? textEditorConfigs.icons.alignRight
+              : textEditorConfigs.icons.alignCenter,
+        ),
+      ),
+    if (textEditorConfigs.showFontScaleButton)
+      IconButton(
+        key: const ValueKey('BackgroundModeFontScaleButton'),
+        tooltip: i18n.fontScale,
+        onPressed: onOpenFontScaleBottomSheet,
+        icon: Icon(textEditorConfigs.icons.fontScale),
+      ),
+    if (textEditorConfigs.showBackgroundModeButton)
+      IconButton(
+        key: const ValueKey('BackgroundModeColorIconButton'),
+        tooltip: i18n.backgroundMode,
+        onPressed: onToggleBackgroundMode,
+        icon: Icon(textEditorConfigs.icons.backgroundMode),
+      ),
+  ];
 
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);

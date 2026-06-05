@@ -102,7 +102,12 @@ class AutoImage extends StatelessWidget {
       ..add(EnumProperty<BoxFit?>('fit', fit))
       ..add(DoubleProperty('width', width))
       ..add(DoubleProperty('height', height))
-      ..add(FlagProperty('enableCachedSize',
-          value: enableCachedSize, ifTrue: 'cached size enabled'));
+      ..add(
+        FlagProperty(
+          'enableCachedSize',
+          value: enableCachedSize,
+          ifTrue: 'cached size enabled',
+        ),
+      );
   }
 }

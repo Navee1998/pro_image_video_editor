@@ -24,11 +24,11 @@ void main() {
     test('returns true for two identical nested maps', () {
       final a = {
         'x': 1,
-        'y': {'a': 10, 'b': 20}
+        'y': {'a': 10, 'b': 20},
       };
       final b = {
         'x': 1,
-        'y': {'a': 10, 'b': 20}
+        'y': {'a': 10, 'b': 20},
       };
       expect(mapIsEqual(a, b), isTrue);
     });
@@ -36,11 +36,11 @@ void main() {
     test('returns false for nested maps with different values', () {
       final a = {
         'x': 1,
-        'y': {'a': 10, 'b': 20}
+        'y': {'a': 10, 'b': 20},
       };
       final b = {
         'x': 1,
-        'y': {'a': 10, 'b': 21}
+        'y': {'a': 10, 'b': 21},
       };
       expect(mapIsEqual(a, b), isFalse);
     });
@@ -67,16 +67,16 @@ void main() {
       final a = [
         {
           'x': 1,
-          'y': [2, 3]
+          'y': [2, 3],
         },
-        {'z': 4}
+        {'z': 4},
       ];
       final b = [
         {
           'x': 1,
-          'y': [2, 3]
+          'y': [2, 3],
         },
-        {'z': 4}
+        {'z': 4},
       ];
       expect(mapIsEqual(a, b), isTrue);
     });

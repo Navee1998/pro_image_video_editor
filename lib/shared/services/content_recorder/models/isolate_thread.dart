@@ -17,10 +17,7 @@ class IsolateThread extends Thread {
   /// [onMessage] is a callback that is triggered when a message is received
   /// by the thread.
   /// [coreNumber] specifies the number of the used processor core.
-  IsolateThread({
-    required super.onMessage,
-    required super.coreNumber,
-  });
+  IsolateThread({required super.onMessage, required super.coreNumber});
 
   /// The isolate used for offloading image processing tasks.
   Isolate? isolate;

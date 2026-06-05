@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 
 import '/core/models/editor_configs/paint_editor/paint_editor_configs.dart';
 import '/core/models/layers/paint_layer.dart';
-import '/features/paint_editor/enums/paint_editor_enum.dart';
 import '/features/paint_editor/widgets/draw_paint_item.dart';
 
 /// A widget representing a paint layer in the sticker editor.
@@ -45,22 +44,23 @@ class LayerWidgetPaintItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Opacity(
-      opacity: layer.opacity,
-      child: CustomPaint(
-        size: layer.size,
-        willChange: willChange,
-        isComplex: layer.item.mode == PaintMode.freeStyle,
-        painter: DrawPaintItem(
-          item: layer.item,
-          scale: layer.scale,
-          selected: isSelected,
-          enabledHitDetection: enableHitDetection,
-          onHitChanged: onHitChanged,
-          paintEditorConfigs: paintEditorConfigs,
-        ),
+    final child = CustomPaint(
+      size: layer.size,
+      willChange: willChange,
+      isComplex: layer.item.mode.isFreeStyleMode,
+      painter: DrawPaintItem(
+        item: layer.item,
+        scale: layer.scale,
+        selected: isSelected,
+        enabledHitDetection: enableHitDetection,
+        onHitChanged: onHitChanged,
+        paintEditorConfigs: paintEditorConfigs,
       ),
     );
+
+    if (layer.opacity >= 1.0) return child;
+
+    return Opacity(opacity: layer.opacity, child: child);
   }
 
   @override

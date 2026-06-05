@@ -20,10 +20,7 @@ class GroundedTextSizeSlider extends StatelessWidget {
   ///
   /// Requires the [textEditor] parameter to manage the state of the text
   /// editor.
-  const GroundedTextSizeSlider({
-    super.key,
-    required this.textEditor,
-  });
+  const GroundedTextSizeSlider({super.key, required this.textEditor});
 
   /// The state of the text editor associated with this slider.
   ///
@@ -41,12 +38,13 @@ class GroundedTextSizeSlider extends StatelessWidget {
           margin: const EdgeInsets.only(right: 16),
           width: 16,
           height: min(
-              280,
-              MediaQuery.sizeOf(context).height -
-                  MediaQuery.viewInsetsOf(context).bottom -
-                  kToolbarHeight -
-                  kBottomNavigationBarHeight -
-                  MediaQuery.paddingOf(context).top),
+            280,
+            MediaQuery.sizeOf(context).height -
+                MediaQuery.viewInsetsOf(context).bottom -
+                kToolbarHeight -
+                kBottomNavigationBarHeight -
+                MediaQuery.paddingOf(context).top,
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
@@ -66,20 +64,22 @@ class GroundedTextSizeSlider extends StatelessWidget {
                     data: SliderThemeData(
                       overlayShape: SliderComponentShape.noThumb,
                     ),
-                    child: StatefulBuilder(builder: (context, setState) {
-                      return Slider(
-                        onChanged: (value) {
-                          textEditor.fontScale = 4.5 - value;
-                          setState(() {});
-                        },
-                        min: 0.5,
-                        max: 4,
-                        value: max(0.5, min(4.5 - textEditor.fontScale, 4)),
-                        thumbColor: Colors.white,
-                        inactiveColor: Colors.white60,
-                        activeColor: Colors.white60,
-                      );
-                    }),
+                    child: StatefulBuilder(
+                      builder: (context, setState) {
+                        return Slider(
+                          onChanged: (value) {
+                            textEditor.fontScale = 4.5 - value;
+                            setState(() {});
+                          },
+                          min: 0.5,
+                          max: 4,
+                          value: max(0.5, min(4.5 - textEditor.fontScale, 4)),
+                          thumbColor: Colors.white,
+                          inactiveColor: Colors.white60,
+                          activeColor: Colors.white60,
+                        );
+                      },
+                    ),
                   ),
                 ),
               ),

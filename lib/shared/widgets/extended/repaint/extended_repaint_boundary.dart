@@ -71,7 +71,7 @@ class ExtendedRepaintBoundary extends SingleChildRenderObjectWidget {
   /// child's key
   /// (if the child has a non-null key) or from the given `childIndex`.
   ExtendedRepaintBoundary.wrap(Widget child, int childIndex)
-      : super(key: ValueKey<Object>(child.key ?? childIndex), child: child);
+    : super(key: ValueKey<Object>(child.key ?? childIndex), child: child);
 
   /// Wraps each of the given children in [ExtendedRepaintBoundary]s.
   ///

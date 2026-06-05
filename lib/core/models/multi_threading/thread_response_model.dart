@@ -7,10 +7,7 @@ class ThreadResponse {
   /// Constructs a [ThreadResponse] instance.
   ///
   /// All parameters are required.
-  const ThreadResponse({
-    required this.id,
-    required this.bytes,
-  });
+  const ThreadResponse({required this.id, required this.bytes});
 
   /// The unique identifier.
   final String id;

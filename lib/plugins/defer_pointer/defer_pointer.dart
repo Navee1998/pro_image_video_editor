@@ -32,7 +32,12 @@ class DeferPointer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final link = this.link ?? DeferredPointerHandler.of(context).link;
+    final link = this.link ?? DeferredPointerHandler.maybeOf(context)?.link;
+
+    if (link == null) {
+      return child;
+    }
+
     return _DeferPointerRenderObjectWidget(
       link: link,
       deferPaint: paintOnTop,
@@ -60,7 +65,9 @@ class _DeferPointerRenderObjectWidget extends SingleChildRenderObjectWidget {
 
   @override
   void updateRenderObject(
-      BuildContext context, DeferPointerRenderObject renderObject) {
+    BuildContext context,
+    DeferPointerRenderObject renderObject,
+  ) {
     renderObject
       ..link = link
       ..deferPaint = deferPaint;

@@ -19,10 +19,7 @@ class DialogConfigs {
   final DialogStyle style;
 
   /// Creates a copy of this configuration with the specified overrides.
-  DialogConfigs copyWith({
-    DialogWidgets? widgets,
-    DialogStyle? style,
-  }) {
+  DialogConfigs copyWith({DialogWidgets? widgets, DialogStyle? style}) {
     return DialogConfigs(
       widgets: widgets ?? this.widgets,
       style: style ?? this.style,

@@ -105,37 +105,38 @@ class _GroundedTextBarState extends State<GroundedTextBar>
                 if (textEditorConfigs.customTextStyles != null) ...[
                   const SizedBox(width: 5),
                   _buildDivider(),
-                  ...List.generate(
-                    textEditorConfigs.customTextStyles!.length,
-                    (index) {
-                      var item = textEditorConfigs.customTextStyles![index];
-                      var selected = widget.editor.selectedTextStyle;
-                      bool isSelected = selected.hashCode == item.hashCode;
+                  ...List.generate(textEditorConfigs.customTextStyles!.length, (
+                    index,
+                  ) {
+                    var item = textEditorConfigs.customTextStyles![index];
+                    var selected = widget.editor.selectedTextStyle;
+                    bool isSelected = selected.hashCode == item.hashCode;
 
-                      return FadeInUp(
-                        duration: kGroundedFadeInDuration * 1.5,
-                        delay: kGroundedFadeInStaggerDelay * (index + 2),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 10),
-                          child: IconButton(
-                            onPressed: () => widget.editor.setTextStyle(item),
-                            icon: Text(
-                              'Aa',
-                              style: item.copyWith(
-                                color: isSelected ? Colors.black : Colors.white,
-                              ),
-                            ),
-                            style: IconButton.styleFrom(
-                              backgroundColor:
-                                  isSelected ? Colors.white : Colors.black38,
-                              foregroundColor:
-                                  isSelected ? Colors.black : Colors.white,
+                    return FadeInUp(
+                      duration: kGroundedFadeInDuration * 1.5,
+                      delay: kGroundedFadeInStaggerDelay * (index + 2),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        child: IconButton(
+                          onPressed: () => widget.editor.setTextStyle(item),
+                          icon: Text(
+                            'Aa',
+                            style: item.copyWith(
+                              color: isSelected ? Colors.black : Colors.white,
                             ),
                           ),
+                          style: IconButton.styleFrom(
+                            backgroundColor: isSelected
+                                ? Colors.white
+                                : Colors.black38,
+                            foregroundColor: isSelected
+                                ? Colors.black
+                                : Colors.white,
+                          ),
                         ),
-                      );
-                    },
-                  ),
+                      ),
+                    );
+                  }),
                 ],
               ],
             ),
@@ -150,15 +151,9 @@ class _GroundedTextBarState extends State<GroundedTextBar>
       FlatIconTextButton(
         label: Text(
           widget.i18nColor,
-          style: TextStyle(
-            fontSize: 10.0,
-            color: _foreGroundColorAccent,
-          ),
+          style: TextStyle(fontSize: 10.0, color: _foreGroundColorAccent),
         ),
-        icon: Icon(
-          Icons.color_lens_outlined,
-          color: _foreGroundColor,
-        ),
+        icon: Icon(Icons.color_lens_outlined, color: _foreGroundColor),
         onPressed: () {
           widget.showColorPicker(widget.editor.primaryColor);
         },
@@ -166,19 +161,13 @@ class _GroundedTextBarState extends State<GroundedTextBar>
       FlatIconTextButton(
         label: Text(
           i18n.textEditor.textAlign,
-          style: TextStyle(
-            fontSize: 10.0,
-            color: _foreGroundColorAccent,
-          ),
+          style: TextStyle(fontSize: 10.0, color: _foreGroundColorAccent),
         ),
-        icon: Icon(
-          switch (widget.editor.align) {
-            TextAlign.left => textEditorConfigs.icons.alignLeft,
-            TextAlign.right => textEditorConfigs.icons.alignRight,
-            TextAlign.center || _ => textEditorConfigs.icons.alignCenter,
-          },
-          color: _foreGroundColor,
-        ),
+        icon: Icon(switch (widget.editor.align) {
+          TextAlign.left => textEditorConfigs.icons.alignLeft,
+          TextAlign.right => textEditorConfigs.icons.alignRight,
+          TextAlign.center || _ => textEditorConfigs.icons.alignCenter,
+        }, color: _foreGroundColor),
         onPressed: () {
           widget.editor.toggleTextAlign();
         },
@@ -186,10 +175,7 @@ class _GroundedTextBarState extends State<GroundedTextBar>
       FlatIconTextButton(
         label: Text(
           i18n.textEditor.backgroundMode,
-          style: TextStyle(
-            fontSize: 10.0,
-            color: _foreGroundColorAccent,
-          ),
+          style: TextStyle(fontSize: 10.0, color: _foreGroundColorAccent),
         ),
         icon: Icon(
           textEditorConfigs.icons.backgroundMode,

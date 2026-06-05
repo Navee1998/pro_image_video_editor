@@ -15,10 +15,7 @@ class FrostedGlassTuneAppbar extends StatelessWidget {
   ///
   /// The [tuneEditor] parameter is required to access the state of the
   /// Tune Editor.
-  const FrostedGlassTuneAppbar({
-    super.key,
-    required this.tuneEditor,
-  });
+  const FrostedGlassTuneAppbar({super.key, required this.tuneEditor});
 
   /// The current state of the [TuneEditor].
   ///

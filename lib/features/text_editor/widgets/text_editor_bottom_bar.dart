@@ -45,8 +45,9 @@ class _TextEditorBottomBarState extends State<TextEditorBottomBar> {
         padding: const EdgeInsets.symmetric(horizontal: 14),
         scrollDirection: Axis.horizontal,
         child: ConstrainedBox(
-          constraints:
-              BoxConstraints(minWidth: MediaQuery.sizeOf(context).width),
+          constraints: BoxConstraints(
+            minWidth: MediaQuery.sizeOf(context).width,
+          ),
           child: Row(
             mainAxisAlignment:
                 widget.configs.textEditor.style.bottomBarMainAxisAlignment,
@@ -59,29 +60,26 @@ class _TextEditorBottomBarState extends State<TextEditorBottomBar> {
 
   List<Widget> _buildIconButtons() {
     var items = widget.configs.textEditor.customTextStyles!;
-    return List.generate(
-      items.length,
-      (index) {
-        var selected = widget.selectedStyle;
-        bool isSelected = selected.hashCode == items[index].hashCode;
+    return List.generate(items.length, (index) {
+      var selected = widget.selectedStyle;
+      bool isSelected = selected.hashCode == items[index].hashCode;
 
-        return Padding(
-          padding: EdgeInsets.symmetric(horizontal: _space),
-          child: IconButton(
-            onPressed: () => widget.onFontChange(items[index]),
-            icon: Text(
-              'Aa',
-              style: items[index].copyWith(
-                color: isSelected ? Colors.black : Colors.white,
-              ),
-            ),
-            style: IconButton.styleFrom(
-              backgroundColor: isSelected ? Colors.white : Colors.black38,
-              foregroundColor: isSelected ? Colors.black : Colors.white,
+      return Padding(
+        padding: EdgeInsets.symmetric(horizontal: _space),
+        child: IconButton(
+          onPressed: () => widget.onFontChange(items[index]),
+          icon: Text(
+            'Aa',
+            style: items[index].copyWith(
+              color: isSelected ? Colors.black : Colors.white,
             ),
           ),
-        );
-      },
-    );
+          style: IconButton.styleFrom(
+            backgroundColor: isSelected ? Colors.white : Colors.black38,
+            foregroundColor: isSelected ? Colors.black : Colors.white,
+          ),
+        ),
+      );
+    });
   }
 }

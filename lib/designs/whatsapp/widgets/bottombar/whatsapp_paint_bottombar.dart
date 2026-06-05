@@ -120,9 +120,7 @@ class _WhatsAppPaintBottomBarState extends State<WhatsAppPaintBottomBar> {
                       _showColorPicker = !_showColorPicker;
                     });
                   },
-                  icon: Icon(
-                    _showColorPicker ? Icons.draw : Icons.color_lens,
-                  ),
+                  icon: Icon(_showColorPicker ? Icons.draw : Icons.color_lens),
                   style: IconButton.styleFrom(backgroundColor: Colors.black38),
                 ),
                 Container(
@@ -158,8 +156,9 @@ class _WhatsAppPaintBottomBarState extends State<WhatsAppPaintBottomBar> {
     return Padding(
       padding: const EdgeInsets.only(left: 14),
       child: Wrap(
-        alignment:
-            _isMaterial ? WrapAlignment.start : WrapAlignment.spaceEvenly,
+        alignment: _isMaterial
+            ? WrapAlignment.start
+            : WrapAlignment.spaceEvenly,
         runAlignment: WrapAlignment.center,
         spacing: 10,
         children: [

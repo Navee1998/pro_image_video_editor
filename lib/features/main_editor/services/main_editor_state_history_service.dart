@@ -143,14 +143,13 @@ class MainEditorStateHistoryService {
   }
 
   Future<void> _precacheLayers(
-      ImportStateHistory import, BuildContext context) async {
+    ImportStateHistory import,
+    BuildContext context,
+  ) async {
     await Future.wait(
       import.requirePrecacheList.toSet().map(
-            (item) => precacheImage(
-              item.toImageProvider(),
-              context,
-            ),
-          ),
+        (item) => precacheImage(item.toImageProvider(), context),
+      ),
     );
   }
 
@@ -168,7 +167,6 @@ class MainEditorStateHistoryService {
           EditorStateHistory(
             transformConfigs: TransformConfigs.empty(),
             blur: 0,
-            filters: [],
             layers: [],
             tuneAdjustments: [],
           ),
@@ -177,8 +175,9 @@ class MainEditorStateHistoryService {
       ..historyPointer = import.editorPosition + (enableEmptyHistory ? 1 : 0);
 
     for (var i = 0; i < import.stateHistory.length; i++) {
-      controllers.screenshot
-          .addEmptyScreenshot(screenshots: stateManager.screenshots);
+      controllers.screenshot.addEmptyScreenshot(
+        screenshots: stateManager.screenshots,
+      );
     }
   }
 
@@ -191,16 +190,19 @@ class MainEditorStateHistoryService {
       if (import.configs.mergeMode == ImportEditorMergeMode.merge) {
         el.layers.insertAll(0, stateManager.stateHistory.last.layers);
         el.filters.insertAll(0, stateManager.stateHistory.last.filters);
-        el.tuneAdjustments
-            .insertAll(0, stateManager.stateHistory.last.tuneAdjustments);
+        el.tuneAdjustments.insertAll(
+          0,
+          stateManager.stateHistory.last.tuneAdjustments,
+        );
       }
     }
 
     for (var i = 0; i < import.stateHistory.length; i++) {
       stateManager.stateHistory.add(import.stateHistory[i]);
       if (i < import.stateHistory.length - 1) {
-        controllers.screenshot
-            .addEmptyScreenshot(screenshots: stateManager.screenshots);
+        controllers.screenshot.addEmptyScreenshot(
+          screenshots: stateManager.screenshots,
+        );
       } else {
         takeScreenshot();
       }

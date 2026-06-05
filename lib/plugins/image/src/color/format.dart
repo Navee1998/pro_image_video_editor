@@ -13,7 +13,7 @@ enum Format {
   int32,
   float16,
   float32,
-  float64
+  float64,
 }
 
 enum FormatType { uint, int, float }
@@ -30,7 +30,7 @@ const formatToFormatType = <Format, FormatType>{
   Format.int32: FormatType.int,
   Format.float16: FormatType.float,
   Format.float32: FormatType.float,
-  Format.float64: FormatType.float
+  Format.float64: FormatType.float,
 };
 
 const formatSize = <Format, int>{
@@ -45,7 +45,7 @@ const formatSize = <Format, int>{
   Format.int32: 4,
   Format.float16: 2,
   Format.float32: 4,
-  Format.float64: 8
+  Format.float64: 8,
 };
 
 const formatMaxValue = <Format, int>{
@@ -60,17 +60,17 @@ const formatMaxValue = <Format, int>{
   Format.int32: 0x7fffffff,
   Format.float16: 1,
   Format.float32: 1,
-  Format.float64: 1
+  Format.float64: 1,
 };
 
 int getRowStride(int width, int numChannels, Format format) =>
     (format == Format.uint1)
-        ? ((width * numChannels) / 8).ceil()
-        : (format == Format.uint2)
-            ? ((width * numChannels) / 4).ceil()
-            : (format == Format.uint4)
-                ? ((width * numChannels) / 2).ceil()
-                : width * numChannels * formatSize[format]!;
+    ? ((width * numChannels) / 8).ceil()
+    : (format == Format.uint2)
+    ? ((width * numChannels) / 4).ceil()
+    : (format == Format.uint4)
+    ? ((width * numChannels) / 2).ceil()
+    : width * numChannels * formatSize[format]!;
 
 /// Convert a value from the [from] [Format] to the [to] Format.
 num convertFormatValue(num value, Format from, Format to) {

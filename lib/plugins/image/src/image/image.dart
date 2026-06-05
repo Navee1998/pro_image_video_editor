@@ -28,45 +28,52 @@ enum FrameType {
   page,
 
   /// The frames of this document are to be interpreted as a sequence of images.
-  sequence
+  sequence,
 }
 
 /// An Image is a container for [ImageData] and other various meta-data
 /// representing an image in memory.
 class Image extends Iterable<Pixel> {
   /// Creates an image with the given dimensions and format.
-  Image(
-      {required int width,
-      required int height,
-      int numChannels = 3,
-      bool withPalette = false,
-      Palette? palette,
-      ExifData? exif,
-      IccProfile? iccp,
-      this.textData,
-      this.loopCount = 0,
-      this.frameType = FrameType.sequence,
-      this.backgroundColor,
-      this.frameDuration = 0,
-      this.frameIndex = 0}) {
+  Image({
+    required int width,
+    required int height,
+    int numChannels = 3,
+    bool withPalette = false,
+    Palette? palette,
+    ExifData? exif,
+    IccProfile? iccp,
+    this.textData,
+    this.loopCount = 0,
+    this.frameType = FrameType.sequence,
+    this.backgroundColor,
+    this.frameDuration = 0,
+    this.frameIndex = 0,
+  }) {
     frames.add(this);
-    _initialize(width, height,
-        numChannels: numChannels,
-        withPalette: withPalette,
-        palette: palette,
-        exif: exif,
-        iccp: iccp);
+    _initialize(
+      width,
+      height,
+      numChannels: numChannels,
+      withPalette: withPalette,
+      palette: palette,
+      exif: exif,
+      iccp: iccp,
+    );
   }
 
-  Image.fromResized(Image other,
-      {required int width, required int height, bool noAnimation = false})
-      : _exif = other._exif?.clone(),
-        iccProfile = other.iccProfile?.clone(),
-        frameType = other.frameType,
-        loopCount = other.loopCount,
-        backgroundColor = other.backgroundColor?.clone(),
-        frameDuration = other.frameDuration,
-        frameIndex = other.frameIndex {
+  Image.fromResized(
+    Image other, {
+    required int width,
+    required int height,
+    bool noAnimation = false,
+  }) : _exif = other._exif?.clone(),
+       iccProfile = other.iccProfile?.clone(),
+       frameType = other.frameType,
+       loopCount = other.loopCount,
+       backgroundColor = other.backgroundColor?.clone(),
+       frameDuration = other.frameDuration,
+       frameIndex = other.frameIndex {
     _createImageData(width, height, other.numChannels, other.palette);
 
     if (other.extraChannels != null) {
@@ -88,14 +95,14 @@ class Image extends Iterable<Pixel> {
 
   /// Creates a copy of the given Image [other].
   Image.from(Image other, {bool noAnimation = false, bool noPixels = false})
-      : data = other.data?.clone(noPixels: noPixels),
-        _exif = other._exif?.clone(),
-        iccProfile = other.iccProfile?.clone(),
-        frameType = other.frameType,
-        loopCount = other.loopCount,
-        backgroundColor = other.backgroundColor?.clone(),
-        frameDuration = other.frameDuration,
-        frameIndex = other.frameIndex {
+    : data = other.data?.clone(noPixels: noPixels),
+      _exif = other._exif?.clone(),
+      iccProfile = other.iccProfile?.clone(),
+      frameType = other.frameType,
+      loopCount = other.loopCount,
+      backgroundColor = other.backgroundColor?.clone(),
+      frameDuration = other.frameDuration,
+      frameIndex = other.frameIndex {
     if (other.extraChannels != null) {
       extraChannels = Map<String, ImageData>.from(other.extraChannels!);
     }
@@ -114,10 +121,10 @@ class Image extends Iterable<Pixel> {
 
   /// Creates an empty image.
   Image.empty()
-      : loopCount = 0,
-        frameType = FrameType.sequence,
-        frameDuration = 0,
-        frameIndex = 0;
+    : loopCount = 0,
+      frameType = FrameType.sequence,
+      frameDuration = 0,
+      frameIndex = 0;
 
   /// Create an image from raw data in [bytes].
   ///
@@ -143,25 +150,26 @@ class Image extends Iterable<Pixel> {
   ///   canvas.width, canvas.height).data;
   /// var image = Image.fromBytes(width: canvas.width, height: canvas.height,
   ///     bytes: canvasBytes, numChannels: 4);
-  Image.fromBytes(
-      {required int width,
-      required int height,
-      required ByteBuffer bytes,
-      int bytesOffset = 0,
-      Format format = Format.uint8,
-      int? numChannels,
-      int? rowStride,
-      bool withPalette = false,
-      Palette? palette,
-      ExifData? exif,
-      IccProfile? iccp,
-      ChannelOrder? order,
-      this.textData,
-      this.loopCount = 0,
-      this.frameType = FrameType.sequence,
-      this.backgroundColor,
-      this.frameDuration = 0,
-      this.frameIndex = 0}) {
+  Image.fromBytes({
+    required int width,
+    required int height,
+    required ByteBuffer bytes,
+    int bytesOffset = 0,
+    Format format = Format.uint8,
+    int? numChannels,
+    int? rowStride,
+    bool withPalette = false,
+    Palette? palette,
+    ExifData? exif,
+    IccProfile? iccp,
+    ChannelOrder? order,
+    this.textData,
+    this.loopCount = 0,
+    this.frameType = FrameType.sequence,
+    this.backgroundColor,
+    this.frameDuration = 0,
+    this.frameIndex = 0,
+  }) {
     frames.add(this);
 
     numChannels ??= order != null ? channelOrderLength[order] : 3;
@@ -173,10 +181,10 @@ class Image extends Iterable<Pixel> {
     order ??= numChannels == 3
         ? ChannelOrder.rgb
         : numChannels == 4
-            ? ChannelOrder.rgba
-            : numChannels == 1
-                ? ChannelOrder.red
-                : ChannelOrder.grayAlpha;
+        ? ChannelOrder.rgba
+        : numChannels == 1
+        ? ChannelOrder.red
+        : ChannelOrder.grayAlpha;
 
     if (numChannels == 1) {
       // There is only one channel order
@@ -350,7 +358,11 @@ class Image extends Iterable<Pixel> {
   }
 
   void _createImageData(
-      int width, int height, int numChannels, Palette? palette) {
+    int width,
+    int height,
+    int numChannels,
+    Palette? palette,
+  ) {
     if (palette == null) {
       data = ImageDataUint8(width, height, numChannels);
     } else {
@@ -511,8 +523,11 @@ class Image extends Iterable<Pixel> {
 
   /// Get the pixel using the given [interpolation] type for non-integer pixel
   /// coordinates.
-  Color getPixelInterpolate(num fx, num fy,
-      {Interpolation interpolation = Interpolation.linear}) {
+  Color getPixelInterpolate(
+    num fx,
+    num fy, {
+    Interpolation interpolation = Interpolation.linear,
+  }) {
     switch (interpolation) {
       case Interpolation.nearest:
         return getPixelSafe(fx.toInt(), fy.toInt());
@@ -545,10 +560,11 @@ class Image extends Iterable<Pixel> {
     final inn = nx >= width || ny >= height ? icc : getPixelSafe(nx, ny);
 
     return getColor(
-        linear(icc.r, inc.r, icn.r, inn.r),
-        linear(icc.g, inc.g, icn.g, inn.g),
-        linear(icc.b, inc.b, icn.b, inn.b),
-        linear(icc.a, inc.a, icn.a, inn.a));
+      linear(icc.r, inc.r, icn.r, inn.r),
+      linear(icc.g, inc.g, icn.g, inn.g),
+      linear(icc.b, inc.b, icn.b, inn.b),
+      linear(icc.a, inc.a, icn.a, inn.a),
+    );
   }
 
   /// Get the pixel using cubic interpolation for non-integer pixel
@@ -682,11 +698,12 @@ class Image extends Iterable<Pixel> {
   /// [maxChannelValue] will be used to set the alpha. If [withPalette] is
   /// true, and to target format and numChannels has fewer than 256 colors,
   /// then the new image will be converted to use a palette.
-  Image convert(
-      {int? numChannels,
-      num? alpha,
-      bool withPalette = false,
-      bool noAnimation = false}) {
+  Image convert({
+    int? numChannels,
+    num? alpha,
+    bool withPalette = false,
+    bool noAnimation = false,
+  }) {
     Format format = this.format;
     numChannels ??= this.numChannels;
     alpha ??= formatMaxValue[format];
@@ -714,20 +731,22 @@ class Image extends Iterable<Pixel> {
 
     Image? firstFrame;
     for (final frame in frames) {
-      final newImage = Image(
-          width: frame.width,
-          height: frame.height,
-          numChannels: numChannels,
-          withPalette: withPalette,
-          exif: frame._exif?.clone(),
-          iccp: frame.iccProfile?.clone(),
-          backgroundColor: frame.backgroundColor?.clone(),
-          frameType: frame.frameType,
-          loopCount: frame.loopCount,
-          frameDuration: frame.frameDuration)
-        ..textData = frame.textData != null
-            ? Map<String, String>.from(frame.textData!)
-            : null;
+      final newImage =
+          Image(
+              width: frame.width,
+              height: frame.height,
+              numChannels: numChannels,
+              withPalette: withPalette,
+              exif: frame._exif?.clone(),
+              iccp: frame.iccProfile?.clone(),
+              backgroundColor: frame.backgroundColor?.clone(),
+              frameType: frame.frameType,
+              loopCount: frame.loopCount,
+              frameDuration: frame.frameDuration,
+            )
+            ..textData = frame.textData != null
+                ? Map<String, String>.from(frame.textData!)
+                : null;
 
       if (firstFrame != null) {
         firstFrame.addFrame(newImage);
@@ -752,8 +771,13 @@ class Image extends Iterable<Pixel> {
           } else {
             usedColors[h] = numColors;
             np.index = numColors;
-            c = convertColor(op,
-                to: c, format: f, numChannels: numChannels, alpha: alpha);
+            c = convertColor(
+              op,
+              to: c,
+              format: f,
+              numChannels: numChannels,
+              alpha: alpha,
+            );
             pal.setRgb(numColors, c.r, c.g, c.b);
             numColors++;
           }
@@ -783,9 +807,7 @@ class Image extends Iterable<Pixel> {
     }
   }
 
-  int _numPixelColors(
-          Format
-              format) => /*format == Format.uint1
+  int _numPixelColors(Format format) => /*format == Format.uint1
       ? 2
       : format == Format.uint2
           ? 4

@@ -64,10 +64,7 @@ class _WhatsAppPaintAppBarState extends State<WhatsAppPaintAppBar> {
               duration: const Duration(milliseconds: 150),
               transitionBuilder: (child, animation) => ScaleTransition(
                 scale: animation,
-                child: FadeTransition(
-                  opacity: animation,
-                  child: child,
-                ),
+                child: FadeTransition(opacity: animation, child: child),
               ),
               child: widget.canUndo
                   ? IconButton(

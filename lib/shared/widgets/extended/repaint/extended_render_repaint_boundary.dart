@@ -97,10 +97,7 @@ class ExtendedRenderRepaintBoundary extends RenderProxyBox {
   ///
   ///  * [OffsetLayer.toImage] for a similar API at the layer level.
   ///  * [dart:ui.Scene.toImage] for more information about the image returned.
-  Future<ui.Image> toImage({
-    Rect? rect,
-    double pixelRatio = 1.0,
-  }) {
+  Future<ui.Image> toImage({Rect? rect, double pixelRatio = 1.0}) {
     assert(!debugNeedsPaint);
     final OffsetLayer offsetLayer = layer! as OffsetLayer;
     return offsetLayer.toImage(
@@ -223,8 +220,10 @@ class ExtendedRenderRepaintBoundary extends RenderProxyBox {
   }
 
   @override
-  void debugRegisterRepaintBoundaryPaint(
-      {bool includedParent = true, bool includedChild = false}) {
+  void debugRegisterRepaintBoundaryPaint({
+    bool includedParent = true,
+    bool includedChild = false,
+  }) {
     assert(() {
       if (includedParent && includedChild) {
         _debugSymmetricPaintCount += 1;
@@ -244,8 +243,12 @@ class ExtendedRenderRepaintBoundary extends RenderProxyBox {
       final int totalPaints =
           debugSymmetricPaintCount + debugAsymmetricPaintCount;
       if (totalPaints == 0) {
-        properties.add(MessageProperty(
-            'usefulness ratio', 'no metrics collected yet (never painted)'));
+        properties.add(
+          MessageProperty(
+            'usefulness ratio',
+            'no metrics collected yet (never painted)',
+          ),
+        );
       } else {
         final double fraction = debugAsymmetricPaintCount / totalPaints;
         final String diagnosis = switch (fraction) {
@@ -281,15 +284,16 @@ class ExtendedRenderRepaintBoundary extends RenderProxyBox {
                   'good',
             ),
           )
-          ..add(
-            MessageProperty('diagnosis', diagnosis),
-          );
+          ..add(MessageProperty('diagnosis', diagnosis));
       }
       return true;
     }());
     if (inReleaseMode) {
-      properties.add(DiagnosticsNode.message(
-          '(run in debug mode to collect repaint boundary statistics)'));
+      properties.add(
+        DiagnosticsNode.message(
+          '(run in debug mode to collect repaint boundary statistics)',
+        ),
+      );
     }
   }
 }

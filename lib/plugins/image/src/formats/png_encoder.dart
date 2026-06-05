@@ -62,7 +62,8 @@ class PngEncoder extends Encoder {
 
     // Include room for the filter bytes (1 byte per row).
     final filteredImage = Uint8List(
-        (image.width * image.height * nc * channelBytes) + image.height);
+      (image.width * image.height * nc * channelBytes) + image.height,
+    );
 
     _filter(image, filteredImage);
 
@@ -172,15 +173,17 @@ class PngEncoder extends Encoder {
       ..writeUint32(image.width) // width
       ..writeUint32(image.height) // height
       ..writeByte(image.bitsPerChannel) // bit depth
-      ..writeByte(image.hasPalette
-          ? PngColorType.indexed
-          : image.numChannels == 1
-              ? PngColorType.grayscale
-              : image.numChannels == 2
-                  ? PngColorType.grayscaleAlpha
-                  : image.numChannels == 3
-                      ? PngColorType.rgb
-                      : PngColorType.rgba)
+      ..writeByte(
+        image.hasPalette
+            ? PngColorType.indexed
+            : image.numChannels == 1
+            ? PngColorType.grayscale
+            : image.numChannels == 2
+            ? PngColorType.grayscaleAlpha
+            : image.numChannels == 3
+            ? PngColorType.rgb
+            : PngColorType.rgba,
+      )
       ..writeByte(0) // compression method: 0:deflate
       ..writeByte(0) // filter method: 0:adaptive
       ..writeByte(0); // interlace method: 0:no interlace
@@ -246,14 +249,11 @@ class PngEncoder extends Encoder {
 
   void _writeICCPChunk(OutputBuffer? out, IccProfile iccp) {
     final chunk = OutputBuffer(bigEndian: true)
-
       // name
       ..writeBytes(iccp.name.codeUnits)
       ..writeByte(0)
-
       // compression
       ..writeByte(0) // 0 - deflate
-
       // profile data
       ..writeBytes(iccp.compressed());
 
@@ -345,7 +345,12 @@ class PngEncoder extends Encoder {
   }
 
   int _filterUp(
-      Uint8List row, Uint8List? prevRow, int bpc, Uint8List out, int oi) {
+    Uint8List row,
+    Uint8List? prevRow,
+    int bpc,
+    Uint8List out,
+    int oi,
+  ) {
     out[oi++] = PngFilter.up.index;
     final l = row.length;
     for (var x = 0; x < l; x += bpc) {
@@ -357,8 +362,14 @@ class PngEncoder extends Encoder {
     return oi;
   }
 
-  int _filterAverage(Uint8List row, Uint8List? prevRow, int bpc, int bpp,
-      Uint8List out, int oi) {
+  int _filterAverage(
+    Uint8List row,
+    Uint8List? prevRow,
+    int bpc,
+    int bpp,
+    Uint8List out,
+    int oi,
+  ) {
     out[oi++] = PngFilter.average.index;
     final l = row.length;
     for (var x = 0; x < l; x += bpc) {
@@ -386,8 +397,14 @@ class PngEncoder extends Encoder {
     return c;
   }
 
-  int _filterPaeth(Uint8List row, Uint8List? prevRow, int bpc, int bpp,
-      Uint8List out, int oi) {
+  int _filterPaeth(
+    Uint8List row,
+    Uint8List? prevRow,
+    int bpc,
+    int bpp,
+    Uint8List out,
+    int oi,
+  ) {
     out[oi++] = PngFilter.paeth.index;
     final l = row.length;
     for (var x = 0; x < l; x += bpc) {

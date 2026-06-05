@@ -139,12 +139,14 @@ class PvrEncoder extends Encoder {
             p2.setBlock(x0, y1);
             p3.setBlock(x1, y1);
 
-            final ca = p0.getColorRgbA() * factors[factorIndex][0] +
+            final ca =
+                p0.getColorRgbA() * factors[factorIndex][0] +
                 p1.getColorRgbA() * factors[factorIndex][1] +
                 p2.getColorRgbA() * factors[factorIndex][2] +
                 p3.getColorRgbA() * factors[factorIndex][3];
 
-            final cb = p0.getColorRgbB() * factors[factorIndex][0] +
+            final cb =
+                p0.getColorRgbB() * factors[factorIndex][0] +
                 p1.getColorRgbB() * factors[factorIndex][1] +
                 p2.getColorRgbB() * factors[factorIndex][2] +
                 p3.getColorRgbB() * factors[factorIndex][3];
@@ -242,12 +244,14 @@ class PvrEncoder extends Encoder {
             p2.setBlock(x0, y1);
             p3.setBlock(x1, y1);
 
-            final ca = p0.getColorRgbaA() * factors[factorIndex][0] +
+            final ca =
+                p0.getColorRgbaA() * factors[factorIndex][0] +
                 p1.getColorRgbaA() * factors[factorIndex][1] +
                 p2.getColorRgbaA() * factors[factorIndex][2] +
                 p3.getColorRgbaA() * factors[factorIndex][3];
 
-            final cb = p0.getColorRgbaB() * factors[factorIndex][0] +
+            final cb =
+                p0.getColorRgbaB() * factors[factorIndex][0] +
                 p1.getColorRgbaB() * factors[factorIndex][1] +
                 p2.getColorRgbaB() * factors[factorIndex][2] +
                 p3.getColorRgbaB() * factors[factorIndex][3];
@@ -294,7 +298,10 @@ class PvrEncoder extends Encoder {
   }
 
   static PvrColorBoundingBox _calculateBoundingBoxRgb(
-      Image bitmap, int blockX, int blockY) {
+    Image bitmap,
+    int blockX,
+    int blockY,
+  ) {
     PvrColorRgb pixel(int x, int y) {
       final p = bitmap.getPixel(blockX + x, blockY + y);
       return PvrColorRgb(p.r as int, p.g as int, p.b as int);
@@ -321,7 +328,10 @@ class PvrEncoder extends Encoder {
   }
 
   static PvrColorBoundingBox _calculateBoundingBoxRgba(
-      Image bitmap, int blockX, int blockY) {
+    Image bitmap,
+    int blockX,
+    int blockY,
+  ) {
     PvrColorRgba pixel(int x, int y) {
       final p = bitmap.getPixel(blockX + x, blockY + y);
       return PvrColorRgba(p.r as int, p.g as int, p.b as int, p.a as int);

@@ -90,7 +90,9 @@ class OutsideListener extends SingleChildRenderObjectWidget {
 
   @override
   void updateRenderObject(
-      BuildContext context, OutsideRenderPointerListener renderObject) {
+    BuildContext context,
+    OutsideRenderPointerListener renderObject,
+  ) {
     renderObject
       ..onPointerDown = onPointerDown
       ..onPointerMove = onPointerMove
@@ -215,9 +217,8 @@ class OutsideRenderPointerListener
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
-    properties.add(FlagsSummary<Function?>(
-      'listeners',
-      <String, Function?>{
+    properties.add(
+      FlagsSummary<Function?>('listeners', <String, Function?>{
         'down': onPointerDown,
         'move': onPointerMove,
         'up': onPointerUp,
@@ -227,8 +228,7 @@ class OutsideRenderPointerListener
         'panZoomUpdate': onPointerPanZoomUpdate,
         'panZoomEnd': onPointerPanZoomEnd,
         'signal': onPointerSignal,
-      },
-      ifEmpty: '<none>',
-    ));
+      }, ifEmpty: '<none>'),
+    );
   }
 }

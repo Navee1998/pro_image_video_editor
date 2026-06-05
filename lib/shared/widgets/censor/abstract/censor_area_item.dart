@@ -16,11 +16,7 @@ abstract class CensorAreaItem extends StatelessWidget {
   /// optional [size].
   ///
   /// If [size] is `null`, the widget expands to fit its parent.
-  const CensorAreaItem({
-    super.key,
-    required this.censorConfigs,
-    this.size,
-  });
+  const CensorAreaItem({super.key, required this.censorConfigs, this.size});
 
   /// The dimensions of the censored area.
   ///
@@ -40,10 +36,7 @@ abstract class CensorAreaItem extends StatelessWidget {
         /// will absorb it.
       },
       child: _buildClipper(
-        child: buildBackdropFilter(
-          context: context,
-          child: _buildArea(),
-        ),
+        child: buildBackdropFilter(context: context, child: _buildArea()),
       ),
     );
   }

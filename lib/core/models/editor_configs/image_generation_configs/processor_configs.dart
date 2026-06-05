@@ -11,9 +11,12 @@ class ProcessorConfigs {
     this.numberOfBackgroundProcessors = 2,
     this.maxConcurrency = 1,
     this.processorMode = ProcessorMode.auto,
-  })  : assert(numberOfBackgroundProcessors > 0,
-            'minBackgroundProcessors must be positive'),
-        assert(maxConcurrency > 0, 'maxConcurrency must be positive');
+    this.initializationDelay,
+  }) : assert(
+         numberOfBackgroundProcessors > 0,
+         'minBackgroundProcessors must be positive',
+       ),
+       assert(maxConcurrency > 0, 'maxConcurrency must be positive');
 
   /// The number of background processors to use.
   ///
@@ -35,6 +38,15 @@ class ProcessorConfigs {
   /// Defaults to [ProcessorMode.auto].
   final ProcessorMode processorMode;
 
+  /// Optional delay before initializing background isolates/threads.
+  ///
+  /// This can be useful to avoid jank during page transition animations
+  /// at startup. For example, setting this to `Duration(milliseconds: 300)`
+  /// will wait 300ms before spawning isolates.
+  ///
+  /// Defaults to `null` (no delay).
+  final Duration? initializationDelay;
+
   /// Creates a copy of this object with the given fields replaced with the
   /// new values.
   ///
@@ -45,12 +57,14 @@ class ProcessorConfigs {
     int? numberOfBackgroundProcessors,
     int? maxConcurrency,
     ProcessorMode? processorMode,
+    Duration? initializationDelay,
   }) {
     return ProcessorConfigs(
       numberOfBackgroundProcessors:
           numberOfBackgroundProcessors ?? this.numberOfBackgroundProcessors,
       maxConcurrency: maxConcurrency ?? this.maxConcurrency,
       processorMode: processorMode ?? this.processorMode,
+      initializationDelay: initializationDelay ?? this.initializationDelay,
     );
   }
 }

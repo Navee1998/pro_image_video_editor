@@ -27,10 +27,7 @@ class WhatsAppHelper {
 
   /// Called during a scaling gesture, updating the swipe direction and filter
   /// state.
-  void onScaleUpdate(
-    ScaleUpdateDetails details,
-    ProImageEditorState editor,
-  ) {
+  void onScaleUpdate(ScaleUpdateDetails details, ProImageEditorState editor) {
     /// Blocks further updates if the filter show helper is active.
     editor.blockOnScaleUpdateFunction = filterShowHelper > 0;
 

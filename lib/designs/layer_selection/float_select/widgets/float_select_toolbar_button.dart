@@ -32,14 +32,9 @@ class FloatSelectToolbarButton extends StatelessWidget {
       style: TextButton.styleFrom(
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 16),
         backgroundColor: Colors.transparent,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(6),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
       ),
-      child: Text(
-        text,
-        style: isEnabled ? textStyle : disabledTextStyle,
-      ),
+      child: Text(text, style: isEnabled ? textStyle : disabledTextStyle),
     );
   }
 }

@@ -26,9 +26,7 @@ Future<Uint8List?> generateHighQualityImage(
   ImageGenerationConfigs configs = const ImageGenerationConfigs(
     outputFormat: OutputFormat.png,
     maxOutputSize: Size.infinite,
-    processorConfigs: ProcessorConfigs(
-      processorMode: ProcessorMode.minimum,
-    ),
+    processorConfigs: ProcessorConfigs(processorMode: ProcessorMode.minimum),
   ),
 }) async {
   var recorder = ContentRecorderController(

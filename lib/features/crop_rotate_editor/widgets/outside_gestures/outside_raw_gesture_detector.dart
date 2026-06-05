@@ -175,11 +175,13 @@ class OutsideRawGestureDetectorState extends State<OutsideRawGestureDetector> {
       if (!context.findRenderObject()!.owner!.debugDoingLayout) {
         throw FlutterError.fromParts(<DiagnosticsNode>[
           ErrorSummary(
-              'Unexpected call to replaceGestureRecognizers() method of '
-              'RawGestureDetectorState.'),
+            'Unexpected call to replaceGestureRecognizers() method of '
+            'RawGestureDetectorState.',
+          ),
           ErrorDescription(
-              'The replaceGestureRecognizers() method can only be called '
-              'during the layout phase.'),
+            'The replaceGestureRecognizers() method can only be called '
+            'during the layout phase.',
+          ),
           ErrorHint(
             'To set the gesture recognizers at other times, trigger a new '
             'build using setState() '
@@ -254,11 +256,12 @@ class OutsideRawGestureDetectorState extends State<OutsideRawGestureDetector> {
       _recognizers![type] =
           oldRecognizers[type] ?? gestures[type]!.constructor();
       assert(
-          _recognizers![type].runtimeType == type,
-          'GestureRecognizerFactory of type $type created a GestureRecognizer '
-          'of type ${_recognizers![type].runtimeType}. The '
-          'GestureRecognizerFactory must be specialized with the type of the '
-          'class that it returns from its constructor method.');
+        _recognizers![type].runtimeType == type,
+        'GestureRecognizerFactory of type $type created a GestureRecognizer '
+        'of type ${_recognizers![type].runtimeType}. The '
+        'GestureRecognizerFactory must be specialized with the type of the '
+        'class that it returns from its constructor method.',
+      );
       gestures[type]!.initializer(_recognizers![type]!);
     }
     for (final Type type in oldRecognizers.keys) {
@@ -316,7 +319,8 @@ class OutsideRawGestureDetectorState extends State<OutsideRawGestureDetector> {
   }
 
   void _updateSemanticsForRenderObject(
-      OutsideRenderSemanticsGestureHandler renderObject) {
+    OutsideRenderSemanticsGestureHandler renderObject,
+  ) {
     assert(!widget.excludeFromSemantics);
     assert(_semantics != null);
     _semantics!.assignSemantics(renderObject);
@@ -350,25 +354,42 @@ class OutsideRawGestureDetectorState extends State<OutsideRawGestureDetector> {
     } else {
       final List<String> gestures = _recognizers!.values
           .map<String>(
-              (GestureRecognizer recognizer) => recognizer.debugDescription)
+            (GestureRecognizer recognizer) => recognizer.debugDescription,
+          )
           .toList();
       properties
         ..add(IterableProperty<String>('gestures', gestures, ifEmpty: '<none>'))
-        ..add(IterableProperty<GestureRecognizer>(
-            'recognizers', _recognizers!.values,
-            level: DiagnosticLevel.fine))
-        ..add(DiagnosticsProperty<bool>(
-            'excludeFromSemantics', widget.excludeFromSemantics,
-            defaultValue: false));
+        ..add(
+          IterableProperty<GestureRecognizer>(
+            'recognizers',
+            _recognizers!.values,
+            level: DiagnosticLevel.fine,
+          ),
+        )
+        ..add(
+          DiagnosticsProperty<bool>(
+            'excludeFromSemantics',
+            widget.excludeFromSemantics,
+            defaultValue: false,
+          ),
+        );
       if (!widget.excludeFromSemantics) {
-        properties.add(DiagnosticsProperty<SemanticsGestureDelegate>(
-            'semantics', widget.semantics,
-            defaultValue: null));
+        properties.add(
+          DiagnosticsProperty<SemanticsGestureDelegate>(
+            'semantics',
+            widget.semantics,
+            defaultValue: null,
+          ),
+        );
       }
     }
-    properties.add(EnumProperty<OutsideHitTestBehavior>(
-        'behavior', widget.behavior,
-        defaultValue: null));
+    properties.add(
+      EnumProperty<OutsideHitTestBehavior>(
+        'behavior',
+        widget.behavior,
+        defaultValue: null,
+      ),
+    );
   }
 }
 
@@ -404,7 +425,8 @@ class _DefaultSemanticsGestureDelegate extends SemanticsGestureDelegate {
   }
 
   GestureLongPressCallback? _getLongPressHandler(
-      Map<Type, GestureRecognizer> recognizers) {
+    Map<Type, GestureRecognizer> recognizers,
+  ) {
     final LongPressGestureRecognizer? longPress =
         recognizers[LongPressGestureRecognizer] as LongPressGestureRecognizer?;
     if (longPress == null) {
@@ -421,7 +443,8 @@ class _DefaultSemanticsGestureDelegate extends SemanticsGestureDelegate {
   }
 
   GestureDragUpdateCallback? _getHorizontalDragUpdateHandler(
-      Map<Type, GestureRecognizer> recognizers) {
+    Map<Type, GestureRecognizer> recognizers,
+  ) {
     final HorizontalDragGestureRecognizer? horizontal =
         recognizers[HorizontalDragGestureRecognizer]
             as HorizontalDragGestureRecognizer?;
@@ -460,7 +483,8 @@ class _DefaultSemanticsGestureDelegate extends SemanticsGestureDelegate {
   }
 
   GestureDragUpdateCallback? _getVerticalDragUpdateHandler(
-      Map<Type, GestureRecognizer> recognizers) {
+    Map<Type, GestureRecognizer> recognizers,
+  ) {
     final VerticalDragGestureRecognizer? vertical =
         recognizers[VerticalDragGestureRecognizer]
             as VerticalDragGestureRecognizer?;
@@ -511,7 +535,8 @@ class _GestureSemantics extends SingleChildRenderObjectWidget {
 
   @override
   OutsideRenderSemanticsGestureHandler createRenderObject(
-      BuildContext context) {
+    BuildContext context,
+  ) {
     final OutsideRenderSemanticsGestureHandler renderObject =
         OutsideRenderSemanticsGestureHandler()..behavior = behavior;
     assignSemantics(renderObject);
@@ -520,7 +545,9 @@ class _GestureSemantics extends SingleChildRenderObjectWidget {
 
   @override
   void updateRenderObject(
-      BuildContext context, OutsideRenderSemanticsGestureHandler renderObject) {
+    BuildContext context,
+    OutsideRenderSemanticsGestureHandler renderObject,
+  ) {
     renderObject.behavior = behavior;
     assignSemantics(renderObject);
   }

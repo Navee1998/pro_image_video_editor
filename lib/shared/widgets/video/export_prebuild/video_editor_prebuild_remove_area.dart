@@ -36,37 +36,37 @@ class VideoEditorRemoveArea extends StatelessWidget {
       alignment: Alignment.bottomCenter,
       child: SafeArea(
         child: StreamBuilder(
-            stream: rebuildStream,
-            builder: (context, snapshot) {
-              return AnimatedSwitcher(
-                duration: const Duration(milliseconds: 160),
-                child: isLayerBeingTransformed
-                    ? Padding(
-                        padding: const EdgeInsets.only(bottom: 8),
-                        child: Container(
-                          key: removeAreaKey,
-                          height: kToolbarHeight,
-                          width: kToolbarHeight,
-                          decoration: BoxDecoration(
-                            color: const Color(0xFFF44336).withAlpha(
-                                editor.layerInteractionManager.hoverRemoveBtn
-                                    ? 255
-                                    : 100),
-                            borderRadius: BorderRadius.circular(100),
+          stream: rebuildStream,
+          builder: (context, snapshot) {
+            return AnimatedSwitcher(
+              duration: const Duration(milliseconds: 160),
+              child: isLayerBeingTransformed
+                  ? Padding(
+                      padding: const EdgeInsets.only(bottom: 8),
+                      child: Container(
+                        key: removeAreaKey,
+                        height: kToolbarHeight,
+                        width: kToolbarHeight,
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFF44336).withAlpha(
+                            editor.layerInteractionManager.hoverRemoveBtn
+                                ? 255
+                                : 100,
                           ),
-                          child: Center(
-                            child: Icon(
-                              editor.mainEditorConfigs.icons.removeElementZone,
-                              size: 28,
-                            ),
+                          borderRadius: BorderRadius.circular(100),
+                        ),
+                        child: Center(
+                          child: Icon(
+                            editor.mainEditorConfigs.icons.removeElementZone,
+                            size: 28,
                           ),
                         ),
-                      )
-                    : SizedBox.shrink(
-                        key: UniqueKey(),
                       ),
-              );
-            }),
+                    )
+                  : SizedBox.shrink(key: UniqueKey()),
+            );
+          },
+        ),
       ),
     );
   }

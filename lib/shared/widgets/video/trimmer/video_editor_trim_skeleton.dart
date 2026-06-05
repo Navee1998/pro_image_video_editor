@@ -61,8 +61,9 @@ class _VideoEditorTrimSkeletonState extends State<VideoEditorTrimSkeleton>
         height: double.infinity,
         decoration: BoxDecoration(
           color: player.style.trimBarSkeletonColors.first,
-          borderRadius:
-              BorderRadius.circular(player.style.trimBarHandlerRadius),
+          borderRadius: BorderRadius.circular(
+            player.style.trimBarHandlerRadius,
+          ),
         ),
       ),
     );

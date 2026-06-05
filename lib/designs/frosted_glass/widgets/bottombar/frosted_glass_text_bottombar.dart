@@ -94,9 +94,7 @@ class _FrostedGlassTextBottomBarState extends State<FrostedGlassTextBottomBar> {
                   : Text(
                       'Aa',
                       style: widget.configs.textEditor.customTextStyles?.first
-                          .copyWith(
-                        color: Colors.white,
-                      ),
+                          .copyWith(color: Colors.white),
                     ),
               style: IconButton.styleFrom(backgroundColor: Colors.black38),
             ),

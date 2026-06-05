@@ -58,9 +58,9 @@ class _PaintEditorLayerEditorState extends State<PaintEditorLayerEditor> {
   Widget build(BuildContext context) {
     return ExtendedPopScope(
       child: DefaultTextStyle(
-        style: DefaultTextStyle.of(context).style.copyWith(
-              color: _style.editSheetColor,
-            ),
+        style: DefaultTextStyle.of(
+          context,
+        ).style.copyWith(color: _style.editSheetColor),
         child: ListView(
           padding: const EdgeInsets.symmetric(vertical: 16),
           shrinkWrap: true,
@@ -120,23 +120,25 @@ class _PaintEditorLayerEditorState extends State<PaintEditorLayerEditor> {
         ),
         Padding(
           padding: const EdgeInsets.only(left: 6.0, right: 12),
-          child: LayoutBuilder(builder: (_, constraints) {
-            return BarColorPicker(
-              colorListener: (value) {
-                _setColor(Color(value));
-              },
-              animationDuration: Duration.zero,
-              padding: EdgeInsets.zero,
-              configs: _configs,
-              thumbRadius: 8,
-              thumbColor: Colors.white,
-              cornerRadius: 10,
-              pickMode: PickMode.color,
-              color: widget.layer.item.color,
-              length: constraints.maxWidth - 16,
-              horizontal: true,
-            );
-          }),
+          child: LayoutBuilder(
+            builder: (_, constraints) {
+              return BarColorPicker(
+                colorListener: (value) {
+                  _setColor(Color(value));
+                },
+                animationDuration: Duration.zero,
+                padding: EdgeInsets.zero,
+                configs: _configs,
+                thumbRadius: 8,
+                thumbColor: Colors.white,
+                cornerRadius: 10,
+                pickMode: PickMode.color,
+                color: widget.layer.item.color,
+                length: constraints.maxWidth - 16,
+                horizontal: true,
+              );
+            },
+          ),
         ),
       ],
     );
@@ -238,14 +240,20 @@ class _PaintEditorLayerEditorState extends State<PaintEditorLayerEditor> {
     properties
       ..add(DiagnosticsProperty<PaintLayer>('layer', widget.layer))
       ..add(
-          DiagnosticsProperty<ProImageEditorConfigs>('configs', widget.configs))
+        DiagnosticsProperty<ProImageEditorConfigs>('configs', widget.configs),
+      )
       ..add(EnumProperty<PaintMode>('mode', _paintItem.mode))
       ..add(ColorProperty('color', _paintItem.color))
       ..add(DoubleProperty('strokeWidth', _paintItem.strokeWidth))
       ..add(DoubleProperty('opacity', _layer.opacity))
       ..add(FlagProperty('fill', value: _paintItem.fill, ifTrue: 'filled'))
-      ..add(FlagProperty('canBeFilled',
-          value: _paintItem.canBeFilled, ifTrue: 'can be filled'))
+      ..add(
+        FlagProperty(
+          'canBeFilled',
+          value: _paintItem.canBeFilled,
+          ifTrue: 'can be filled',
+        ),
+      )
       ..add(DiagnosticsProperty<Size>('rawSize', _layer.rawSize));
   }
 }

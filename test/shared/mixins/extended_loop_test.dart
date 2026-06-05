@@ -15,24 +15,26 @@ void main() {
       onDoneCalled = false;
     });
 
-    test('calls function with curveT from 0.0 to 1.0 and calls onDone',
-        () async {
-      await testClass.loopWithTransitionTiming(
-        (curveT) {
-          curveTValues.add(curveT);
-        },
-        duration: const Duration(milliseconds: 50),
-        mounted: true,
-        onDone: () {
-          onDoneCalled = true;
-        },
-      );
+    test(
+      'calls function with curveT from 0.0 to 1.0 and calls onDone',
+      () async {
+        await testClass.loopWithTransitionTiming(
+          (curveT) {
+            curveTValues.add(curveT);
+          },
+          duration: const Duration(milliseconds: 50),
+          mounted: true,
+          onDone: () {
+            onDoneCalled = true;
+          },
+        );
 
-      expect(curveTValues.isNotEmpty, isTrue);
-      expect(curveTValues.last, equals(1.0));
-      expect(onDoneCalled, isTrue);
-      expect(curveTValues.first, closeTo(0.0, 0.1));
-    });
+        expect(curveTValues.isNotEmpty, isTrue);
+        expect(curveTValues.last, equals(1.0));
+        expect(onDoneCalled, isTrue);
+        expect(curveTValues.first, closeTo(0.0, 0.1));
+      },
+    );
 
     test('uses transitionFunction', () async {
       await testClass.loopWithTransitionTiming(

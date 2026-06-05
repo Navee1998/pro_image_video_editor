@@ -3,10 +3,12 @@ import 'package:flutter/widgets.dart';
 import '/core/models/custom_widgets/video_editor_widgets.dart';
 import '/core/models/icons/video_editor_icons.dart';
 import '/core/models/styles/video_editor_style.dart';
+import 'layer_timeline_configs.dart';
 
 export '/core/models/custom_widgets/video_editor_widgets.dart';
 export '/core/models/icons/video_editor_icons.dart';
 export '/core/models/styles/video_editor_style.dart';
+export 'layer_timeline_configs.dart';
 
 /// Configuration settings for the video editor.
 class VideoEditorConfigs {
@@ -25,6 +27,8 @@ class VideoEditorConfigs {
     this.isAudioSupported = true,
     this.enablePlayButton = false,
     this.enableEstimatedFileSize = false,
+    this.enableTrimBar = true,
+    this.showControls = true,
     this.controlsPosition = VideoEditorControlPosition.top,
     this.minTrimDuration = const Duration(seconds: 7),
     this.maxTrimDuration,
@@ -35,11 +39,13 @@ class VideoEditorConfigs {
     this.trimBarMaxScale = 3,
     this.playTimeSmoothingDuration = Duration.zero,
     this.showTrimBar = true,
-  })  : assert(trimBarMinScale > 0, 'trimBarMinScale must be greater than 0'),
-        assert(
-          trimBarMaxScale > trimBarMinScale,
-          'trimBarMaxScale must be greater than trimBarMinScale',
-        );
+    this.showHeaderCropOption = false,
+    this.layerTimeline = const LayerTimelineConfigs(),
+  }) : assert(trimBarMinScale > 0, 'trimBarMinScale must be greater than 0'),
+       assert(
+         trimBarMaxScale > trimBarMinScale,
+         'trimBarMaxScale must be greater than trimBarMinScale',
+       );
 
   /// Configurable icons for the video editor.
   final VideoEditorIcons icons;
@@ -71,6 +77,9 @@ class VideoEditorConfigs {
   /// Whether to show the trim bar.
   final bool showTrimBar;
 
+  /// Whether to show the header crop option.
+  final bool showHeaderCropOption;
+
   /// Displays an estimated file size based on the trim duration and bitrate.
   ///
   /// **IMPORTANT:** The bitrate must be set in the `ProVideoController`.
@@ -79,6 +88,19 @@ class VideoEditorConfigs {
   /// (VBR), and the actual bitrate may be constrained by device-specific
   /// limits. That mean the displayed estimated file size could be wrong.
   final bool enableEstimatedFileSize;
+
+  /// Determines whether the trim bar should be visible in the editor.
+  ///
+  /// When `true`, a trim bar is displayed, allowing the user to adjust
+  /// the start and end positions of the selected audio or video segment.
+  /// When `false`, the trim bar is hidden.
+  final bool enableTrimBar;
+
+  /// Whether to show the video editor controls UI.
+  ///
+  /// When set to `false`, the controls widget (play/pause, mute, trim bar,
+  /// etc.) will be hidden.
+  final bool showControls;
 
   /// Minimum scale factor for the trim bar.
   final double trimBarMinScale;
@@ -110,6 +132,10 @@ class VideoEditorConfigs {
   /// Curve for the animated indicator switch-out effect.
   final Curve animatedIndicatorSwitchOutCurve;
 
+  /// Configuration for how layers with time ranges are animated in/out
+  /// on the video timeline.
+  final LayerTimelineConfigs layerTimeline;
+
   /// Creates a copy of this instance with the given parameters overridden.
   VideoEditorConfigs copyWith({
     VideoEditorIcons? icons,
@@ -121,6 +147,8 @@ class VideoEditorConfigs {
     bool? isAudioSupported,
     bool? enablePlayButton,
     bool? enableEstimatedFileSize,
+    bool? enableTrimBar,
+    bool? showControls,
     double? trimBarMinScale,
     double? trimBarMaxScale,
     Duration? playTimeSmoothingDuration,
@@ -131,6 +159,8 @@ class VideoEditorConfigs {
     Curve? animatedIndicatorSwitchInCurve,
     Curve? animatedIndicatorSwitchOutCurve,
     bool? showTrimBar,
+    bool? showHeaderCropOption,
+    LayerTimelineConfigs? layerTimeline,
   }) {
     return VideoEditorConfigs(
       icons: icons ?? this.icons,
@@ -144,6 +174,8 @@ class VideoEditorConfigs {
       enablePlayButton: enablePlayButton ?? this.enablePlayButton,
       enableEstimatedFileSize:
           enableEstimatedFileSize ?? this.enableEstimatedFileSize,
+      enableTrimBar: enableTrimBar ?? this.enableTrimBar,
+      showControls: showControls ?? this.showControls,
       trimBarMinScale: trimBarMinScale ?? this.trimBarMinScale,
       trimBarMaxScale: trimBarMaxScale ?? this.trimBarMaxScale,
       playTimeSmoothingDuration:
@@ -155,9 +187,12 @@ class VideoEditorConfigs {
           animatedIndicatorDuration ?? this.animatedIndicatorDuration,
       animatedIndicatorSwitchInCurve:
           animatedIndicatorSwitchInCurve ?? this.animatedIndicatorSwitchInCurve,
-      animatedIndicatorSwitchOutCurve: animatedIndicatorSwitchOutCurve ??
+      animatedIndicatorSwitchOutCurve:
+          animatedIndicatorSwitchOutCurve ??
           this.animatedIndicatorSwitchOutCurve,
       showTrimBar: showTrimBar ?? this.showTrimBar,
+      showHeaderCropOption: showHeaderCropOption ?? this.showHeaderCropOption,
+      layerTimeline: layerTimeline ?? this.layerTimeline,
     );
   }
 
@@ -175,6 +210,7 @@ class VideoEditorConfigs {
         other.isAudioSupported == isAudioSupported &&
         other.enablePlayButton == enablePlayButton &&
         other.enableEstimatedFileSize == enableEstimatedFileSize &&
+        other.showControls == showControls &&
         other.trimBarMinScale == trimBarMinScale &&
         other.trimBarMaxScale == trimBarMaxScale &&
         other.playTimeSmoothingDuration == playTimeSmoothingDuration &&
@@ -185,7 +221,8 @@ class VideoEditorConfigs {
         other.animatedIndicatorSwitchInCurve ==
             animatedIndicatorSwitchInCurve &&
         other.animatedIndicatorSwitchOutCurve ==
-            animatedIndicatorSwitchOutCurve;
+            animatedIndicatorSwitchOutCurve &&
+        other.layerTimeline == layerTimeline;
   }
 
   @override
@@ -199,6 +236,7 @@ class VideoEditorConfigs {
         isAudioSupported.hashCode ^
         enablePlayButton.hashCode ^
         enableEstimatedFileSize.hashCode ^
+        showControls.hashCode ^
         trimBarMinScale.hashCode ^
         trimBarMaxScale.hashCode ^
         playTimeSmoothingDuration.hashCode ^
@@ -207,7 +245,8 @@ class VideoEditorConfigs {
         controlsPosition.hashCode ^
         animatedIndicatorDuration.hashCode ^
         animatedIndicatorSwitchInCurve.hashCode ^
-        animatedIndicatorSwitchOutCurve.hashCode;
+        animatedIndicatorSwitchOutCurve.hashCode ^
+        layerTimeline.hashCode;
   }
 }
 
@@ -217,5 +256,5 @@ enum VideoEditorControlPosition {
   top,
 
   /// Place the controls on the bottom of the screen.
-  bottom
+  bottom,
 }

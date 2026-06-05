@@ -8,8 +8,9 @@ import 'package:pro_image_editor/features/paint_editor/models/painted_model.dart
 import 'package:pro_image_editor/features/paint_editor/widgets/draw_paint_item.dart';
 
 void main() {
-  testWidgets('DrawCanvas should handle hit testing for different modes',
-      (WidgetTester tester) async {
+  testWidgets('DrawCanvas should handle hit testing for different modes', (
+    WidgetTester tester,
+  ) async {
     // Define a list of modes to test
     final paintModes = [
       PaintMode.line,
@@ -49,7 +50,9 @@ void main() {
 
       final customPaintFinder = find.byType(CustomPaint).first;
 
-      final isHit = tester.renderObject<RenderBox>(customPaintFinder).hitTest(
+      final isHit = tester
+          .renderObject<RenderBox>(customPaintFinder)
+          .hitTest(
             BoxHitTestResult(),
             position: tester.getCenter(customPaintFinder),
           );

@@ -49,11 +49,15 @@ class TuneEditorWidgets extends CustomWidgetsStandaloneEditor<TuneEditorState> {
   @override
   TuneEditorWidgets copyWith({
     ReactiveAppbar? Function(
-            TuneEditorState editorState, Stream<void> rebuildStream)?
-        appBar,
+      TuneEditorState editorState,
+      Stream<void> rebuildStream,
+    )?
+    appBar,
     ReactiveWidget? Function(
-            TuneEditorState editorState, Stream<void> rebuildStream)?
-        bottomBar,
+      TuneEditorState editorState,
+      Stream<void> rebuildStream,
+    )?
+    bottomBar,
     CustomBodyItems<TuneEditorState>? bodyItems,
     CustomBodyItems<TuneEditorState>? bodyItemsRecorded,
     CustomSlider<TuneEditorState>? slider,

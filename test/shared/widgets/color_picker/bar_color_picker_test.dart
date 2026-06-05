@@ -14,13 +14,15 @@ void main() {
   group('BarColorPicker Tests', () {
     testWidgets('Picks color on tap', (WidgetTester tester) async {
       int colorValue = 0;
-      await tester.pumpWidget(MaterialApp(
-        home: BarColorPicker(
-          configs: const ProImageEditorConfigs(),
-          color: const Color(0xffff0000),
-          colorListener: (value) => colorValue = value,
+      await tester.pumpWidget(
+        MaterialApp(
+          home: BarColorPicker(
+            configs: const ProImageEditorConfigs(),
+            color: const Color(0xffff0000),
+            colorListener: (value) => colorValue = value,
+          ),
         ),
-      ));
+      );
 
       /// Wait that init animation is done
       await tester.pump(const Duration(milliseconds: 500));

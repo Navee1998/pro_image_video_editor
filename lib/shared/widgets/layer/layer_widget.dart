@@ -24,6 +24,7 @@ import '/shared/widgets/layer/widgets/layer_widget_emoji_item.dart';
 import '/shared/widgets/layer/widgets/layer_widget_paint_item.dart';
 import '/shared/widgets/layer/widgets/layer_widget_text_item.dart';
 import 'interaction_helper/layer_interaction_helper_widget.dart';
+import 'layer_timeline_visibility.dart';
 import 'widgets/layer_widget_custom_item.dart';
 
 /// A widget representing a layer within a design canvas.
@@ -41,6 +42,7 @@ class LayerWidget extends StatefulWidget with SimpleConfigsAccess {
     this.isInteractive = false,
     this.enableMouseCursor = true,
     this.callbacks = const ProImageEditorCallbacks(),
+    this.playTimeNotifier,
   });
   @override
   final ProImageEditorConfigs configs;
@@ -73,6 +75,12 @@ class LayerWidget extends StatefulWidget with SimpleConfigsAccess {
   /// A flag indicating whether the mouse cursor should be enabled for this
   /// widget.
   final bool enableMouseCursor;
+
+  /// Notifier providing the current video playback position.
+  ///
+  /// When non-null and the layer has [Layer.startTime] / [Layer.endTime],
+  /// the layer is animated in/out based on the current time.
+  final ValueNotifier<Duration>? playTimeNotifier;
 
   @override
   createState() => _LayerWidgetState();
@@ -140,7 +148,8 @@ class _LayerWidgetState extends State<LayerWidget>
       _fractionalOffset = configs.stickerEditor.layerFractionalOffset;
     } else if (_layer.isPaintLayer) {
       var layer = _layer as PaintLayer;
-      _layerType = layer.item.mode == PaintMode.blur ||
+      _layerType =
+          layer.item.mode == PaintMode.blur ||
               layer.item.mode == PaintMode.pixelate
           ? LayerWidgetType.censor
           : LayerWidgetType.canvas;
@@ -226,8 +235,9 @@ class _LayerWidgetState extends State<LayerWidget>
       final interaction = _layer.interaction;
       final offsetDistance =
           (event.position - _lastDownEvent!.position).distance;
-      final timeElapsed =
-          DateTime.now().difference(_tapDownTimestamp).inMilliseconds;
+      final timeElapsed = DateTime.now()
+          .difference(_tapDownTimestamp)
+          .inMilliseconds;
 
       // Ignore if pointer moved too much (exceeds tap slop)
       if (offsetDistance >= tapSlop) return;
@@ -309,32 +319,44 @@ class _LayerWidgetState extends State<LayerWidget>
   Widget build(BuildContext context) {
     Matrix4 transformMatrix = _calcTransformMatrix();
 
-    final overlayPadding =
-        _isSelected ? layerInteraction.style.overlayPadding : EdgeInsets.zero;
+    final overlayPadding = _isSelected
+        ? layerInteraction.style.overlayPadding
+        : EdgeInsets.zero;
 
     final adjustedLeft =
         offsetX - overlayPadding.horizontal * (_fractionalOffset.dx + 0.5);
     final adjustedTop =
         offsetY - overlayPadding.vertical * (_fractionalOffset.dy + 0.5);
 
+    Widget content = FractionalTranslation(
+      translation: _fractionalOffset,
+      child: Hero(
+        // Important that hero is above transform
+        createRectTween: (begin, end) => RectTween(begin: begin, end: end),
+        tag: _layer.id,
+        child: Transform(
+          transform: transformMatrix,
+          alignment: Alignment.center,
+          child: _buildInteractionHandlers(),
+        ),
+      ),
+    );
+
+    final playTime = widget.playTimeNotifier;
+    if (playTime != null &&
+        (_layer.startTime != null || _layer.endTime != null)) {
+      content = LayerTimelineVisibility(
+        layer: _layer,
+        playTimeNotifier: playTime,
+        configs: configs.videoEditor.layerTimeline,
+        child: content,
+      );
+    }
+
     return Positioned(
       left: adjustedLeft,
       top: adjustedTop,
-      child: RepaintBoundary(
-        child: FractionalTranslation(
-          translation: _fractionalOffset,
-          child: Hero(
-            // Important that hero is above transform
-            createRectTween: (begin, end) => RectTween(begin: begin, end: end),
-            tag: _layer.id,
-            child: Transform(
-              transform: transformMatrix,
-              alignment: Alignment.center,
-              child: _buildInteractionHandlers(),
-            ),
-          ),
-        ),
-      ),
+      child: RepaintBoundary(child: content),
     );
   }
 
@@ -351,115 +373,184 @@ class _LayerWidgetState extends State<LayerWidget>
       isInteractive: widget.isInteractive,
       enableVisibleOverlay: _enableVisibleOverlay,
       onScaleRotateDown: (details) => _layersService?.handleScaleRotateDown(
-          context.size ?? Size.zero, _layer),
+        context.size ?? Size.zero,
+        _layer,
+      ),
       onScaleRotateUp: (_) => _layersService?.handleScaleRotateUp(),
       onRemoveLayer: () => _layersService?.handleRemoveLayer(_layer),
       onDuplicate: widget.onDuplicate,
       onGroupLayers: _layersService?.handleGroupLayers,
       onUngroupLayers: () => _layersService?.handleUngroupLayers(_layer),
-      child: _buildCursor(
+      child: _LayerCursorRegion(
+        showMoveCursor: _showMoveCursor,
+        enableMove: _layer.interaction.enableMove,
+        enableMouseCursor: widget.enableMouseCursor,
+        hoverCursor: layerInteraction.style.hoverCursor,
+        onHoverEnter: _onHoverEnter,
+        onHoverExit: _onHoverLeave,
         child: ValueListenableBuilder(
-            valueListenable: _lastHitState,
-            builder: (_, __, ___) {
-              return GestureDetector(
+          valueListenable: _lastHitState,
+          builder: (_, _, _) {
+            return GestureDetector(
+              behavior: HitTestBehavior.translucent,
+              onSecondaryTapUp: isDesktop ? _onSecondaryTapUp : null,
+              child: Listener(
                 behavior: HitTestBehavior.translucent,
-                onSecondaryTapUp: isDesktop ? _onSecondaryTapUp : null,
-                child: Listener(
-                  behavior: HitTestBehavior.translucent,
-                  onPointerDown: _onPointerDown,
-                  onPointerUp: _onPointerUp,
-                  child: Padding(
-                    padding: !_isSelected
-                        ? EdgeInsets.zero
-                        : layerInteraction.style.overlayPadding,
-                    child: FittedBox(
-                      key: _layer.keyInternalSize,
-                      child: _buildContent(),
+                onPointerDown: _onPointerDown,
+                onPointerUp: _onPointerUp,
+                child: Padding(
+                  padding: !_isSelected
+                      ? EdgeInsets.zero
+                      : layerInteraction.style.overlayPadding,
+                  child: FittedBox(
+                    key: _layer.keyInternalSize,
+                    child: _LayerContentItem(
+                      layerType: _layerType,
+                      layer: _layer,
+                      isSelected: _isSelected,
+                      enableHitDetection:
+                          _layerInteractionManager?.enabledHitDetection ??
+                          false,
+                      showMoveCursor: _showMoveCursor,
+                      onHitChanged: (state) {
+                        _lastHitState.value = state;
+                      },
+                      emojiEditorConfigs: emojiEditorConfigs,
+                      textEditorConfigs: textEditorConfigs,
+                      stickerEditorConfigs: stickerEditorConfigs,
+                      paintEditorConfigs: paintEditorConfigs,
+                      designMode: designMode,
                     ),
                   ),
                 ),
-              );
-            }),
+              ),
+            );
+          },
+        ),
       ),
     );
-  }
-
-  Widget _buildCursor({required Widget child}) {
-    return ValueListenableBuilder(
-        valueListenable: _showMoveCursor,
-        builder: (_, showCursor, __) {
-          return MouseRegion(
-            hitTestBehavior: HitTestBehavior.translucent,
-            cursor: showCursor &&
-                    _layer.interaction.enableMove &&
-                    widget.enableMouseCursor
-                ? layerInteraction.style.hoverCursor
-                : MouseCursor.defer,
-            onEnter: (event) => _onHoverEnter(),
-            onExit: (event) => _onHoverLeave(),
-            child: child,
-          );
-        });
-  }
-
-  /// Builds the content widget based on the type of layer being displayed.
-  Widget _buildContent() {
-    Widget? content;
-    switch (_layerType) {
-      case LayerWidgetType.emoji:
-        content = LayerWidgetEmojiItem(
-          layer: _layer as EmojiLayer,
-          emojiEditorConfigs: emojiEditorConfigs,
-          textEditorConfigs: textEditorConfigs,
-          designMode: designMode,
-        );
-      case LayerWidgetType.text:
-        content = LayerWidgetTextItem(
-          layer: _layer as TextLayer,
-          textEditorConfigs: textEditorConfigs,
-          showMoveCursor: _showMoveCursor,
-          onHitChanged: (state) {
-            _lastHitState.value = state;
-          },
-        );
-      case LayerWidgetType.widget:
-        content = LayerWidgetCustomItem(
-          layer: _layer as WidgetLayer,
-          stickerEditorConfigs: stickerEditorConfigs,
-        );
-      case LayerWidgetType.canvas:
-        content = LayerWidgetPaintItem(
-          layer: _layer as PaintLayer,
-          isSelected: _isSelected,
-          enableHitDetection:
-              _layerInteractionManager?.enabledHitDetection ?? false,
-          onHitChanged: (state) {
-            _lastHitState.value = state;
-          },
-          paintEditorConfigs: widget.configs.paintEditor,
-        );
-      case LayerWidgetType.censor:
-        content = LayerWidgetCensorItem(
-          layer: _layer as PaintLayer,
-          censorConfigs: paintEditorConfigs.censorConfigs,
-        );
-      default:
-        return const SizedBox.shrink();
-    }
-
-    if (_layer.boxConstraints != null) {
-      content = ConstrainedBox(
-        constraints: _layer.boxConstraints!,
-        child: content,
-      );
-    }
-
-    return content;
   }
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
     _layer.debugFillProperties(properties);
+  }
+}
+
+class _LayerCursorRegion extends StatelessWidget {
+  const _LayerCursorRegion({
+    required this.showMoveCursor,
+    required this.enableMove,
+    required this.enableMouseCursor,
+    required this.hoverCursor,
+    required this.onHoverEnter,
+    required this.onHoverExit,
+    required this.child,
+  });
+
+  final ValueNotifier<bool> showMoveCursor;
+  final bool enableMove;
+  final bool enableMouseCursor;
+  final MouseCursor hoverCursor;
+  final VoidCallback onHoverEnter;
+  final VoidCallback onHoverExit;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return ValueListenableBuilder(
+      valueListenable: showMoveCursor,
+      builder: (_, showCursor, child) {
+        return MouseRegion(
+          hitTestBehavior: HitTestBehavior.translucent,
+          cursor: showCursor && enableMove && enableMouseCursor
+              ? hoverCursor
+              : MouseCursor.defer,
+          onEnter: (event) => onHoverEnter(),
+          onExit: (event) => onHoverExit(),
+          child: child,
+        );
+      },
+      child: child,
+    );
+  }
+}
+
+class _LayerContentItem extends StatelessWidget {
+  const _LayerContentItem({
+    required this.layerType,
+    required this.layer,
+    required this.isSelected,
+    required this.enableHitDetection,
+    required this.showMoveCursor,
+    required this.onHitChanged,
+    required this.emojiEditorConfigs,
+    required this.textEditorConfigs,
+    required this.stickerEditorConfigs,
+    required this.paintEditorConfigs,
+    required this.designMode,
+  });
+
+  final LayerWidgetType layerType;
+  final Layer layer;
+  final bool isSelected;
+  final bool enableHitDetection;
+  final ValueNotifier<bool> showMoveCursor;
+  final ValueChanged<bool> onHitChanged;
+  final EmojiEditorConfigs emojiEditorConfigs;
+  final TextEditorConfigs textEditorConfigs;
+  final StickerEditorConfigs stickerEditorConfigs;
+  final PaintEditorConfigs paintEditorConfigs;
+  final ImageEditorDesignMode designMode;
+
+  @override
+  Widget build(BuildContext context) {
+    Widget? content;
+    switch (layerType) {
+      case LayerWidgetType.emoji:
+        content = LayerWidgetEmojiItem(
+          layer: layer as EmojiLayer,
+          emojiEditorConfigs: emojiEditorConfigs,
+          textEditorConfigs: textEditorConfigs,
+          designMode: designMode,
+        );
+      case LayerWidgetType.text:
+        content = LayerWidgetTextItem(
+          layer: layer as TextLayer,
+          textEditorConfigs: textEditorConfigs,
+          showMoveCursor: showMoveCursor,
+          onHitChanged: onHitChanged,
+        );
+      case LayerWidgetType.widget:
+        content = LayerWidgetCustomItem(
+          layer: layer as WidgetLayer,
+          stickerEditorConfigs: stickerEditorConfigs,
+        );
+      case LayerWidgetType.canvas:
+        content = LayerWidgetPaintItem(
+          layer: layer as PaintLayer,
+          isSelected: isSelected,
+          enableHitDetection: enableHitDetection,
+          onHitChanged: onHitChanged,
+          paintEditorConfigs: paintEditorConfigs,
+        );
+      case LayerWidgetType.censor:
+        content = LayerWidgetCensorItem(
+          layer: layer as PaintLayer,
+          censorConfigs: paintEditorConfigs.censorConfigs,
+        );
+      default:
+        return const SizedBox.shrink();
+    }
+
+    if (layer.boxConstraints != null) {
+      content = ConstrainedBox(
+        constraints: layer.boxConstraints!,
+        child: content,
+      );
+    }
+
+    return RepaintBoundary(key: layer.repaintBoundaryKey, child: content);
   }
 }

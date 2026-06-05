@@ -46,7 +46,7 @@ class MainEditorHelperLines extends StatelessWidget {
   /// Configuration settings for the editor.
   final ProImageEditorConfigs configs;
 
-  static const double _strokeWidth = 1.25;
+  double get _strokeWidth => helperLines.style.strokeWidth;
   static const int _duration = 100;
 
   bool get _isLayerInRemovalZone => layerInteractionManager.hoverRemoveBtn;
@@ -59,71 +59,72 @@ class MainEditorHelperLines extends StatelessWidget {
 
     return RepaintBoundary(
       child: StreamBuilder(
-          stream: controllers.removeBtnCtrl.stream,
-          builder: (_, __) {
-            return StreamBuilder<void>(
-              stream: controllers.helperLineCtrl.stream,
-              builder: (context, snapshot) {
-                final viewer = interactiveViewer.currentState;
+        stream: controllers.removeBtnCtrl.stream,
+        builder: (_, _) {
+          return StreamBuilder<void>(
+            stream: controllers.helperLineCtrl.stream,
+            builder: (context, snapshot) {
+              final viewer = interactiveViewer.currentState;
 
-                final scale = viewer?.scaleFactor ?? 1;
+              final scale = viewer?.scaleFactor ?? 1;
 
-                final offset = viewer?.offset ?? Offset.zero;
-                final screenSize = sizesManager.screen;
-                final editorBodySize = sizesManager.bodySize;
+              final offset = viewer?.offset ?? Offset.zero;
+              final screenSize = sizesManager.editorSize;
+              final editorBodySize = sizesManager.bodySize;
 
-                if (configs.helperLines.isDisabledAtZoom && scale > 1) {
-                  return const SizedBox.shrink();
-                }
+              if (helperLines.isDisabledAtZoom && scale > 1) {
+                return const SizedBox.shrink();
+              }
 
-                return Transform.translate(
-                  offset: offset,
-                  child: Stack(
-                    clipBehavior: Clip.none,
-                    children: [
-                      if (helperLines.showVerticalLine)
-                        _buildLine(
-                          key: const ValueKey('Screen-Vertical-Guide-Line'),
-                          width:
-                              layerInteractionManager.showVerticalHelperLine &&
-                                      !_isLayerInRemovalZone
-                                  ? _strokeWidth
-                                  : 0,
-                          height: screenSize.height * scale,
-                          left: editorBodySize.width / 2 * scale,
-                          top: 0,
-                          color: helperLines.style.verticalColor,
-                        ),
-                      if (helperLines.showHorizontalLine)
-                        _buildLine(
-                          key: const ValueKey('Screen-Horizontal-Guide-Line'),
-                          width: screenSize.width * scale,
-                          height: layerInteractionManager
-                                      .showHorizontalHelperLine &&
-                                  !_isLayerInRemovalZone
-                              ? _strokeWidth
-                              : 0,
-                          left: 0,
-                          top: editorBodySize.height / 2 * scale,
-                          color: helperLines.style.horizontalColor,
-                          margin:
-                              configs.layerInteraction.hideToolbarOnInteraction
-                                  ? EdgeInsets.only(
-                                      top: sizesManager.appBarHeight,
-                                      bottom: sizesManager.bottomBarHeight,
-                                    )
-                                  : null,
-                        ),
-                      if (helperLines.showRotateLine)
-                        _buildRotateLine(scale, screenSize.height * 2),
-                      if (helperLines.showLayerAlignLine)
-                        ..._buildLayerAlignLines(scale, screenSize),
-                    ],
-                  ),
-                );
-              },
-            );
-          }),
+              return Transform.translate(
+                offset: offset,
+                child: Stack(
+                  clipBehavior: Clip.none,
+                  children: [
+                    if (helperLines.showVerticalLine)
+                      _buildLine(
+                        key: const ValueKey('Screen-Vertical-Guide-Line'),
+                        width:
+                            layerInteractionManager.showVerticalHelperLine &&
+                                !_isLayerInRemovalZone
+                            ? _strokeWidth
+                            : 0,
+                        height: screenSize.height * scale,
+                        left: editorBodySize.width / 2 * scale,
+                        top: 0,
+                        color: helperLines.style.verticalColor,
+                      ),
+                    if (helperLines.showHorizontalLine)
+                      _buildLine(
+                        key: const ValueKey('Screen-Horizontal-Guide-Line'),
+                        width: screenSize.width * scale,
+                        height:
+                            layerInteractionManager.showHorizontalHelperLine &&
+                                !_isLayerInRemovalZone
+                            ? _strokeWidth
+                            : 0,
+                        left: 0,
+                        top: editorBodySize.height / 2 * scale,
+                        color: helperLines.style.horizontalColor,
+                        margin:
+                            configs.layerInteraction.hideToolbarOnInteraction
+                            ? EdgeInsets.only(
+                                top: sizesManager.appBarHeight,
+                                bottom: sizesManager.bottomBarHeight,
+                              )
+                            : null,
+                      ),
+                    if (helperLines.showRotateLine)
+                      _buildRotateLine(scale, screenSize.height * 2),
+                    if (helperLines.showLayerAlignLine)
+                      ..._buildLayerAlignLines(scale, screenSize),
+                  ],
+                ),
+              );
+            },
+          );
+        },
+      ),
     );
   }
 
@@ -161,7 +162,8 @@ class MainEditorHelperLines extends StatelessWidget {
           child: AnimatedContainer(
             key: const ValueKey('Rotation-Guide-Line'),
             duration: const Duration(milliseconds: _duration),
-            width: layerInteractionManager.showRotationHelperLine &&
+            width:
+                layerInteractionManager.showRotationHelperLine &&
                     !_isLayerInRemovalZone
                 ? _strokeWidth
                 : 0,
@@ -175,21 +177,25 @@ class MainEditorHelperLines extends StatelessWidget {
 
   List<Widget> _buildLayerAlignLines(double scale, Size screenSize) {
     final editorCenter = sizesManager.bodySize / 2;
-    const halfStroke = _strokeWidth / 2;
+    final halfStroke = _strokeWidth / 2;
 
-    final verticalOffset = (editorCenter.width +
+    final verticalOffset =
+        (editorCenter.width +
             layerInteractionManager.verticalGuideOffset.dx -
             halfStroke) *
         scale;
 
-    final horizontalOffset = (editorCenter.height +
+    final horizontalOffset =
+        (editorCenter.height +
             layerInteractionManager.horizontalGuideOffset.dy -
             halfStroke) *
         scale;
 
-    final showHorizontal = layerInteractionManager.isHorizontalGuideVisible &&
+    final showHorizontal =
+        layerInteractionManager.isHorizontalGuideVisible &&
         !_isLayerInRemovalZone;
-    final showVertical = layerInteractionManager.isVerticalGuideVisible &&
+    final showVertical =
+        layerInteractionManager.isVerticalGuideVisible &&
         !_isLayerInRemovalZone;
 
     return [

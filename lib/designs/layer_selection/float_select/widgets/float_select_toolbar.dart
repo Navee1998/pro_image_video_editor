@@ -50,11 +50,10 @@ class FloatSelectToolbar extends StatelessWidget {
         borderRadius: BorderRadius.circular(_style.toolbarRadius),
       ),
       child: ConstrainedBox(
-        constraints: BoxConstraints(
-          maxWidth: MediaQuery.sizeOf(context).width,
-        ),
+        constraints: BoxConstraints(maxWidth: MediaQuery.sizeOf(context).width),
         child: Wrap(
-          children: _widgets.toolbarChildren ??
+          children:
+              _widgets.toolbarChildren ??
               [
                 if (configs.enableEditButton && layer.isTextLayer)
                   FloatSelectToolbarButton(

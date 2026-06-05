@@ -26,8 +26,10 @@ void main() {
     });
 
     test('formats hours as total minutes', () {
-      expect(const Duration(hours: 1, minutes: 2, seconds: 3).toTimeString(),
-          '62:03');
+      expect(
+        const Duration(hours: 1, minutes: 2, seconds: 3).toTimeString(),
+        '62:03',
+      );
     });
 
     test('pads single digit minutes and seconds', () {

@@ -1,6 +1,6 @@
 name: pro_image_editor
 description: "A Flutter image editor: Seamlessly enhance your images with user-friendly editing features."
-version: 11.15.2
+version: 12.4.5
 homepage: https://github.com/hm21/pro_image_editor/
 repository: https://github.com/hm21/pro_image_editor/
 documentation: https://github.com/hm21/pro_image_editor/
@@ -31,27 +31,27 @@ platforms:
   windows:
 
 environment:
-  sdk: '>=3.2.2 <4.0.0'
-  flutter: ">=3.35.0"
+  sdk: '>=3.11.0 <4.0.0'
+  flutter: ">=3.41.0"
 
 dependencies:
   flutter:
     sdk: flutter
 
-  http: ^1.5.0
+  http: ^1.6.0
   plugin_platform_interface: ^2.1.8
-  shared_preferences: ^2.5.3
-  vector_math: ^2.1.4
+  shared_preferences: ^2.5.4
+  vector_math: ^2.2.0
   web: ^1.1.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  build_runner: ^2.8.0
+  build_runner: ^2.11.1
   flutter_lints: ^6.0.0
   import_sorter: ^4.6.0
-  mockito: ^5.5.1
+  mockito: ^5.6.3
   network_image_mock: ^2.1.1
 
 flutter:
@@ -60,9 +60,15 @@ flutter:
       android:
         package: ch.waio.pro_image_editor
         pluginClass: ProImageEditorPlugin
+      ios:
+        pluginClass: ProImageEditorPlugin
+      macos:
+        pluginClass: ProImageEditorPlugin
   assets:
-    - lib/web/web_worker.dart.js
-    - lib/web/web_worker.dart.js.map
+    - path: lib/web/web_worker.dart.js
+      platforms: [web]
+    - path: lib/web/web_worker.dart.js.map
+      platforms: [web]
   shaders:
     - lib/shared/shaders/pixelate.frag
   fonts:

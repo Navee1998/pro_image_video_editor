@@ -69,7 +69,10 @@ class _CropAspectRatioOptionsState extends State<CropAspectRatioOptions> {
               style: TextStyle(
                 fontWeight: FontWeight.w600,
                 fontSize: 24,
-                color: widget.configs.cropRotateEditor.style
+                color: widget
+                    .configs
+                    .cropRotateEditor
+                    .style
                     .aspectRatioSheetForegroundColor,
               ),
             ),
@@ -102,7 +105,10 @@ class _CropAspectRatioOptionsState extends State<CropAspectRatioOptions> {
                       style: TextStyle(
                         fontWeight: FontWeight.w500,
                         fontSize: 16,
-                        color: widget.configs.cropRotateEditor.style
+                        color: widget
+                            .configs
+                            .cropRotateEditor
+                            .style
                             .aspectRatioSheetForegroundColor,
                       ),
                     ),

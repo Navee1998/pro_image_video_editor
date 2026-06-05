@@ -29,11 +29,7 @@ class EmojiEditorIcons {
   /// The [copyWith] method allows you to create a new instance of
   /// [EmojiEditorIcons] with some properties updated while keeping the
   /// others unchanged.
-  EmojiEditorIcons copyWith({
-    IconData? bottomNavBar,
-  }) {
-    return EmojiEditorIcons(
-      bottomNavBar: bottomNavBar ?? this.bottomNavBar,
-    );
+  EmojiEditorIcons copyWith({IconData? bottomNavBar}) {
+    return EmojiEditorIcons(bottomNavBar: bottomNavBar ?? this.bottomNavBar);
   }
 }

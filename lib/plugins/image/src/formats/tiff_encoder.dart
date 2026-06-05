@@ -29,8 +29,8 @@ class TiffEncoder extends Encoder {
     final type = image.numChannels == 1
         ? TiffPhotometricType.blackIsZero.index
         : image.hasPalette
-            ? TiffPhotometricType.palette.index
-            : TiffPhotometricType.rgb.index;
+        ? TiffPhotometricType.palette.index
+        : TiffPhotometricType.rgb.index;
 
     final nc = image.numChannels;
 

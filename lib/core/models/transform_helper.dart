@@ -73,8 +73,8 @@ class TransformHelper {
         : mainImageSize;
     double? cropRectRatio =
         transformConfigs != null && transformConfigs!.isNotEmpty
-            ? transformConfigs?.cropRect.size.aspectRatio
-            : null;
+        ? transformConfigs?.cropRect.size.aspectRatio
+        : null;
     if (transformConfigs?.is90DegRotated == true) {
       cropRectRatio = 1 / cropRectRatio!;
     }

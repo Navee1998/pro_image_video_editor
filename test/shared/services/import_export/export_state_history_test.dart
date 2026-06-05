@@ -25,16 +25,14 @@ class DummyLayer extends Layer {
   Map<String, dynamic> toMap({
     int maxDecimalPlaces = kMaxSafeDecimalPlaces,
     bool enableMinify = false,
-  }) =>
-      {'id': id, 'scale': scale};
+  }) => {'id': id, 'scale': scale};
 
   @override
   Map<String, dynamic> toMapFromReference(
     Layer reference, {
     int maxDecimalPlaces = kMaxSafeDecimalPlaces,
     bool enableMinify = false,
-  }) =>
-      toMap();
+  }) => toMap();
 }
 
 void main() {
@@ -51,14 +49,18 @@ void main() {
       stateHistory = [
         EditorStateHistory(
           blur: null,
-          filters: [],
           layers: [],
           transformConfigs: null,
           tuneAdjustments: [],
         ),
         EditorStateHistory(
           blur: 2.0,
-          filters: presetFiltersList.first.filters,
+          filters: [
+            FilterState(
+              name: 'filter',
+              matrices: presetFiltersList.first.filters,
+            ),
+          ],
           layers: [DummyLayer('layer1')],
           transformConfigs: null,
         ),

@@ -11,6 +11,7 @@ import '/core/models/editor_image.dart';
 import '/shared/widgets/auto_image.dart';
 import '../../tune_editor/models/tune_adjustment_matrix.dart';
 import '../types/filter_matrix.dart';
+import '../types/filter_state.dart';
 import 'filter_generator.dart';
 
 /// Represents an image where filters and blur factors can be applied.
@@ -30,8 +31,12 @@ class FilteredWidget extends StatelessWidget {
     this.blankSize,
     this.videoPlayer,
     this.enableCachedSize = false,
-  }) : assert(image != null || videoPlayer != null || blankSize != null,
-            'Image or videoPlayer or blankSize cannot be null');
+    this.filterStates,
+    this.playTimeNotifier,
+  }) : assert(
+         image != null || videoPlayer != null || blankSize != null,
+         'Image or videoPlayer or blankSize cannot be null',
+       );
 
   /// A key that uniquely identifies the [ColorFilterGeneratorState] widget and
   /// allows access to its state. This can be used to manipulate the state of
@@ -74,6 +79,12 @@ class FilteredWidget extends StatelessWidget {
   /// size.
   final bool enableCachedSize;
 
+  /// Optional timeline-aware filter states for the video editor.
+  final List<FilterState>? filterStates;
+
+  /// Notifier that provides the current video playback position.
+  final ValueNotifier<Duration>? playTimeNotifier;
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -88,6 +99,8 @@ class FilteredWidget extends StatelessWidget {
             key: filterKey,
             filters: filters,
             tuneAdjustments: tuneAdjustments,
+            filterStates: filterStates,
+            playTimeNotifier: playTimeNotifier,
             child: _buildContent(),
           ),
           if (blurFactor > 0) _buildBlur(),
@@ -100,10 +113,7 @@ class FilteredWidget extends StatelessWidget {
     return ClipRect(
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: blurFactor, sigmaY: blurFactor),
-        child: SizedBox(
-          width: width,
-          height: height,
-        ),
+        child: SizedBox(width: width, height: height),
       ),
     );
   }
@@ -131,14 +141,28 @@ class FilteredWidget extends StatelessWidget {
       ..add(DoubleProperty('width', width))
       ..add(DoubleProperty('height', height))
       ..add(DiagnosticsProperty<FilterMatrix>('filters', filters))
-      ..add(IterableProperty<TuneAdjustmentMatrix>(
-          'tuneAdjustments', tuneAdjustments))
+      ..add(
+        IterableProperty<TuneAdjustmentMatrix>(
+          'tuneAdjustments',
+          tuneAdjustments,
+        ),
+      )
       ..add(DoubleProperty('blurFactor', blurFactor))
       ..add(EnumProperty<BoxFit>('fit', fit))
-      ..add(FlagProperty('enableCachedSize',
-          value: enableCachedSize, ifTrue: 'cached size enabled'))
+      ..add(
+        FlagProperty(
+          'enableCachedSize',
+          value: enableCachedSize,
+          ifTrue: 'cached size enabled',
+        ),
+      )
       ..add(DiagnosticsProperty<EditorImage?>('image', image))
-      ..add(FlagProperty('hasVideoPlayer',
-          value: videoPlayer != null, ifTrue: 'video player set'));
+      ..add(
+        FlagProperty(
+          'hasVideoPlayer',
+          value: videoPlayer != null,
+          ifTrue: 'video player set',
+        ),
+      );
   }
 }

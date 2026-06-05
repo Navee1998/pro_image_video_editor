@@ -50,7 +50,7 @@ class StickerEditorCallbacks extends StandaloneEditorCallbacks {
   /// },
   /// ```
   final Function(ProImageEditorState editorState, WidgetLayer sticker)?
-      onTapEditSticker;
+  onTapEditSticker;
 
   /// A callback triggered each time the search value changes.
   ///
@@ -61,7 +61,7 @@ class StickerEditorCallbacks extends StandaloneEditorCallbacks {
   /// Creates a copy with modified editor callbacks.
   StickerEditorCallbacks copyWith({
     Function(ProImageEditorState editorState, WidgetLayer sticker)?
-        onTapEditSticker,
+    onTapEditSticker,
     Function(String value)? onSearchChanged,
     Function()? onInit,
     Function()? onAfterViewInit,

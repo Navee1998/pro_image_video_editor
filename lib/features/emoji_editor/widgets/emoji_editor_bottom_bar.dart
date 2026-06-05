@@ -44,14 +44,16 @@ class EmojiEditorBottomBar extends StatelessWidget {
         ),
         onTap: (index) {
           closeSkinToneOverlay();
-          EmojiStateManager.of(context)
-              ?.setActiveCategory(categoryEmojis[index].category);
+          EmojiStateManager.of(
+            context,
+          )?.setActiveCategory(categoryEmojis[index].category);
         },
         tabs: categoryEmojis
             .asMap()
             .entries
             .map<Widget>(
-                (item) => _buildCategory(item.key, item.value.category))
+              (item) => _buildCategory(item.key, item.value.category),
+            )
             .toList(),
       ),
     );
@@ -62,10 +64,7 @@ class EmojiEditorBottomBar extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(6.0),
         child: Icon(
-          getIconForCategory(
-            config.categoryViewConfig.categoryIcons,
-            category,
-          ),
+          getIconForCategory(config.categoryViewConfig.categoryIcons, category),
           size: 20,
         ),
       ),

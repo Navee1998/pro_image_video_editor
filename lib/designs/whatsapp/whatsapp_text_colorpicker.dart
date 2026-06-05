@@ -38,19 +38,14 @@ class WhatsappTextColorpicker extends StatelessWidget {
     return Align(
       alignment: Alignment.topRight,
       child: Container(
-        margin: const EdgeInsets.only(
-          right: 16,
-          top: 0,
-        ),
-        padding: const EdgeInsets.only(
-          top: barPickerPadding,
-        ),
+        margin: const EdgeInsets.only(right: 16, top: 0),
+        padding: const EdgeInsets.only(top: barPickerPadding),
         child: BarColorPicker(
           configs: textEditor.configs,
           borderWidth:
               textEditor.configs.designMode == ImageEditorDesignMode.material
-                  ? 0
-                  : 2,
+              ? 0
+              : 2,
           showThumb:
               textEditor.configs.designMode == ImageEditorDesignMode.material,
           length: min(

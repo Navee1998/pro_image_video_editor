@@ -10,20 +10,27 @@ import 'image_exception.dart';
 /// A buffer that can be read as a stream of bytes.
 class InputBuffer {
   /// Create a InputStream for reading from a List&lt;int&rt;
-  InputBuffer(this.buffer,
-      {this.bigEndian = false, this.offset = 0, int? length})
-      : start = offset,
-        end = min(
-            buffer.length, (length == null) ? buffer.length : offset + length);
+  InputBuffer(
+    this.buffer, {
+    this.bigEndian = false,
+    this.offset = 0,
+    int? length,
+  }) : start = offset,
+       end = min(
+         buffer.length,
+         (length == null) ? buffer.length : offset + length,
+       );
 
   /// Create a copy of [other].
   InputBuffer.from(InputBuffer other, {int offset = 0, int? length})
-      : buffer = other.buffer,
-        offset = other.offset + offset,
-        start = other.start,
-        end = min(other.buffer.length,
-            (length == null) ? other.end : other.offset + offset + length),
-        bigEndian = other.bigEndian;
+    : buffer = other.buffer,
+      offset = other.offset + offset,
+      start = other.start,
+      end = min(
+        other.buffer.length,
+        (length == null) ? other.end : other.offset + offset + length,
+      ),
+      bigEndian = other.bigEndian;
   List<int> buffer;
   final int start;
   final int end;
@@ -55,11 +62,19 @@ class InputBuffer {
   /// the offset in [other] to start reading.
   void memcpy(int start, int length, dynamic other, [int offset = 0]) {
     if (other is InputBuffer) {
-      buffer.setRange(this.offset + start, this.offset + start + length,
-          other.buffer, other.offset + offset);
+      buffer.setRange(
+        this.offset + start,
+        this.offset + start + length,
+        other.buffer,
+        other.offset + offset,
+      );
     } else {
-      buffer.setRange(this.offset + start, this.offset + start + length,
-          other as List<int>, offset);
+      buffer.setRange(
+        this.offset + start,
+        this.offset + start + length,
+        other as List<int>,
+        offset,
+      );
     }
   }
 
@@ -78,8 +93,12 @@ class InputBuffer {
     var pos = position != null ? start + position : this.offset;
     pos += offset;
 
-    return InputBuffer(buffer,
-        bigEndian: bigEndian, offset: pos, length: count);
+    return InputBuffer(
+      buffer,
+      bigEndian: bigEndian,
+      offset: pos,
+      length: count,
+    );
   }
 
   /// Returns the position of the given [value] within the buffer, starting
@@ -131,7 +150,8 @@ class InputBuffer {
         codes.add(c);
       }
       throw ImageException(
-          'EOF reached without finding string terminator (length: $len)');
+        'EOF reached without finding string terminator (length: $len)',
+      );
     }
 
     final s = readBytes(len);
@@ -255,13 +275,19 @@ class InputBuffer {
     if (buffer is Uint8List) {
       final b = buffer as Uint8List;
       return Uint8List.view(
-          b.buffer, b.offsetInBytes + this.offset + offset, len);
+        b.buffer,
+        b.offsetInBytes + this.offset + offset,
+        len,
+      );
     }
     return (buffer is Uint8List)
-        ? (buffer as Uint8List)
-            .sublist(this.offset + offset, this.offset + offset + len)
+        ? (buffer as Uint8List).sublist(
+            this.offset + offset,
+            this.offset + offset + len,
+          )
         : Uint8List.fromList(
-            buffer.sublist(this.offset + offset, this.offset + offset + len));
+            buffer.sublist(this.offset + offset, this.offset + offset + len),
+          );
   }
 
   Uint32List toUint32List([int offset = 0]) {

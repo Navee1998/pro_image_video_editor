@@ -26,41 +26,42 @@ void main() {
     });
 
     test(
-        'should convert EmojiLayer to map with meta and interaction properties',
-        () {
-      final meta = {'test': 'value'};
-      final interaction = LayerInteraction(
-        enableEdit: true,
-        enableMove: false,
-        enableRotate: true,
-        enableScale: false,
-        enableSelection: true,
-      );
+      'should convert EmojiLayer to map with meta and interaction properties',
+      () {
+        final meta = {'test': 'value'};
+        final interaction = LayerInteraction(
+          enableEdit: true,
+          enableMove: false,
+          enableRotate: true,
+          enableScale: false,
+          enableSelection: true,
+        );
 
-      final emojiLayer = EmojiLayer(
-        emoji: '😀',
-        rotation: 30.0,
-        scale: 1.5,
-        flipX: true,
-        flipY: false,
-        offset: const Offset(10, 20),
-        meta: meta,
-        interaction: interaction,
-      );
+        final emojiLayer = EmojiLayer(
+          emoji: '😀',
+          rotation: 30.0,
+          scale: 1.5,
+          flipX: true,
+          flipY: false,
+          offset: const Offset(10, 20),
+          meta: meta,
+          interaction: interaction,
+        );
 
-      final map = emojiLayer.toMap();
+        final map = emojiLayer.toMap();
 
-      expect(map['emoji'], '😀');
-      expect(map['rotation'], 30.0);
-      expect(map['scale'], 1.5);
-      expect(map['type'], 'emoji');
-      expect(map['flipX'], isTrue);
-      expect(map['flipY'], isFalse);
-      expect(map['x'], 10);
-      expect(map['y'], 20);
-      expect(map['meta'], meta);
-      expect(map['interaction'], interaction.toMap());
-    });
+        expect(map['emoji'], '😀');
+        expect(map['rotation'], 30.0);
+        expect(map['scale'], 1.5);
+        expect(map['type'], 'emoji');
+        expect(map['flipX'], isTrue);
+        expect(map['flipY'], isFalse);
+        expect(map['x'], 10);
+        expect(map['y'], 20);
+        expect(map['meta'], meta);
+        expect(map['interaction'], interaction.toMap());
+      },
+    );
 
     test('should convert EmojiLayer to map correctly', () {
       final meta = {'test': 'value'};
@@ -105,9 +106,7 @@ void main() {
         scale: 1.0,
       );
 
-      final map = {
-        'emoji': '😎',
-      };
+      final map = {'emoji': '😎'};
 
       final emojiLayer = EmojiLayer.fromMap(baseLayer, map);
 
@@ -119,15 +118,9 @@ void main() {
     });
 
     test('should convert EmojiLayer to map from reference correctly', () {
-      final referenceLayer = EmojiLayer(
-        emoji: '😀',
-        id: 'layer4',
-      );
+      final referenceLayer = EmojiLayer(emoji: '😀', id: 'layer4');
 
-      final emojiLayer = EmojiLayer(
-        emoji: '😎',
-        id: 'layer4',
-      );
+      final emojiLayer = EmojiLayer(emoji: '😎', id: 'layer4');
 
       final map = emojiLayer.toMapFromReference(referenceLayer);
 

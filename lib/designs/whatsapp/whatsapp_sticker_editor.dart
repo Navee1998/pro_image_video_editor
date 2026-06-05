@@ -1,7 +1,3 @@
-// ignore_for_file: deprecated_member_use_from_same_package
-// TODO: Remove the deprecated values when releasing version 12.0.0.
-
-// Dart imports:
 import 'dart:ui';
 
 // Flutter imports:
@@ -46,9 +42,8 @@ class _WhatsAppStickerPageState extends State<WhatsAppStickerPage> {
   late TextEditingController _searchCtrl;
   late FocusNode _searchFocus;
 
-  late final bool _isStickerEditorEnabled =
-      widget.configs.stickerEditor.enabled &&
-          widget.configs.mainEditor.tools.contains(SubEditorMode.sticker);
+  late final bool _isStickerEditorEnabled = widget.configs.mainEditor.tools
+      .contains(SubEditorMode.sticker);
 
   @override
   void initState() {
@@ -86,7 +81,8 @@ class _WhatsAppStickerPageState extends State<WhatsAppStickerPage> {
                   fit: StackFit.expand,
                   children: [
                     Offstage(
-                      offstage: whatsAppTemporaryStickerMode !=
+                      offstage:
+                          whatsAppTemporaryStickerMode !=
                           WhatsAppStickerMode.emoji,
                       child: EmojiEditor(
                         key: _emojiEditorKey,
@@ -95,7 +91,8 @@ class _WhatsAppStickerPageState extends State<WhatsAppStickerPage> {
                     ),
                     if (_isStickerEditorEnabled)
                       Offstage(
-                        offstage: whatsAppTemporaryStickerMode !=
+                        offstage:
+                            whatsAppTemporaryStickerMode !=
                             WhatsAppStickerMode.sticker,
                         child: StickerEditor(
                           configs: widget.configs,
@@ -122,9 +119,7 @@ class _WhatsAppStickerPageState extends State<WhatsAppStickerPage> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             IconButton(
-              style: IconButton.styleFrom(
-                backgroundColor: Colors.black38,
-              ),
+              style: IconButton.styleFrom(backgroundColor: Colors.black38),
               tooltip: widget.configs.i18n.cancel,
               onPressed: () {
                 if (_activeSearch) {
@@ -144,9 +139,7 @@ class _WhatsAppStickerPageState extends State<WhatsAppStickerPage> {
               ),
             ),
             IconButton(
-              style: IconButton.styleFrom(
-                backgroundColor: Colors.black38,
-              ),
+              style: IconButton.styleFrom(backgroundColor: Colors.black38),
               onPressed: () {},
               icon: Icon(
                 widget.configs.stickerEditor.icons.bottomNavBar,
@@ -196,21 +189,23 @@ class _WhatsAppStickerPageState extends State<WhatsAppStickerPage> {
                             ButtonSegment(
                               value: WhatsAppStickerMode.sticker,
                               label: Text(
-                                widget.configs.i18n.stickerEditor
+                                widget
+                                    .configs
+                                    .i18n
+                                    .stickerEditor
                                     .bottomNavigationBarText,
-                                style: const TextStyle(
-                                  fontSize: 13,
-                                ),
+                                style: const TextStyle(fontSize: 13),
                               ),
                             ),
                             ButtonSegment(
                               value: WhatsAppStickerMode.emoji,
                               label: Text(
-                                widget.configs.i18n.emojiEditor
+                                widget
+                                    .configs
+                                    .i18n
+                                    .emojiEditor
                                     .bottomNavigationBarText,
-                                style: const TextStyle(
-                                  fontSize: 13,
-                                ),
+                                style: const TextStyle(fontSize: 13),
                               ),
                             ),
                           ],
@@ -221,7 +216,7 @@ class _WhatsAppStickerPageState extends State<WhatsAppStickerPage> {
                             });
                           },
                         ),
-                      )
+                      ),
                   ],
                 ),
         ),
@@ -265,20 +260,14 @@ class _WhatsAppStickerPageState extends State<WhatsAppStickerPage> {
         child: AnimatedSwitcher(
           duration: Duration(milliseconds: _isStickerEditorEnabled ? 160 : 0),
           switchInCurve: Curves.easeInOut,
-          transitionBuilder: (child, animation) => FadeTransition(
-            opacity: animation,
-            child: child,
-          ),
+          transitionBuilder: (child, animation) =>
+              FadeTransition(opacity: animation, child: child),
           child: _activeSearch
               ? (_isStickerEditorEnabled
-                  ? Row(
-                      children: [
-                        Expanded(
-                          child: _buildCupertinoSegments(),
-                        ),
-                      ],
-                    )
-                  : const SizedBox.shrink())
+                    ? Row(
+                        children: [Expanded(child: _buildCupertinoSegments())],
+                      )
+                    : const SizedBox.shrink())
               : AnimatedSwitcher(
                   duration: const Duration(milliseconds: 200),
                   child: Row(
@@ -356,15 +345,14 @@ class _WhatsAppStickerPageState extends State<WhatsAppStickerPage> {
                   widget.callbacks.stickerEditorCallbacks?.onSearchChanged
                       ?.call(value);
                   _searchFocus.requestFocus();
-                  Future.delayed(const Duration(milliseconds: 1))
-                      .whenComplete(() {
-                    _searchFocus.requestFocus();
-                  });
+                  Future.delayed(const Duration(milliseconds: 1)).whenComplete(
+                    () {
+                      _searchFocus.requestFocus();
+                    },
+                  );
                 },
                 itemColor: const Color.fromARGB(255, 243, 243, 243),
-                style: const TextStyle(
-                  color: Colors.white,
-                ),
+                style: const TextStyle(color: Colors.white),
               ),
             ),
             CupertinoButton(
@@ -381,15 +369,14 @@ class _WhatsAppStickerPageState extends State<WhatsAppStickerPage> {
     } else {
       return Container(
         decoration: BoxDecoration(
-            color: Colors.white, borderRadius: BorderRadius.circular(100)),
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(100),
+        ),
         padding: const EdgeInsets.symmetric(horizontal: 14),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const Icon(
-              Icons.search,
-              color: Color(0xFF161616),
-            ),
+            const Icon(Icons.search, color: Color(0xFF161616)),
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.only(left: 12.0),
@@ -414,10 +401,7 @@ class _WhatsAppStickerPageState extends State<WhatsAppStickerPage> {
               ),
             ),
             IconButton(
-              icon: const Icon(
-                Icons.close,
-                color: Color(0xFF161616),
-              ),
+              icon: const Icon(Icons.close, color: Color(0xFF161616)),
               onPressed: () {
                 setState(() {
                   if (_searchCtrl.text.isNotEmpty) {

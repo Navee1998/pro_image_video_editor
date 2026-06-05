@@ -49,8 +49,12 @@ class SubEditorPageStyle {
   /// [Animation<double>], and [Widget] as parameters and returns a Widget
   /// representing the transition.
   final Widget Function(
-          BuildContext, Animation<double>, Animation<double>, Widget)?
-      transitionsBuilder;
+    BuildContext,
+    Animation<double>,
+    Animation<double>,
+    Widget,
+  )?
+  transitionsBuilder;
 
   /// Checks if repositioning is required based on the presence of certain
   /// properties.
@@ -79,7 +83,7 @@ class SubEditorPageStyle {
     double? positionBottom,
     Color? barrierColor,
     Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
-        transitionsBuilder,
+    transitionsBuilder,
   }) {
     return SubEditorPageStyle(
       enforceSizeFromMainEditor:

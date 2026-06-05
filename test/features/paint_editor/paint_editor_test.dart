@@ -52,79 +52,102 @@ void main() {
   }
 
   group('PaintEditor Initialization', () {
-    testWidgets('creates PaintEditor using memory image',
-        (WidgetTester tester) async {
-      await tester.pumpWidget(MaterialApp(
-        home: PaintEditor.memory(mockMemoryImage, initConfigs: initConfigs),
-      ));
+    testWidgets('creates PaintEditor using memory image', (
+      WidgetTester tester,
+    ) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: PaintEditor.memory(mockMemoryImage, initConfigs: initConfigs),
+        ),
+      );
 
       expect(find.byType(PaintEditor), findsOneWidget);
     });
-    testWidgets('creates PaintEditor using network image',
-        (WidgetTester tester) async {
+    testWidgets('creates PaintEditor using network image', (
+      WidgetTester tester,
+    ) async {
       await mockNetworkImagesFor(() async {
-        await tester.pumpWidget(MaterialApp(
-          home: PaintEditor.network(mockNetworkImage, initConfigs: initConfigs),
-        ));
+        await tester.pumpWidget(
+          MaterialApp(
+            home: PaintEditor.network(
+              mockNetworkImage,
+              initConfigs: initConfigs,
+            ),
+          ),
+        );
       });
 
       expect(find.byType(PaintEditor), findsOneWidget);
     });
-    testWidgets('creates PaintEditor using file image',
-        (WidgetTester tester) async {
-      await tester.pumpWidget(MaterialApp(
-        home: PaintEditor.file(mockFileImage, initConfigs: initConfigs),
-      ));
+    testWidgets('creates PaintEditor using file image', (
+      WidgetTester tester,
+    ) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: PaintEditor.file(mockFileImage, initConfigs: initConfigs),
+        ),
+      );
 
       expect(find.byType(PaintEditor), findsOneWidget);
     });
-    testWidgets('creates PaintEditor using file path',
-        (WidgetTester tester) async {
-      await tester.pumpWidget(MaterialApp(
-        home: PaintEditor.file('', initConfigs: initConfigs),
-      ));
+    testWidgets('creates PaintEditor using file path', (
+      WidgetTester tester,
+    ) async {
+      await tester.pumpWidget(
+        MaterialApp(home: PaintEditor.file('', initConfigs: initConfigs)),
+      );
 
       expect(find.byType(PaintEditor), findsOneWidget);
     });
     group('creates PaintEditor using autoSource constructor', () {
-      testWidgets('Auto-detects from memory image',
-          (WidgetTester tester) async {
-        await tester.pumpWidget(MaterialApp(
-          home: PaintEditor.autoSource(
-            byteArray: mockMemoryImage,
-            initConfigs: initConfigs,
+      testWidgets('Auto-detects from memory image', (
+        WidgetTester tester,
+      ) async {
+        await tester.pumpWidget(
+          MaterialApp(
+            home: PaintEditor.autoSource(
+              byteArray: mockMemoryImage,
+              initConfigs: initConfigs,
+            ),
           ),
-        ));
+        );
 
         expect(find.byType(PaintEditor), findsOneWidget);
       });
-      testWidgets('Auto-detects from network image',
-          (WidgetTester tester) async {
+      testWidgets('Auto-detects from network image', (
+        WidgetTester tester,
+      ) async {
         await mockNetworkImagesFor(() async {
-          await tester.pumpWidget(MaterialApp(
-            home: PaintEditor.autoSource(
-              networkUrl: mockNetworkImage,
-              initConfigs: initConfigs,
+          await tester.pumpWidget(
+            MaterialApp(
+              home: PaintEditor.autoSource(
+                networkUrl: mockNetworkImage,
+                initConfigs: initConfigs,
+              ),
             ),
-          ));
+          );
         });
 
         expect(find.byType(PaintEditor), findsOneWidget);
       });
       testWidgets('Auto-detects from file image', (WidgetTester tester) async {
-        await tester.pumpWidget(MaterialApp(
-          home: PaintEditor.autoSource(
-            file: mockFileImage,
-            initConfigs: initConfigs,
+        await tester.pumpWidget(
+          MaterialApp(
+            home: PaintEditor.autoSource(
+              file: mockFileImage,
+              initConfigs: initConfigs,
+            ),
           ),
-        ));
+        );
 
         expect(find.byType(PaintEditor), findsOneWidget);
       });
       testWidgets('Auto-detects from file path', (WidgetTester tester) async {
-        await tester.pumpWidget(MaterialApp(
-          home: PaintEditor.autoSource(file: '', initConfigs: initConfigs),
-        ));
+        await tester.pumpWidget(
+          MaterialApp(
+            home: PaintEditor.autoSource(file: '', initConfigs: initConfigs),
+          ),
+        );
 
         expect(find.byType(PaintEditor), findsOneWidget);
       });
@@ -145,8 +168,9 @@ void main() {
   });
 
   group('PaintEditor Sheets', () {
-    testWidgets('should open linWidthBottomSheet via openLinWidthBottomSheet',
-        (tester) async {
+    testWidgets('should open linWidthBottomSheet via openLinWidthBottomSheet', (
+      tester,
+    ) async {
       await pumpEditor(tester);
 
       key.currentState!.openLinWidthBottomSheet();
@@ -154,8 +178,9 @@ void main() {
 
       expect(find.byType(SliderBottomSheet<PaintEditorState>), findsOneWidget);
     });
-    testWidgets('should open opacityBottomSheet via openOpacityBottomSheet',
-        (tester) async {
+    testWidgets('should open opacityBottomSheet via openOpacityBottomSheet', (
+      tester,
+    ) async {
       await pumpEditor(tester);
 
       key.currentState!.openOpacityBottomSheet();
@@ -164,8 +189,9 @@ void main() {
       expect(find.byType(SliderBottomSheet<PaintEditorState>), findsOneWidget);
     });
 
-    testWidgets('Line width bottom sheet has correct background color',
-        (WidgetTester tester) async {
+    testWidgets('Line width bottom sheet has correct background color', (
+      WidgetTester tester,
+    ) async {
       await pumpEditor(tester);
 
       key.currentState!.openLinWidthBottomSheet();
@@ -173,16 +199,19 @@ void main() {
       await tester.pumpAndSettle(); // Wait for bottom sheet to appear
 
       final modalMaterial = tester.widget<Material>(
-        find.byWidgetPredicate((widget) =>
-            widget is Material &&
-            widget.color == lineWidthBottomSheetBackground),
+        find.byWidgetPredicate(
+          (widget) =>
+              widget is Material &&
+              widget.color == lineWidthBottomSheetBackground,
+        ),
       );
 
       expect(modalMaterial.color, lineWidthBottomSheetBackground);
     });
 
-    testWidgets('Opacity bottom sheet has correct background color',
-        (WidgetTester tester) async {
+    testWidgets('Opacity bottom sheet has correct background color', (
+      WidgetTester tester,
+    ) async {
       await pumpEditor(tester);
 
       key.currentState!.openOpacityBottomSheet();
@@ -190,15 +219,19 @@ void main() {
       await tester.pumpAndSettle(); // Wait for bottom sheet to appear
 
       final modalMaterial = tester.widget<Material>(
-        find.byWidgetPredicate((widget) =>
-            widget is Material && widget.color == opacityBottomSheetBackground),
+        find.byWidgetPredicate(
+          (widget) =>
+              widget is Material &&
+              widget.color == opacityBottomSheetBackground,
+        ),
       );
 
       expect(modalMaterial.color, opacityBottomSheetBackground);
     });
 
-    testWidgets('Line width bottom sheet has correct title',
-        (WidgetTester tester) async {
+    testWidgets('Line width bottom sheet has correct title', (
+      WidgetTester tester,
+    ) async {
       await pumpEditor(tester);
 
       key.currentState!.openLinWidthBottomSheet();
@@ -208,8 +241,9 @@ void main() {
       expect(find.text(lineWidthBottomSheetTitle), findsOneWidget);
     });
 
-    testWidgets('Opacity bottom sheet has correct title',
-        (WidgetTester tester) async {
+    testWidgets('Opacity bottom sheet has correct title', (
+      WidgetTester tester,
+    ) async {
       await pumpEditor(tester);
 
       key.currentState!.openOpacityBottomSheet();
@@ -267,8 +301,9 @@ void main() {
 
       expect(editor.fillBackground, isNot(initialIsFilled));
     });
-    testWidgets('should set opacity via setOpacity',
-        (WidgetTester tester) async {
+    testWidgets('should set opacity via setOpacity', (
+      WidgetTester tester,
+    ) async {
       await pumpEditor(tester);
 
       final editor = key.currentState!;
@@ -307,7 +342,6 @@ void main() {
       await pumpEditor(tester);
 
       final editor = key.currentState!
-
         // Add a painting
         ..addPainting(
           PaintedModel(
@@ -336,12 +370,12 @@ void main() {
       expect(editor.canUndo, isFalse);
     });
 
-    testWidgets('should redo the last undone action',
-        (WidgetTester tester) async {
+    testWidgets('should redo the last undone action', (
+      WidgetTester tester,
+    ) async {
       await pumpEditor(tester);
 
       final editor = key.currentState!
-
         // Add a painting
         ..addPainting(
           PaintedModel(
@@ -373,8 +407,9 @@ void main() {
       expect(editor.canRedo, isFalse);
     });
 
-    testWidgets('should not redo if no actions were undone',
-        (WidgetTester tester) async {
+    testWidgets('should not redo if no actions were undone', (
+      WidgetTester tester,
+    ) async {
       await pumpEditor(tester);
 
       final editor = key.currentState!;
@@ -391,8 +426,9 @@ void main() {
       expect(editor.canRedo, isFalse);
     });
 
-    testWidgets('should not undo if no actions were performed',
-        (WidgetTester tester) async {
+    testWidgets('should not undo if no actions were performed', (
+      WidgetTester tester,
+    ) async {
       await pumpEditor(tester);
 
       final editor = key.currentState!;

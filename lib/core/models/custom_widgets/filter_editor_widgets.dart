@@ -57,16 +57,21 @@ class FilterEditorWidgets
     Function() onSelectFilter,
     Widget editorImage,
     Key filterKey,
-  )? filterButton;
+  )?
+  filterButton;
 
   @override
   FilterEditorWidgets copyWith({
     ReactiveAppbar? Function(
-            FilterEditorState editorState, Stream<void> rebuildStream)?
-        appBar,
+      FilterEditorState editorState,
+      Stream<void> rebuildStream,
+    )?
+    appBar,
     ReactiveWidget? Function(
-            FilterEditorState editorState, Stream<void> rebuildStream)?
-        bottomBar,
+      FilterEditorState editorState,
+      Stream<void> rebuildStream,
+    )?
+    bottomBar,
     CustomBodyItems<FilterEditorState>? bodyItems,
     CustomBodyItems<FilterEditorState>? bodyItemsRecorded,
     CustomSlider<FilterEditorState>? slider,
@@ -77,7 +82,8 @@ class FilterEditorWidgets
       Function() onSelectFilter,
       Widget editorImage,
       Key filterKey,
-    )? filterButton,
+    )?
+    filterButton,
   }) {
     return FilterEditorWidgets(
       appBar: appBar ?? this.appBar,

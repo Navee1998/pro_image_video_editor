@@ -33,9 +33,7 @@ class Debounce {
   /// // Create a debounce instance with a 500 milliseconds delay.
   /// final debounce = Debounce(Duration(milliseconds: 500));
   /// ```
-  Debounce(
-    this.delay,
-  );
+  Debounce(this.delay);
 
   /// The duration of the debounce delay.
   final Duration delay;

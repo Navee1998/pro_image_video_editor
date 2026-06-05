@@ -1,11 +1,10 @@
 import 'dart:async';
 
-import 'package:example/shared/widgets/video_progress_alert.dart';
+import 'package:example/core/constants/example_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:pro_image_editor/pro_image_editor.dart';
 import 'package:video_player/video_player.dart';
 
-import '/core/constants/example_constants.dart';
 import '../mixins/video_editor_mixin.dart';
 import '../widgets/video_initializing_widget.dart';
 
@@ -23,6 +22,19 @@ class VideoPlayerExample extends StatefulWidget {
 class _VideoPlayerExampleState extends State<VideoPlayerExample>
     with VideoEditorMixin {
   late VideoPlayerController _videoController;
+
+  /// The Clips Editor and Audio Editor are not supported by that video player.
+  /// Use video_media_kit_example.dart instead.
+  @override
+  final List<SubEditorMode> subEditors = [
+    SubEditorMode.paint,
+    SubEditorMode.text,
+    SubEditorMode.cropRotate,
+    SubEditorMode.tune,
+    SubEditorMode.filter,
+    SubEditorMode.blur,
+    SubEditorMode.emoji,
+  ];
 
   @override
   void initState() {
@@ -119,10 +131,8 @@ class _VideoPlayerExampleState extends State<VideoPlayerExample>
   Widget _buildEditor() {
     return ProImageEditor.video(
       proVideoController!,
-      callbacks: ProImageEditorCallbacks(
-        onCompleteWithParameters: generateVideo,
-        onCloseEditor: onCloseEditor,
-        videoEditorCallbacks: VideoEditorCallbacks(
+      callbacks: callbacks.copyWith(
+        videoEditorCallbacks: callbacks.videoEditorCallbacks!.copyWith(
           onPause: _videoController.pause,
           onPlay: _videoController.play,
           onMuteToggle: (isMuted) {
@@ -136,46 +146,8 @@ class _VideoPlayerExampleState extends State<VideoPlayerExample>
           onTrimSpanEnd: _seekToPosition,
         ),
       ),
-      configs: ProImageEditorConfigs(
-        dialogConfigs: DialogConfigs(
-          widgets: DialogWidgets(
-            loadingDialog: (message, configs) =>
-                VideoProgressAlert(taskId: taskId),
-          ),
-        ),
-        mainEditor: MainEditorConfigs(
-          widgets: MainEditorWidgets(
-            removeLayerArea: (
-              removeAreaKey,
-              editor,
-              rebuildStream,
-              isLayerBeingTransformed,
-            ) =>
-                VideoEditorRemoveArea(
-              removeAreaKey: removeAreaKey,
-              editor: editor,
-              rebuildStream: rebuildStream,
-              isLayerBeingTransformed: isLayerBeingTransformed,
-            ),
-          ),
-        ),
-        paintEditor: const PaintEditorConfigs(
-          tools: [
-            PaintMode.freeStyle,
-            PaintMode.arrow,
-            PaintMode.line,
-            PaintMode.rect,
-            PaintMode.circle,
-            PaintMode.dashLine,
-            PaintMode.dashDotLine,
-            PaintMode.polygon,
-            // Blur and pixelate are not supported.
-            // PaintMode.pixelate,
-            // PaintMode.blur,
-            PaintMode.eraser,
-          ],
-        ),
-        videoEditor: videoConfigs.copyWith(
+      configs: configs.copyWith(
+        videoEditor: configs.videoEditor.copyWith(
           playTimeSmoothingDuration: const Duration(milliseconds: 600),
         ),
       ),

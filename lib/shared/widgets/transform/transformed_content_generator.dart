@@ -72,7 +72,8 @@ class TransformedContentGenerator extends StatelessWidget {
       } else if (!origFitW && !fitW) {
         helper /= cropRatio;
       } else {
-        final bool useOrig = (origFitW && cropRatio > origRatio) ||
+        final bool useOrig =
+            (origFitW && cropRatio > origRatio) ||
             (!origFitW && cropRatio < origRatio);
         helper = fitW
             ? helper * (useOrig ? origRatio : cropRatio)
@@ -96,11 +97,7 @@ class TransformedContentGenerator extends StatelessWidget {
             height: originalSize.isInfinite ? null : originalSize.height,
             child: _buildFitRotateFlip(
               fitFactor: fitFactor,
-              child: _buildCropPainter(
-                child: _buildScaleRotate(
-                  child: child,
-                ),
-              ),
+              child: _buildCropPainter(child: _buildScaleRotate(child: child)),
             ),
           ),
         );
@@ -108,8 +105,10 @@ class TransformedContentGenerator extends StatelessWidget {
     );
   }
 
-  Widget _buildFitRotateFlip(
-      {required Widget child, required double fitFactor}) {
+  Widget _buildFitRotateFlip({
+    required Widget child,
+    required double fitFactor,
+  }) {
     if (fitFactor == 1 &&
         _transformConfigs.angle == 0 &&
         !_transformConfigs.flipX &&
@@ -124,12 +123,13 @@ class TransformedContentGenerator extends StatelessWidget {
       // rotation
       ..rotateZ(_transformConfigs.angle)
       ..scaleByDouble(
-          // flip X
-          _transformConfigs.flipX ? -1.0 : 1.0,
-          // flip Y
-          _transformConfigs.flipY ? -1.0 : 1.0,
-          1.0,
-          1.0);
+        // flip X
+        _transformConfigs.flipX ? -1.0 : 1.0,
+        // flip Y
+        _transformConfigs.flipY ? -1.0 : 1.0,
+        1.0,
+        1.0,
+      );
 
     return Transform(
       alignment: Alignment.center,
@@ -143,12 +143,17 @@ class TransformedContentGenerator extends StatelessWidget {
 
     CropMode cropMode = _transformConfigs.cropMode;
 
+    final effectiveCropMode =
+        cropMode == CropMode.oval && !configs.cropRotateEditor.exportOvalMask
+        ? CropMode.rectangular
+        : cropMode;
+
     final clipper = CutOutsideArea(
       configs: _transformConfigs,
-      cropMode: cropMode,
+      cropMode: effectiveCropMode,
     );
 
-    if (cropMode == CropMode.oval) {
+    if (effectiveCropMode == CropMode.oval) {
       return ClipOval(clipper: clipper, child: child);
     } else {
       return ClipRect(clipper: clipper, child: child);
@@ -181,21 +186,44 @@ class TransformedContentGenerator extends StatelessWidget {
     super.debugFillProperties(properties);
 
     properties
-      ..add(DiagnosticsProperty<TransformConfigs>(
-          'transformConfigs', transformConfigs))
-      ..add(FlagProperty('isVideoPlayer',
-          value: isVideoPlayer, ifTrue: 'video player'))
+      ..add(
+        DiagnosticsProperty<TransformConfigs>(
+          'transformConfigs',
+          transformConfigs,
+        ),
+      )
+      ..add(
+        FlagProperty(
+          'isVideoPlayer',
+          value: isVideoPlayer,
+          ifTrue: 'video player',
+        ),
+      )
       ..add(DoubleProperty('angle', transformConfigs.angle))
-      ..add(FlagProperty('flipX',
-          value: transformConfigs.flipX, ifTrue: 'flipped X'))
-      ..add(FlagProperty('flipY',
-          value: transformConfigs.flipY, ifTrue: 'flipped Y'))
+      ..add(
+        FlagProperty(
+          'flipX',
+          value: transformConfigs.flipX,
+          ifTrue: 'flipped X',
+        ),
+      )
+      ..add(
+        FlagProperty(
+          'flipY',
+          value: transformConfigs.flipY,
+          ifTrue: 'flipped Y',
+        ),
+      )
       ..add(DoubleProperty('scaleUser', transformConfigs.scaleUser))
       ..add(DiagnosticsProperty<Offset>('offset', transformConfigs.offset))
       ..add(EnumProperty<CropMode>('cropMode', transformConfigs.cropMode))
       ..add(DiagnosticsProperty<Rect>('cropRect', transformConfigs.cropRect))
-      ..add(DiagnosticsProperty<Size>(
-          'originalSize', transformConfigs.originalSize));
+      ..add(
+        DiagnosticsProperty<Size>(
+          'originalSize',
+          transformConfigs.originalSize,
+        ),
+      );
   }
 }
 
@@ -203,10 +231,7 @@ class TransformedContentGenerator extends StatelessWidget {
 /// configurations.
 class CutOutsideArea extends CustomClipper<Rect> {
   /// Creates an instance of [CutOutsideArea] with the given [configs].
-  CutOutsideArea({
-    required this.configs,
-    required this.cropMode,
-  });
+  CutOutsideArea({required this.configs, required this.cropMode});
 
   /// Defines the cropping shape to apply to an image or video.
   final CropMode cropMode;
